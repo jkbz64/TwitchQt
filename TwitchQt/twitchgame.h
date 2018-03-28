@@ -7,10 +7,12 @@
 namespace Twitch {
     // Game model
     struct Game {
-        int m_id;
+        qulonglong m_id;
         QString m_name;
         QString m_boxArtUrl;
     };
+
+    using Games = QVector<Twitch::Game>;
 
     // Game-related replies
 
@@ -22,8 +24,6 @@ namespace Twitch {
     protected:
         virtual void parseData(const QJsonDocument&) override;
     };
-
-    using Games = QVector<Twitch::Game>;
 
     class TopGamesReply : public Reply {
         Q_OBJECT

@@ -15,11 +15,11 @@ inline void TopGamesReply::parseData(const QJsonDocument& json)
         for(const auto& gameElement : data)
         {
             auto&& game = gameElement.toObject();
-            int id = game.value("id").toInt();
+            QString id = game.value("id").toString();
             QString name = game.value("name").toString();
             QString boxArtUrl = game.value("box_art_url").toString();
             topGames.push_back({
-                id,
+                id.toULongLong(),
                 name,
                 boxArtUrl
             });
@@ -38,11 +38,11 @@ inline void Twitch::GameReply::parseData(const QJsonDocument &json)
         for(const auto& gameElement : data)
         {
             auto&& game = gameElement.toObject();
-            int id = game.value("id").toInt();
+            QString id = game.value("id").toString();
             QString name = game.value("name").toString();
             QString boxArtUrl = game.value("box_art_url").toString();
             m_data.setValue(Game{
-                id,
+                id.toULongLong(),
                 name,
                 boxArtUrl
             });
