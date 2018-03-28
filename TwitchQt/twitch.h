@@ -1,15 +1,13 @@
 #ifndef TWITCH_H
 #define TWITCH_H
 
-#include <memory>
-
 #include <QNetworkAccessManager>
 #include <QPointer>
 #include <QString>
 
-#include "twitchreply.h"
 #include "twitchgame.h"
 #include "twitchstream.h"
+#include "twitchuser.h"
 
 namespace Twitch {
     Q_GLOBAL_STATIC(QNetworkAccessManager, http);
@@ -18,7 +16,7 @@ namespace Twitch {
 
     static void setClientID(const QString&);
 
-    //Games
+    // Games
     static QPointer<TopGamesReply> getTopGames();
 
     // Streams
@@ -27,6 +25,10 @@ namespace Twitch {
 
     static QPointer<StreamsReply> getStreamsByGameId(qulonglong, QString = "");
     static QPointer<StreamsReply> getStreamsByLanguage(QString, QString = "");
+
+    // Users
+    static QPointer<UserReply> getUserById(qulonglong);
+    static QPointer<UserReply> getUserByName(QString);
 
 
     #include "twitch.inl"

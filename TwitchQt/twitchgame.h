@@ -1,7 +1,6 @@
 #ifndef TWITCHGAME_H
 #define TWITCHGAME_H
 
-#include <QString>
 #include "twitchreply.h"
 
 namespace Twitch {

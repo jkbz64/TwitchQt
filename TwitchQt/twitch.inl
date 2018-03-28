@@ -74,3 +74,29 @@ inline static QPointer<StreamReply> getStreamByName(QString userName)
     QNetworkReply* reply = http->get(request);
     return QPointer<StreamReply>(new StreamReply(reply));
 }
+
+inline static QPointer<UserReply> getUserById(qulonglong userId)
+{
+    QString url = *api + QString("/users") + QString("?id=") + QString::number(userId);
+
+    QNetworkRequest request;
+    request.setRawHeader("User-Agent", "Twitch.Qt");
+    request.setRawHeader("Client-ID", clientID->toUtf8());
+    request.setUrl(QUrl(url));
+
+    QNetworkReply* reply = http->get(request);
+    return QPointer<UserReply>(new UserReply(reply));
+}
+
+inline static QPointer<UserReply> getUserByName(QString name)
+{
+    QString url = *api + QString("/users") + QString("?login=") + name;
+
+    QNetworkRequest request;
+    request.setRawHeader("User-Agent", "Twitch.Qt");
+    request.setRawHeader("Client-ID", clientID->toUtf8());
+    request.setUrl(QUrl(url));
+
+    QNetworkReply* reply = http->get(request);
+    return QPointer<UserReply>(new UserReply(reply));
+}
