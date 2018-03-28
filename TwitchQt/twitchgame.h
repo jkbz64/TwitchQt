@@ -5,7 +5,7 @@
 #include "twitchreply.h"
 
 namespace Twitch {
-    // Game model
+    // Models
     struct Game {
         qulonglong m_id;
         QString m_name;
@@ -15,12 +15,10 @@ namespace Twitch {
     using Games = QVector<Twitch::Game>;
 
     // Game-related replies
-
     class GameReply : public Reply {
         Q_OBJECT
     public:
-        GameReply(QNetworkReply*);
-        ~GameReply() {}
+        using Reply::Reply;
     protected:
         virtual void parseData(const QJsonDocument&) override;
     };
@@ -28,8 +26,7 @@ namespace Twitch {
     class TopGamesReply : public Reply {
         Q_OBJECT
     public:
-        TopGamesReply(QNetworkReply*);
-        ~TopGamesReply() {}
+        using Reply::Reply;
     protected:
         virtual void parseData(const QJsonDocument&) override;
     };

@@ -9,7 +9,7 @@
 
 #include "twitchreply.h"
 #include "twitchgame.h"
-#include "twitchchannel.h"
+#include "twitchstream.h"
 
 namespace Twitch {
     Q_GLOBAL_STATIC(QNetworkAccessManager, http);
@@ -19,6 +19,7 @@ namespace Twitch {
     static void setClientID(const QString&);
 
     static QPointer<Twitch::TopGamesReply> getTopGames();
+    static QPointer<Twitch::StreamsReply> getStreamsByGameId(qulonglong);
 
     #include "twitch.inl"
 }

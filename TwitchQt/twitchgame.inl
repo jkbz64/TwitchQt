@@ -1,10 +1,4 @@
 
-inline TopGamesReply::TopGamesReply(QNetworkReply* reply) :
-    Reply(reply)
-{
-
-}
-
 inline void TopGamesReply::parseData(const QJsonDocument& json)
 {
     Games topGames;
@@ -29,7 +23,7 @@ inline void TopGamesReply::parseData(const QJsonDocument& json)
 }
 
 
-inline void Twitch::GameReply::parseData(const QJsonDocument &json)
+inline void GameReply::parseData(const QJsonDocument &json)
 {
     auto&& root = json.object();
     if(root.contains("data"))
