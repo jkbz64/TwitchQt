@@ -1,3 +1,3 @@
 # TwitchQt
 
-Header-only Twitch.tv api written using Qt5.
+Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Qt5.
