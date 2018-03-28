@@ -19,7 +19,7 @@ inline static QPointer<TopGamesReply> getTopGames()
 
 inline static QPointer<StreamsReply> getStreamsByGameId(qulonglong gameId)
 {
-    QString url = *api + QString("/streams");
+    QString url = *api + QString("/streams") + QString("?game_id=") + QString::number(gameId);
     QNetworkRequest request;
     request.setRawHeader("User-Agent", "Twitch.Qt");
     request.setRawHeader("Client-ID", clientID->toUtf8());
