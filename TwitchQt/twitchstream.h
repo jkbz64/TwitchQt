@@ -30,7 +30,9 @@ namespace Twitch {
         Q_OBJECT
     public:
         using Reply::Reply;
+        const QString& cursor() const;
     protected:
+        QString m_cursor;
         virtual void parseData(const QJsonDocument&) override;
     };
 

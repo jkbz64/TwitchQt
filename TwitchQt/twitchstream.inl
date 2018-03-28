@@ -45,5 +45,15 @@ inline void StreamsReply::parseData(const QJsonDocument& json)
             });
         }
     }
+    if(root.contains("pagination"))
+    {
+        auto&& pagination = root.value("pagination").toObject();
+        m_cursor = pagination.value("cursor").toString();
+    }
     m_data.setValue(streams);
+}
+
+inline const QString &Twitch::StreamsReply::cursor() const
+{
+    return m_cursor;
 }

@@ -22,8 +22,9 @@ namespace Twitch {
     static QPointer<TopGamesReply> getTopGames();
 
     // Streams
-    static QPointer<StreamsReply> getStreamsByGameId(qulonglong);
-    static QPointer<StreamsReply> getStreamsByLanguage(QString);
+    static QPointer<StreamsReply> getStreamsByGameId(qulonglong, QString = "");
+    static QPointer<StreamsReply> getStreamsByLanguage(QString = "");
+
 
     #include "twitch.inl"
 }
