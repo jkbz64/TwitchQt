@@ -20,7 +20,7 @@ inline Reply::Reply(QNetworkReply* reply) :
         }
         emit finished();
         m_reply->deleteLater();
-    }, Qt::DirectConnection);
+    });
 }
 
 inline QVariant& Reply::data()

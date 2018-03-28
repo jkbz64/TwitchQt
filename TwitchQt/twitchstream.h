@@ -25,13 +25,23 @@ namespace Twitch {
 
     using Streams = QVector<Twitch::Stream>;
 
-    ///
+    /// Replies
+    class StreamReply : public Reply {
+        Q_OBJECT
+    public:
+        using Reply::Reply;
+    protected:
+        virtual void parseData(const QJsonDocument&) override;
+    };
+
     class StreamsReply : public Reply {
         Q_OBJECT
     public:
         using Reply::Reply;
+        qulonglong combinedViewerCount() const;
         const QString& cursor() const;
     protected:
+        qulonglong m_combinedViewerCount{0u};
         QString m_cursor;
         virtual void parseData(const QJsonDocument&) override;
     };
