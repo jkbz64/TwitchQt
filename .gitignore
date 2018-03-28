@@ -45,3 +45,9 @@ target_wrapper.*
 # QtCtreator CMake
 CMakeLists.txt.user*
 
+# Project specific
+main.cpp
+TwitchQt.pro
+
+
+
