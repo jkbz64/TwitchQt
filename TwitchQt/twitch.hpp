@@ -5,9 +5,9 @@
 #include <QPointer>
 #include <QString>
 
-#include "twitchgame.h"
-#include "twitchstream.h"
-#include "twitchuser.h"
+#include "twitchgame.hpp"
+#include "twitchstream.hpp"
+#include "twitchuser.hpp"
 
 namespace Twitch {
     Q_GLOBAL_STATIC(QNetworkAccessManager, http);

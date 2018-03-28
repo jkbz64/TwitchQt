@@ -1,7 +1,7 @@
 #ifndef TWITCHUSER_H
 #define TWITCHUSER_H
 
-#include "twitchreply.h"
+#include "twitchreply.hpp"
 
 namespace Twitch {
     // Models

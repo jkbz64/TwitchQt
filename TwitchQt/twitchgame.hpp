@@ -1,7 +1,7 @@
 #ifndef TWITCHGAME_H
 #define TWITCHGAME_H
 
-#include "twitchreply.h"
+#include "twitchreply.hpp"
 
 namespace Twitch {
     // Models
