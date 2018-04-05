@@ -22,7 +22,7 @@ inline void Twitch::StreamReply::parseData(const QJsonDocument& json)
                 type = Stream::StreamType::Vodcast;
 
             QString title = stream.value("title").toString();
-            QString viewerCount = stream.value("viewer_count").toString();
+            qulonglong viewerCount = stream.value("viewer_count").toInt();
 
             QString startedAt = stream.value("started_at").toString();
             QString language = stream.value("language").toString();
@@ -35,7 +35,7 @@ inline void Twitch::StreamReply::parseData(const QJsonDocument& json)
                 communityIds,
                 type,
                 title,
-                viewerCount.toULongLong(),
+                viewerCount,
                 QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
                 language,
                 thumbnailUrl });
@@ -69,7 +69,7 @@ inline void StreamsReply::parseData(const QJsonDocument& json)
                 type = Stream::StreamType::Vodcast;
 
             QString title = stream.value("title").toString();
-            QString viewerCount = stream.value("viewer_count").toString();
+            qulonglong viewerCount = stream.value("viewer_count").toInt();
 
             QString startedAt = stream.value("started_at").toString();
             QString language = stream.value("language").toString();
@@ -81,7 +81,7 @@ inline void StreamsReply::parseData(const QJsonDocument& json)
                 communityIds,
                 type,
                 title,
-                viewerCount.toULongLong(),
+                viewerCount,
                 QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
                 language,
                 thumbnailUrl });

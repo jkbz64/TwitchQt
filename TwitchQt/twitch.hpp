@@ -6,15 +6,16 @@
 #include <QString>
 
 #include "twitchgame.hpp"
+#include "twitchreply.hpp"
 #include "twitchstream.hpp"
-#include "twitchuser.hpp "
+#include "twitchuser.hpp"
 
 namespace Twitch {
 
 using ID = qulonglong;
 
 Q_GLOBAL_STATIC(QNetworkAccessManager, http);
-Q_GLOBAL_STATIC(QString, api);
+Q_GLOBAL_STATIC_WITH_ARGS(QString, api, ("https://api.twitch.tv/helix/"));
 Q_GLOBAL_STATIC(QString, clientID);
 
 static void setClientID(const QString&);
