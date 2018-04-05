@@ -4,33 +4,35 @@
 #include "twitchreply.hpp"
 
 namespace Twitch {
-    // Models
-    struct Game {
-        qulonglong m_id;
-        QString m_name;
-        QString m_boxArtUrl;
-    };
+// Models
+struct Game {
+    qulonglong m_id;
+    QString m_name;
+    QString m_boxArtUrl;
+};
 
-    using Games = QVector<Twitch::Game>;
+using Games = QVector<Twitch::Game>;
 
-    // Game-related replies
-    class GameReply : public Reply {
-        Q_OBJECT
-    public:
-        using Reply::Reply;
-    protected:
-        virtual void parseData(const QJsonDocument&) override;
-    };
+// Game-related replies
+class GameReply : public Reply {
+    Q_OBJECT
+public:
+    using Reply::Reply;
 
-    class TopGamesReply : public Reply {
-        Q_OBJECT
-    public:
-        using Reply::Reply;
-    protected:
-        virtual void parseData(const QJsonDocument&) override;
-    };
+protected:
+    virtual void parseData(const QJsonDocument&) override;
+};
 
-    #include "twitchgame.inl"
+class TopGamesReply : public Reply {
+    Q_OBJECT
+public:
+    using Reply::Reply;
+
+protected:
+    virtual void parseData(const QJsonDocument&) override;
+};
+
+#include "twitchgame.inl"
 }
 
 Q_DECLARE_METATYPE(Twitch::Game);

@@ -1,12 +1,12 @@
 
-inline void setClientID(const QString &id)
+inline void setClientID(const QString& id)
 {
     *clientID = id;
 }
 
 inline static QPointer<TopGamesReply> getTopGames()
 {
-    QString url = *api + QString("/games/top");
+    const QString url = *api + QString("/games/top");
 
     QNetworkRequest request;
     request.setRawHeader("User-Agent", "Twitch.Qt");
@@ -17,11 +17,10 @@ inline static QPointer<TopGamesReply> getTopGames()
     return QPointer<TopGamesReply>(new TopGamesReply(reply));
 }
 
-
-inline static QPointer<StreamsReply> getStreamsByGameId(qulonglong gameId, QString after)
+inline static QPointer<StreamsReply> getStreamsByGameId(ID gameId, QString after)
 {
     QString url = *api + QString("/streams") + QString("?game_id=") + QString::number(gameId);
-    if(!after.isEmpty())
+    if (!after.isEmpty())
         url += QString("&after=") + after;
 
     QNetworkRequest request;
@@ -32,12 +31,11 @@ inline static QPointer<StreamsReply> getStreamsByGameId(qulonglong gameId, QStri
     QNetworkReply* reply = http->get(request);
     return QPointer<StreamsReply>(new StreamsReply(reply));
 }
-
 
 inline static QPointer<StreamsReply> getStreamsByLanguage(QString language, QString after)
 {
     QString url = *api + QString("/streams") + QString("?language=") + language;
-    if(!after.isEmpty())
+    if (!after.isEmpty())
         url += QString("&after=") + after;
 
     QNetworkRequest request;
@@ -49,9 +47,9 @@ inline static QPointer<StreamsReply> getStreamsByLanguage(QString language, QStr
     return QPointer<StreamsReply>(new StreamsReply(reply));
 }
 
-inline static QPointer<StreamReply> getStreamById(qulonglong userId)
+inline static QPointer<StreamReply> getStreamById(ID userId)
 {
-    QString url = *api + QString("/streams") + QString("?user_id=") + QString::number(userId);
+    const QString url = *api + QString("/streams") + QString("?user_id=") + QString::number(userId);
 
     QNetworkRequest request;
     request.setRawHeader("User-Agent", "Twitch.Qt");
@@ -62,9 +60,9 @@ inline static QPointer<StreamReply> getStreamById(qulonglong userId)
     return QPointer<StreamReply>(new StreamReply(reply));
 }
 
-inline static QPointer<StreamReply> getStreamByName(QString userName)
+inline static QPointer<StreamReply> getStreamByName(const QString& userName)
 {
-    QString url = *api + QString("/streams") + QString("?user_login=") + userName;
+    const QString url = *api + QString("/streams") + QString("?user_login=") + userName;
 
     QNetworkRequest request;
     request.setRawHeader("User-Agent", "Twitch.Qt");
@@ -75,9 +73,9 @@ inline static QPointer<StreamReply> getStreamByName(QString userName)
     return QPointer<StreamReply>(new StreamReply(reply));
 }
 
-inline static QPointer<UserReply> getUserById(qulonglong userId)
+inline static QPointer<UserReply> getUserById(ID userId)
 {
-    QString url = *api + QString("/users") + QString("?id=") + QString::number(userId);
+    const QString url = *api + QString("/users") + QString("?id=") + QString::number(userId);
 
     QNetworkRequest request;
     request.setRawHeader("User-Agent", "Twitch.Qt");
@@ -90,7 +88,7 @@ inline static QPointer<UserReply> getUserById(qulonglong userId)
 
 inline static QPointer<UserReply> getUserByName(QString name)
 {
-    QString url = *api + QString("/users") + QString("?login=") + name;
+    const QString url = *api + QString("/users") + QString("?login=") + name;
 
     QNetworkRequest request;
     request.setRawHeader("User-Agent", "Twitch.Qt");

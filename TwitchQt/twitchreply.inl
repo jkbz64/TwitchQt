@@ -1,20 +1,16 @@
-inline Reply::Reply(QNetworkReply* reply) :
-    QObject(nullptr),
-    m_currentState(ReplyState::Pending),
-    m_reply(reply)
+inline Reply::Reply(QNetworkReply* reply)
+    : QObject(nullptr)
+    , m_currentState(ReplyState::Pending)
+    , m_reply(reply)
 {
-    connect(m_reply, &QNetworkReply::finished, this, [this]()
-    {
+    connect(m_reply, &QNetworkReply::finished, this, [this]() {
         auto json = QJsonDocument::fromJson(m_reply->readAll());
         // Check errors
         auto root = json.object();
-        if(root.find("error") != root.end() || json.isEmpty())
-        {
+        if (root.find("error") != root.end() || json.isEmpty()) {
             m_currentState = ReplyState::Error;
             // TODO error handling
-        }
-        else
-        {
+        } else {
             m_currentState = ReplyState::Success;
             parseData(json);
         }
@@ -32,4 +28,3 @@ inline const Reply::ReplyState& Reply::currentState() const
 {
     return m_currentState;
 }
-

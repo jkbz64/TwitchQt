@@ -7,31 +7,33 @@
 
 #include "twitchgame.hpp"
 #include "twitchstream.hpp"
-#include "twitchuser.hpp"
+#include "twitchuser.hpp "
 
 namespace Twitch {
-    Q_GLOBAL_STATIC(QNetworkAccessManager, http);
-    Q_GLOBAL_STATIC(QString, api);
-    Q_GLOBAL_STATIC(QString, clientID);
 
-    static void setClientID(const QString&);
+using ID = qulonglong;
 
-    // Games
-    static QPointer<TopGamesReply> getTopGames();
+Q_GLOBAL_STATIC(QNetworkAccessManager, http);
+Q_GLOBAL_STATIC(QString, api);
+Q_GLOBAL_STATIC(QString, clientID);
 
-    // Streams
-    static QPointer<StreamReply> getStreamById(qulonglong);
-    static QPointer<StreamReply> getStreamByName(QString);
+static void setClientID(const QString&);
 
-    static QPointer<StreamsReply> getStreamsByGameId(qulonglong, QString = "");
-    static QPointer<StreamsReply> getStreamsByLanguage(QString, QString = "");
+// Games
+static QPointer<TopGamesReply> getTopGames();
 
-    // Users
-    static QPointer<UserReply> getUserById(qulonglong);
-    static QPointer<UserReply> getUserByName(QString);
+// Streams
+static QPointer<StreamReply> getStreamById(ID);
+static QPointer<StreamReply> getStreamByName(const QString&);
 
+static QPointer<StreamsReply> getStreamsByGameId(ID, QString = "");
+static QPointer<StreamsReply> getStreamsByLanguage(QString, QString = "");
 
-    #include "twitch.inl"
-}
+// Users
+static QPointer<UserReply> getUserById(ID);
+static QPointer<UserReply> getUserByName(QString);
+
+#include "twitch.inl"
+} // namespace Twitch
 
 #endif // TWITCH_H

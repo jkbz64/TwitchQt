@@ -4,42 +4,43 @@
 #include "twitchreply.hpp"
 
 namespace Twitch {
-    // Models
-    struct User {
-        enum class UserType {
-            No,
-            GlobalMod,
-            Admin,
-            Staff
-        };
-        enum class BroadcasterType {
-            No,
-            Partner,
-            Affiliate
-        };
-        BroadcasterType m_broadcasterType;
-        QString m_description;
-        QString m_displayName;
-        // QString m_email;
-        qulonglong m_id;
-        QString m_login;
-        QString m_offlineImageUrl;
-        QString m_profileImageUrl;
-        UserType m_type;
-        qulonglong m_viewCount;
+// Models
+struct User {
+    enum class UserType {
+        No,
+        GlobalMod,
+        Admin,
+        Staff
     };
-
-    // Replies
-
-    class UserReply : public Reply {
-        Q_OBJECT
-    public:
-        using Reply::Reply;
-    protected:
-        virtual void parseData(const QJsonDocument&) override;
+    enum class BroadcasterType {
+        No,
+        Partner,
+        Affiliate
     };
+    BroadcasterType m_broadcasterType;
+    QString m_description;
+    QString m_displayName;
+    // QString m_email;
+    qulonglong m_id;
+    QString m_login;
+    QString m_offlineImageUrl;
+    QString m_profileImageUrl;
+    UserType m_type;
+    qulonglong m_viewCount;
+};
 
-    #include "twitchuser.inl"
+// Replies
+
+class UserReply : public Reply {
+    Q_OBJECT
+public:
+    using Reply::Reply;
+
+protected:
+    virtual void parseData(const QJsonDocument&) override;
+};
+
+#include "twitchuser.inl"
 }
 
 Q_DECLARE_METATYPE(Twitch::User);

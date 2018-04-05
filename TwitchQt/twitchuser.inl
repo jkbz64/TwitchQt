@@ -1,19 +1,17 @@
 
-inline void UserReply::parseData(const QJsonDocument &json)
+inline void UserReply::parseData(const QJsonDocument& json)
 {
     auto&& root = json.object();
-    if(root.contains("data"))
-    {
+    if (root.contains("data")) {
         auto&& data = root.value("data").toArray();
-        if(!data.isEmpty())
-        {
+        if (!data.isEmpty()) {
             auto&& user = data.first().toObject();
 
             QString broadcasterTypeStr = user.value("broadcaster_type").toString();
             User::BroadcasterType broadcasterType = User::BroadcasterType::No;
-            if(broadcasterTypeStr == "partner")
+            if (broadcasterTypeStr == "partner")
                 broadcasterType = User::BroadcasterType::Partner;
-            else if(broadcasterTypeStr == "affiliate")
+            else if (broadcasterTypeStr == "affiliate")
                 broadcasterType = User::BroadcasterType::Affiliate;
 
             QString description = user.value("description").toString();
@@ -26,16 +24,16 @@ inline void UserReply::parseData(const QJsonDocument &json)
 
             QString userTypeStr = user.value("type").toString();
             User::UserType userType = User::UserType::No;
-            if(userTypeStr == "global_mod")
+            if (userTypeStr == "global_mod")
                 userType = User::UserType::GlobalMod;
-            else if(userTypeStr == "admin")
+            else if (userTypeStr == "admin")
                 userType = User::UserType::Admin;
-            else if(userTypeStr == "staff")
+            else if (userTypeStr == "staff")
                 userType = User::UserType::Staff;
 
             QString viewCount = user.value("view_count").toString();
 
-            m_data.setValue(User {
+            m_data.setValue(User{
                 broadcasterType,
                 description,
                 displayName,
@@ -45,11 +43,8 @@ inline void UserReply::parseData(const QJsonDocument &json)
                 offlineImageUrl,
                 profileImageUrl,
                 userType,
-                viewCount.toULongLong()
-            });
-        }
-        else
-        {
+                viewCount.toULongLong() });
+        } else {
             // ??
         }
     }
