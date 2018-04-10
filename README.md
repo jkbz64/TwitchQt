@@ -6,7 +6,9 @@ A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Q
 Qt5 and at least C++11 compatible compiler
 
 ## Usage
-It's header only, just include the twitch.hpp header.
+The library is header-only, but it still uses Q_OBJECT macro and other Qt magic so(for now) you'll have to add every header to target headers.
+Copy TwitchQt directory to your project directory/whatever place suits you and `include(path/to/TwitchQt.pri)` in your .pro script, you should be fine with this.
+In the future there will be a single .hpp version of this library which will eliminate including thingy.
 
 # Example
 ```cpp
@@ -16,33 +18,39 @@ It's header only, just include the twitch.hpp header.
 int main(int argc, char* argv[])
 {
     QCoreApplication a(argc, argv);
+	// Twitch::Api is aliased to New Twitch Api (Helix)
+	// TODO Twitch::v5 
+    Twitch::Api api("CLIENT-ID HERE");
 
-    Twitch::setClientID(QString("INSERT CLIENT-ID HERE"));
-
-    auto reply = Twitch::getStreamByName(QString("sodapoppin"));
-    a.connect(reply, &Twitch::Reply::finished, [&reply]() {
-        if (reply->currentState() == Twitch::Reply::ReplyState::Success) {
+    auto reply = api.getStreamByName("forsen");
+    a.connect(reply, &Twitch::Reply::finished, [&a, reply]() {
+        if (reply->currentState() == Twitch::ReplyState::Success) {
+            // Convert reply data to Stream struct
             auto stream = reply->data().value<Twitch::Stream>();
-            qDebug() << stream.m_title;
-            qDebug() << stream.m_viewerCount;
-            qDebug() << stream.m_startedAt.date();
+            qDebug() << stream.m_title; // Print title
+            qDebug() << stream.m_viewerCount; // Print viewer count as int
+            qDebug() << stream.m_startedAt.date(); // Print date
         }
+        // Quit program after receiving reply
+        a.quit();
     });
+
     a.exec();
 
     return 0;
 }
+
 ```
 
 ## TODO:
-- Get Requests 
+- GET Requests:
   **Clips**
   **Game analytics**
   **Bits**
   **Channel emoticons**
   **Streams metadata**
   **?**
-* "Set requests" < only Get requests implemented so far
+* Every request other than GET
 * Unit tests
 * Maybe webhooks(?)
 * Single header version (entire library in one file) 

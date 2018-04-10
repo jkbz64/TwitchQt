@@ -1,3 +1,6 @@
+
+#include <QDebug>
+
 inline Reply::Reply(QNetworkReply* reply)
     : QObject(nullptr)
     , m_currentState(ReplyState::Pending)
@@ -16,7 +19,14 @@ inline Reply::Reply(QNetworkReply* reply)
         }
         emit finished();
         m_reply->deleteLater();
-    });
+        if (!parent())
+            deleteLater();
+    },
+        Qt::QueuedConnection);
+}
+
+inline Reply::~Reply()
+{
 }
 
 inline QVariant& Reply::data()
@@ -24,7 +34,12 @@ inline QVariant& Reply::data()
     return m_data;
 }
 
-inline const Reply::ReplyState& Reply::currentState() const
+inline const ReplyState& Reply::currentState() const
 {
     return m_currentState;
+}
+
+inline Reply::operator bool() const
+{
+    return currentState() == ReplyState::Success;
 }

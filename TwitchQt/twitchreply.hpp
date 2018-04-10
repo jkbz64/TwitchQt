@@ -10,17 +10,21 @@
 #include <QVariant>
 
 namespace Twitch {
+
+enum class ReplyState {
+    Pending,
+    Success,
+    Error
+};
+
 class Reply : public QObject {
     Q_OBJECT
 public:
-    enum class ReplyState {
-        Pending,
-        Success,
-        Error
-    };
     Reply(QNetworkReply*);
+    virtual ~Reply();
     QVariant& data();
     const ReplyState& currentState() const;
+    operator bool() const;
 signals:
     void finished();
 
