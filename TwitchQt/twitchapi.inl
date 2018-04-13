@@ -37,6 +37,29 @@ inline TopGamesReply* Detail::Api::getTopGames()
     return createReply<TopGamesReply>(request);
 }
 
+inline GameReply* Detail::Api::getGameById(ID id)
+{
+    const QString url = api() + QString("/games") + QString("?id=") + QString::number(id);
+    auto request = buildRequest(QUrl(url));
+    return createReply<GameReply>(request);
+}
+
+inline GameReply* Detail::Api::getGameByName(const QString& name)
+{
+    const QString url = api() + QString("/games") + QString("?name=") + name;
+    qDebug() << url;
+    auto request = buildRequest(QUrl(url));
+    return createReply<GameReply>(request);
+}
+
+inline BoxArtReply* Detail::Api::getBoxArtByUrl(const QString& url, int width, int height)
+{
+    QString targetUrl = url;
+    targetUrl = targetUrl.replace("{width}x{height}", QString::number(width) + "x" + QString::number(height));
+    auto request = buildRequest(QUrl(targetUrl));
+    return createReply<BoxArtReply>(request);
+}
+
 inline StreamsReply* Detail::Api::getStreamsByGameId(ID gameId, QString after)
 {
     QString url = api() + QString("/streams") + QString("?game_id=") + QString::number(gameId);
@@ -103,7 +126,7 @@ inline Helix::~Helix() = default;
 
 inline QString Helix::api() const
 {
-    return QString("https://api.twitch.tv/helix/");
+    return QString("https://api.twitch.tv/helix");
 }
 
 inline QNetworkRequest Helix::buildRequest(QUrl url)

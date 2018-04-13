@@ -31,10 +31,10 @@ struct User {
 
 // Replies
 
-class UserReply : public Reply {
+class UserReply : public JSONReply {
     Q_OBJECT
 public:
-    using Reply::Reply;
+    using JSONReply::JSONReply;
 
 protected:
     virtual void parseData(const QJsonDocument&) override;

@@ -3,26 +3,9 @@
 
 inline Reply::Reply(QNetworkReply* reply)
     : QObject(nullptr)
-    , m_currentState(ReplyState::Pending)
     , m_reply(reply)
+    , m_currentState(ReplyState::Pending)
 {
-    connect(m_reply, &QNetworkReply::finished, this, [this]() {
-        auto json = QJsonDocument::fromJson(m_reply->readAll());
-        // Check errors
-        auto root = json.object();
-        if (root.find("error") != root.end() || json.isEmpty()) {
-            m_currentState = ReplyState::Error;
-            // TODO error handling
-        } else {
-            m_currentState = ReplyState::Success;
-            parseData(json);
-        }
-        emit finished();
-        m_reply->deleteLater();
-        if (!parent())
-            deleteLater();
-    },
-        Qt::QueuedConnection);
 }
 
 inline Reply::~Reply()
@@ -43,3 +26,48 @@ inline Reply::operator bool() const
 {
     return currentState() == ReplyState::Success;
 }
+
+inline RawReply::RawReply(QNetworkReply* reply)
+    : Reply(reply)
+{
+    connect(m_reply, &QNetworkReply::finished, this, [this]() {
+        auto data = m_reply->readAll();
+        // Check errors
+        if (data.isEmpty() || data.isNull()) {
+            m_currentState = ReplyState::Error;
+        } else {
+            m_currentState = ReplyState::Success;
+            parseData(data);
+        }
+        emit finished();
+        m_reply->deleteLater();
+        if (!parent())
+            deleteLater();
+    });
+}
+
+inline RawReply::~RawReply() = default;
+
+inline JSONReply::JSONReply(QNetworkReply* reply)
+    : Reply(reply)
+{
+    connect(m_reply, &QNetworkReply::finished, this, [this]() {
+        auto json = QJsonDocument::fromJson(m_reply->readAll());
+        qDebug() << json;
+        // Check errors
+        auto root = json.object();
+        if (root.find("error") != root.end() || json.isEmpty()) {
+            m_currentState = ReplyState::Error;
+            // TODO error handling
+        } else {
+            m_currentState = ReplyState::Success;
+            parseData(json);
+        }
+        emit finished();
+        m_reply->deleteLater();
+        if (!parent())
+            deleteLater();
+    });
+}
+
+inline JSONReply::~JSONReply() = default;

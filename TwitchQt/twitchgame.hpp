@@ -2,6 +2,7 @@
 #define TWITCHGAME_H
 
 #include "twitchreply.hpp"
+#include <QImage>
 
 namespace Twitch {
 // Models
@@ -14,22 +15,30 @@ struct Game {
 using Games = QVector<Twitch::Game>;
 
 // Game-related replies
-class GameReply : public Reply {
+class GameReply : public JSONReply {
     Q_OBJECT
 public:
-    using Reply::Reply;
+    using JSONReply::JSONReply;
 
 protected:
     virtual void parseData(const QJsonDocument&) override;
 };
 
-class TopGamesReply : public Reply {
+class TopGamesReply : public JSONReply {
     Q_OBJECT
 public:
-    using Reply::Reply;
+    using JSONReply::JSONReply;
 
 protected:
     virtual void parseData(const QJsonDocument&) override;
+};
+
+class BoxArtReply : public RawReply {
+public:
+    using RawReply::RawReply;
+
+protected:
+    virtual void parseData(const QByteArray&) override;
 };
 
 #include "twitchgame.inl"

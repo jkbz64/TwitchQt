@@ -37,3 +37,8 @@ inline void TopGamesReply::parseData(const QJsonDocument& json)
     }
     m_data.setValue(topGames);
 }
+
+inline void BoxArtReply::parseData(const QByteArray& data)
+{
+    m_data.setValue(QImage::fromData(data));
+}

@@ -22,7 +22,11 @@ namespace Detail {
         virtual ~Api();
         virtual QString api() const = 0;
 
+        // Games
         TopGamesReply* getTopGames();
+        GameReply* getGameById(ID);
+        GameReply* getGameByName(const QString&);
+        BoxArtReply* getBoxArtByUrl(const QString&, int, int);
 
         // Streams
         StreamReply* getStreamById(ID);

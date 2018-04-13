@@ -22,19 +22,38 @@ class Reply : public QObject {
 public:
     Reply(QNetworkReply*);
     virtual ~Reply();
-    QVariant& data();
+
     const ReplyState& currentState() const;
     operator bool() const;
+
+    QVariant& data();
 signals:
     void finished();
 
 protected:
-    QVariant m_data;
-    virtual void parseData(const QJsonDocument&) = 0;
-
-private:
-    ReplyState m_currentState;
     QNetworkReply* m_reply;
+    ReplyState m_currentState;
+    QVariant m_data;
+};
+
+class RawReply : public Reply {
+    Q_OBJECT
+public:
+    RawReply(QNetworkReply*);
+    virtual ~RawReply();
+
+protected:
+    virtual void parseData(const QByteArray&) = 0;
+};
+
+class JSONReply : public Reply {
+    Q_OBJECT
+public:
+    JSONReply(QNetworkReply*);
+    virtual ~JSONReply();
+
+protected:
+    virtual void parseData(const QJsonDocument&) = 0;
 };
 
 #include "twitchreply.inl"

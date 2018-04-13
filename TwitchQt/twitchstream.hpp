@@ -26,19 +26,19 @@ struct Stream {
 using Streams = QVector<Twitch::Stream>;
 
 /// Replies
-class StreamReply : public Reply {
+class StreamReply : public JSONReply {
     Q_OBJECT
 public:
-    using Reply::Reply;
+    using JSONReply::JSONReply;
 
 protected:
     virtual void parseData(const QJsonDocument&) override;
 };
 
-class StreamsReply : public Reply {
+class StreamsReply : public JSONReply {
     Q_OBJECT
 public:
-    using Reply::Reply;
+    using JSONReply::JSONReply;
     qulonglong combinedViewerCount() const;
     const QString& cursor() const;
 
