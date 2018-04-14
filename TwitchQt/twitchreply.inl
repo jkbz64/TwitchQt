@@ -1,6 +1,4 @@
 
-#include <QDebug>
-
 inline Reply::Reply(QNetworkReply* reply)
     : QObject(nullptr)
     , m_reply(reply)
@@ -53,7 +51,6 @@ inline JSONReply::JSONReply(QNetworkReply* reply)
 {
     connect(m_reply, &QNetworkReply::finished, this, [this]() {
         auto json = QJsonDocument::fromJson(m_reply->readAll());
-        qDebug() << json;
         // Check errors
         auto root = json.object();
         if (root.find("error") != root.end() || json.isEmpty()) {
