@@ -16,8 +16,8 @@ namespace Detail {
     class Api : public QObject {
         Q_OBJECT
     public:
-        Api(QString);
-        Api(QString, QObject*);
+        Api(const QString&);
+        Api(const QString&, QObject*);
 
         virtual ~Api();
         virtual QString api() const = 0;
@@ -32,12 +32,12 @@ namespace Detail {
         StreamReply* getStreamById(ID);
         StreamReply* getStreamByName(const QString&);
 
-        StreamsReply* getStreamsByGameId(ID, QString = "");
-        StreamsReply* getStreamsByLanguage(QString, QString = "");
+        StreamsReply* getStreamsByGameId(ID, const QString& = "");
+        StreamsReply* getStreamsByLanguage(const QString&, const QString& = "");
 
         // Users
         UserReply* getUserById(ID);
-        UserReply* getUserByName(QString);
+        UserReply* getUserByName(const QString&);
 
     protected:
         QNetworkAccessManager* m_http;
@@ -53,8 +53,8 @@ namespace Detail {
 class Helix : public Detail::Api {
     Q_OBJECT
 public:
-    Helix(QString);
-    Helix(QString, QObject*);
+    Helix(const QString&);
+    Helix(const QString&, QObject*);
     ~Helix();
 
     virtual QString api() const override;

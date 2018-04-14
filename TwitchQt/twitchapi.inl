@@ -1,11 +1,11 @@
-inline Detail::Api::Api(QString clientID)
+inline Detail::Api::Api(const QString& clientID)
     : QObject(nullptr)
     , m_http(new QNetworkAccessManager(this))
     , m_clientID(clientID)
 {
 }
 
-inline Detail::Api::Api(QString clientID, QObject* parent)
+inline Detail::Api::Api(const QString& clientID, QObject* parent)
     : QObject(parent)
     , m_http(new QNetworkAccessManager(this))
     , m_clientID(clientID)
@@ -60,7 +60,7 @@ inline BoxArtReply* Detail::Api::getBoxArtByUrl(const QString& url, int width, i
     return createReply<BoxArtReply>(request);
 }
 
-inline StreamsReply* Detail::Api::getStreamsByGameId(ID gameId, QString after)
+inline StreamsReply* Detail::Api::getStreamsByGameId(ID gameId, const QString& after)
 {
     QString url = api() + QString("/streams") + QString("?game_id=") + QString::number(gameId);
     if (!after.isEmpty())
@@ -70,7 +70,7 @@ inline StreamsReply* Detail::Api::getStreamsByGameId(ID gameId, QString after)
     return createReply<StreamsReply>(request);
 }
 
-inline StreamsReply* Detail::Api::getStreamsByLanguage(QString language, QString after)
+inline StreamsReply* Detail::Api::getStreamsByLanguage(const QString& language, const QString& after)
 {
     QString url = api() + QString("/streams") + QString("?language=") + language;
     if (!after.isEmpty())
@@ -104,7 +104,7 @@ inline UserReply* Detail::Api::getUserById(ID userId)
     return createReply<UserReply>(request);
 }
 
-inline UserReply* Detail::Api::getUserByName(QString name)
+inline UserReply* Detail::Api::getUserByName(const QString& name)
 {
     const QString url = api() + QString("/users") + QString("?login=") + name;
 
@@ -112,12 +112,12 @@ inline UserReply* Detail::Api::getUserByName(QString name)
     return createReply<UserReply>(request);
 }
 
-inline Helix::Helix(QString clientID)
+inline Helix::Helix(const QString& clientID)
     : Api(clientID)
 {
 }
 
-inline Helix::Helix(QString clientID, QObject* parent)
+inline Helix::Helix(const QString& clientID, QObject* parent)
     : Api(clientID, parent)
 {
 }
