@@ -27,6 +27,8 @@ public:
     operator bool() const;
 
     QVariant& data();
+
+    const QString& cursor() const;
 signals:
     void finished();
 
@@ -34,6 +36,7 @@ protected:
     QNetworkReply* m_reply;
     ReplyState m_currentState;
     QVariant m_data;
+    QString m_cursor;
 };
 
 class RawReply : public Reply {

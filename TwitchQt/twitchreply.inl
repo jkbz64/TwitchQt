@@ -3,6 +3,7 @@ inline Reply::Reply(QNetworkReply* reply)
     : QObject(nullptr)
     , m_reply(reply)
     , m_currentState(ReplyState::Pending)
+    , m_cursor("")
 {
 }
 
@@ -23,6 +24,11 @@ inline const ReplyState& Reply::currentState() const
 inline Reply::operator bool() const
 {
     return currentState() == ReplyState::Success;
+}
+
+inline const QString& Reply::cursor() const
+{
+    return m_cursor;
 }
 
 inline RawReply::RawReply(QNetworkReply* reply)
@@ -59,6 +65,9 @@ inline JSONReply::JSONReply(QNetworkReply* reply)
         } else {
             m_currentState = ReplyState::Success;
             parseData(json);
+
+            if (root.find("pagination") != root.end()) // Save the pagination
+                m_cursor = root.value("pagination").toObject().value("cursor").toString();
         }
         emit finished();
         m_reply->deleteLater();
