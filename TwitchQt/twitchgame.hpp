@@ -24,7 +24,7 @@ protected:
     virtual void parseData(const QJsonDocument&) override;
 };
 
-class TopGamesReply : public JSONReply {
+class GamesReply : public JSONReply {
     Q_OBJECT
 public:
     using JSONReply::JSONReply;

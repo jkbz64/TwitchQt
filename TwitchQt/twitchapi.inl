@@ -30,11 +30,11 @@ inline T* Detail::Api::createReply(const QNetworkRequest& request)
     return reply;
 }
 
-inline TopGamesReply* Detail::Api::getTopGames()
+inline GamesReply* Detail::Api::getTopGames()
 {
     const QString url = api() + QString("/games/top");
     auto request = buildRequest(QUrl(url));
-    return createReply<TopGamesReply>(request);
+    return createReply<GamesReply>(request);
 }
 
 inline GameReply* Detail::Api::getGameById(ID id)
@@ -44,12 +44,25 @@ inline GameReply* Detail::Api::getGameById(ID id)
     return createReply<GameReply>(request);
 }
 
+inline GamesReply* Detail::Api::getGameByIds(const QStringList& ids)
+{
+    const QString url = api() + QString("/games") + QString("?id=") + ids.join(repeatDelimeter("id"));
+    auto request = buildRequest(QUrl(url));
+    return createReply<GamesReply>(request);
+}
+
 inline GameReply* Detail::Api::getGameByName(const QString& name)
 {
     const QString url = api() + QString("/games") + QString("?name=") + name;
-    qDebug() << url;
     auto request = buildRequest(QUrl(url));
     return createReply<GameReply>(request);
+}
+
+inline GamesReply* Detail::Api::getGameByNames(const QStringList& names)
+{
+    const QString url = api() + QString("/games") + QString("?name=") + names.join(repeatDelimeter("name"));
+    auto request = buildRequest(QUrl(url));
+    return createReply<GamesReply>(request);
 }
 
 inline BoxArtReply* Detail::Api::getBoxArtByUrl(const QString& url, int width, int height)
@@ -88,12 +101,32 @@ inline StreamReply* Detail::Api::getStreamById(ID userId)
     return createReply<StreamReply>(request);
 }
 
+inline StreamsReply* Detail::Api::getStreamsByIds(const QStringList& ids, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?user_id=") + ids.join("&user_id=");
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
 inline StreamReply* Detail::Api::getStreamByName(const QString& userName)
 {
     const QString url = api() + QString("/streams") + QString("?user_login=") + userName;
 
     auto request = buildRequest(QUrl(url));
     return createReply<StreamReply>(request);
+}
+
+inline StreamsReply* Detail::Api::getStreamsByNames(const QStringList& names, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?user_login=") + names.join("&user_login=");
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
 }
 
 inline UserReply* Detail::Api::getUserById(ID userId)
@@ -110,6 +143,26 @@ inline UserReply* Detail::Api::getUserByName(const QString& name)
 
     auto request = buildRequest(QUrl(url));
     return createReply<UserReply>(request);
+}
+
+inline UsersReply* Detail::Api::getUserByIds(const QStringList& ids, const QString& after)
+{
+    QString url = api() + QString("/users") + QString("?id=") + ids.join(repeatDelimeter("id"));
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<UsersReply>(request);
+}
+
+inline UsersReply* Detail::Api::getUserByNames(const QStringList& names, const QString& after)
+{
+    QString url = api() + QString("/users") + QString("?login=") + names.join(repeatDelimeter("login"));
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<UsersReply>(request);
 }
 
 inline Helix::Helix(const QString& clientID)
@@ -137,4 +190,9 @@ inline QNetworkRequest Helix::buildRequest(QUrl url)
     request.setUrl(url);
 
     return request;
+}
+
+inline QString Helix::repeatDelimeter(const QString& parameter) const
+{
+    return QString("&{parameter}=").replace("{parameter}", parameter);
 }

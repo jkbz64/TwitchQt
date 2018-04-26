@@ -21,23 +21,34 @@ namespace Detail {
 
         virtual ~Api();
         virtual QString api() const = 0;
+        // Basically repeated parameters format
+        // For example in Helix it's &par= and in v5 it's comma (,)
+        virtual QString repeatDelimeter(const QString& = "") const = 0;
 
         // Games
-        TopGamesReply* getTopGames();
+        GamesReply* getTopGames();
         GameReply* getGameById(ID);
+        GamesReply* getGameByIds(const QStringList&);
         GameReply* getGameByName(const QString&);
+        GamesReply* getGameByNames(const QStringList&);
         BoxArtReply* getBoxArtByUrl(const QString&, int, int);
 
         // Streams
         StreamReply* getStreamById(ID);
         StreamReply* getStreamByName(const QString&);
 
+        StreamsReply* getStreamsByNames(const QStringList&, const QString& = "");
+        StreamsReply* getStreamsByIds(const QStringList&, const QString& = "");
         StreamsReply* getStreamsByGameId(ID, const QString& = "");
+        StreamsReply* getStreamsByGameIds(const QStringList&, const QString& = "");
         StreamsReply* getStreamsByLanguage(const QString&, const QString& = "");
 
         // Users
         UserReply* getUserById(ID);
         UserReply* getUserByName(const QString&);
+
+        UsersReply* getUserByIds(const QStringList&, const QString& = "");
+        UsersReply* getUserByNames(const QStringList&, const QString& = "");
 
     protected:
         QNetworkAccessManager* m_http;
@@ -58,12 +69,15 @@ public:
     ~Helix();
 
     virtual QString api() const override;
+    virtual QString repeatDelimeter(const QString&) const override;
 
 protected:
     virtual QNetworkRequest buildRequest(QUrl) override;
 };
 
 #include "twitchapi.inl"
+
+using Api = Helix;
 }
 
 #endif // TWITCHAPI_HPP

@@ -19,9 +19,9 @@ inline void GameReply::parseData(const QJsonDocument& json)
     }
 }
 
-inline void TopGamesReply::parseData(const QJsonDocument& json)
+inline void GamesReply::parseData(const QJsonDocument& json)
 {
-    Games topGames;
+    Games games;
     auto&& root = json.object();
     if (root.contains("data")) {
         auto&& data = root.value("data").toArray();
@@ -30,12 +30,12 @@ inline void TopGamesReply::parseData(const QJsonDocument& json)
             QString id = game.value("id").toString();
             QString name = game.value("name").toString();
             QString boxArtUrl = game.value("box_art_url").toString();
-            topGames.push_back({ id.toULongLong(),
+            games.push_back({ id.toULongLong(),
                 name,
                 boxArtUrl });
         }
     }
-    m_data.setValue(topGames);
+    m_data.setValue(games);
 }
 
 inline void BoxArtReply::parseData(const QByteArray& data)

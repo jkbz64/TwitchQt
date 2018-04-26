@@ -29,9 +29,20 @@ struct User {
     qulonglong m_viewCount;
 };
 
+using Users = QVector<User>;
+
 // Replies
 
 class UserReply : public JSONReply {
+    Q_OBJECT
+public:
+    using JSONReply::JSONReply;
+
+protected:
+    virtual void parseData(const QJsonDocument&) override;
+};
+
+class UsersReply : public JSONReply {
     Q_OBJECT
 public:
     using JSONReply::JSONReply;
