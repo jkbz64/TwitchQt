@@ -60,8 +60,6 @@ inline void Detail::Api::updateLimits(QNetworkReply* reply)
         auto timestamp = reply->rawHeader("RateLimit-Reset").toUInt();
         m_rateResetDate.setTime_t(timestamp);
     }
-
-    qDebug() << m_rateRemaining;
 }
 
 // Games
