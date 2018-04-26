@@ -1,5 +1,5 @@
-#ifndef TWITCHSTREAM_H
-#define TWITCHSTREAM_H
+#ifndef TWITCHSTREAM_HPP
+#define TWITCHSTREAM_HPP
 
 #include "twitchreply.hpp"
 
@@ -54,4 +54,4 @@ protected:
 Q_DECLARE_METATYPE(Twitch::Stream);
 Q_DECLARE_METATYPE(Twitch::Streams);
 
-#endif // TWITCHSTREAM_H
+#endif // TWITCHSTREAM_HPP

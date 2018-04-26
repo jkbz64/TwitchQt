@@ -1,5 +1,5 @@
-#ifndef TWITCHGAME_H
-#define TWITCHGAME_H
+#ifndef TWITCHGAME_HPP
+#define TWITCHGAME_HPP
 
 #include "twitchreply.hpp"
 #include <QImage>
@@ -47,4 +47,4 @@ protected:
 Q_DECLARE_METATYPE(Twitch::Game);
 Q_DECLARE_METATYPE(Twitch::Games);
 
-#endif // TWITCHGAME_H
+#endif // TWITCHGAME_HPP

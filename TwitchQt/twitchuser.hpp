@@ -1,5 +1,5 @@
-#ifndef TWITCHUSER_H
-#define TWITCHUSER_H
+#ifndef TWITCHUSER_HPP
+#define TWITCHUSER_HPP
 
 #include "twitchreply.hpp"
 
@@ -56,4 +56,4 @@ protected:
 
 Q_DECLARE_METATYPE(Twitch::User);
 
-#endif // TWITCHUSER_H
+#endif // TWITCHUSER_HPP

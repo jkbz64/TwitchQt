@@ -22,9 +22,6 @@ namespace Detail {
 
         virtual ~Api();
         virtual QString api() const = 0;
-        // Basically repeated parameters format
-        // For example in Helix it's &par= and in v5 it's comma (,)
-        virtual QString repeatDelimeter(const QString& = "") const = 0;
 
         // Games
         GamesReply* getTopGames();
@@ -63,6 +60,9 @@ namespace Detail {
         QDateTime m_rateResetDate;
 
         virtual QNetworkRequest buildRequest(QUrl) = 0;
+        // Basically repeated parameters format
+        // For example in Helix it's &par= and in v5 it's comma (,)
+        virtual QString repeatDelimeter(const QString& = "") const = 0;
 
         template <class T>
         T* createReply(const QNetworkRequest&);
@@ -79,10 +79,10 @@ public:
     ~Helix();
 
     virtual QString api() const override;
-    virtual QString repeatDelimeter(const QString&) const override;
 
 protected:
     virtual QNetworkRequest buildRequest(QUrl) override;
+    virtual QString repeatDelimeter(const QString&) const override;
 };
 
 #include "twitchapi.inl"

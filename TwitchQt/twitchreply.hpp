@@ -1,5 +1,5 @@
-#ifndef TWITCHREPLY_H
-#define TWITCHREPLY_H
+#ifndef TWITCHREPLY_HPP
+#define TWITCHREPLY_HPP
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -62,4 +62,4 @@ protected:
 #include "twitchreply.inl"
 }
 
-#endif // TWITCHREPLY_H
+#endif // TWITCHREPLY_HPP

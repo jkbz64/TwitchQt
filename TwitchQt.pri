@@ -1,7 +1,6 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-	$$PWD/TwitchQt/twitch.hpp \
 	$$PWD/TwitchQt/twitchgame.hpp \
 	$$PWD/TwitchQt/twitchreply.hpp \
 	$$PWD/TwitchQt/twitchgame.inl \
@@ -12,3 +11,4 @@ HEADERS += \
 	$$PWD/TwitchQt/twitchuser.inl \
 	$$PWD/TwitchQt/twitchapi.hpp \
 	$$PWD/TwitchQt/twitchapi.inl \
+    $$PWD/TwitchQt/Twitch
