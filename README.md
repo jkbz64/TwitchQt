@@ -3,17 +3,20 @@
 A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Qt5.
 
 ## Requirements
-Qt5 and at least C++11 compatible compiler
+#### Qt5
+- Core
+- Network
+#### C++11 compatible compiler
 
 ## Usage
-The library is header-only, but it still uses Q_OBJECT macro and other Qt magic so(for now) you'll have to add every header to target headers.
-Copy TwitchQt directory to your project directory/whatever place suits you and `include(path/to/TwitchQt.pri)` in your .pro script, you should be fine with this.
-In the future there will be a single .hpp version of this library which will eliminate including thingy.
+Clone this library whenever you want and just `include(path/to/TwitchQt.pri)` in your .pro file. 
 
-# Example
+There will be (hopefully) a single .hpp version of this library which will make things easier in the future.
+
+## Example
 ```cpp
 #include <QCoreApplication>
-#include <TwitchQt/twitch.hpp>
+#include <TwitchQt/Twitch>
 
 int main(int argc, char* argv[])
 {
@@ -42,6 +45,9 @@ int main(int argc, char* argv[])
 
 ```
 
+## Features
+Look at the [twitchapi.hpp](https://github.com/jkbz64/TwitchQt/blob/master/TwitchQt/twitchapi.hpp) file :)
+
 ## TODO:
 - GET Requests:
   **Clips**
@@ -50,7 +56,7 @@ int main(int argc, char* argv[])
   **Channel emoticons**
   **Streams metadata**
   **?**
-* Every request other than GET
+* Every request other than GET OMEGA
 * Unit tests
 * Maybe webhooks(?)
 * Single header version (entire library in one file) 
