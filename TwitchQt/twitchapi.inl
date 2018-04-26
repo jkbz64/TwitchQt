@@ -24,8 +24,13 @@ inline T* Detail::Api::createReply(const QNetworkRequest& request)
     static_assert(std::is_base_of<Reply, T>::value, " must derive from Twitch::Reply");
 
     QNetworkReply* requestReply = m_http->get(request);
-    auto reply = new T(requestReply);
+    QPointer<T> reply = new T(requestReply);
     reply->setParent(this);
+
+    // Update rate limiting
+    connect(requestReply, &QNetworkReply::metaDataChanged, [this, requestReply]() {
+        updateLimits(requestReply);
+    });
 
     return reply;
 }
@@ -168,11 +173,17 @@ inline UsersReply* Detail::Api::getUserByNames(const QStringList& names, const Q
 inline Helix::Helix(const QString& clientID)
     : Api(clientID)
 {
+    m_rateLimit = 30;
+    m_rateRemaining = 30;
+    m_rateResetDate = QDateTime::currentDateTime();
 }
 
 inline Helix::Helix(const QString& clientID, QObject* parent)
     : Api(clientID, parent)
 {
+    m_rateLimit = 30;
+    m_rateRemaining = 30;
+    m_rateResetDate = QDateTime::currentDateTime();
 }
 
 inline Helix::~Helix() = default;
@@ -195,4 +206,31 @@ inline QNetworkRequest Helix::buildRequest(QUrl url)
 inline QString Helix::repeatDelimeter(const QString& parameter) const
 {
     return QString("&{parameter}=").replace("{parameter}", parameter);
+}
+
+inline int Detail::Api::rateLimit() const
+{
+    return m_rateLimit;
+}
+
+inline int Detail::Api::remainingRequests() const
+{
+    return m_rateRemaining;
+}
+
+inline const QDateTime& Detail::Api::resetDate() const
+{
+    return m_rateResetDate;
+}
+
+inline void Detail::Api::updateLimits(QNetworkReply* reply)
+{
+    if (reply->hasRawHeader("RateLimit-Limit"))
+        m_rateLimit = reply->rawHeader("RateLimit-Limit").toInt();
+    if (reply->hasRawHeader("RateLimit-Remaining"))
+        m_rateRemaining = reply->rawHeader("RateLimit-Remaining").toInt();
+    if (reply->hasRawHeader("RateLimit-Reset")) {
+        auto timestamp = reply->rawHeader("RateLimit-Reset").toUInt();
+        m_rateResetDate.setTime_t(timestamp);
+    }
 }

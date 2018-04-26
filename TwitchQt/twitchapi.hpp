@@ -1,6 +1,7 @@
 #ifndef TWITCHAPI_HPP
 #define TWITCHAPI_HPP
 
+#include <QDateTime>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
@@ -50,14 +51,23 @@ namespace Detail {
         UsersReply* getUserByIds(const QStringList&, const QString& = "");
         UsersReply* getUserByNames(const QStringList&, const QString& = "");
 
+        int rateLimit() const;
+        int remainingRequests() const;
+        const QDateTime& resetDate() const;
+
     protected:
         QNetworkAccessManager* m_http;
         QString m_clientID;
+        int m_rateLimit{ 0 };
+        int m_rateRemaining{ 0 };
+        QDateTime m_rateResetDate;
 
         virtual QNetworkRequest buildRequest(QUrl) = 0;
 
         template <class T>
         T* createReply(const QNetworkRequest&);
+
+        void updateLimits(QNetworkReply*);
     };
 }
 
