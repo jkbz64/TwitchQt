@@ -98,6 +98,16 @@ inline StreamsReply* Detail::Api::getStreamsByLanguage(const QString& language, 
     return createReply<StreamsReply>(request);
 }
 
+inline StreamsReply* Detail::Api::getStreamsByLanguages(const QStringList& languages, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?language=") + languages.join(repeatDelimeter("language"));
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
 inline StreamReply* Detail::Api::getStreamById(ID userId)
 {
     const QString url = api() + QString("/streams") + QString("?user_id=") + QString::number(userId);
@@ -109,6 +119,16 @@ inline StreamReply* Detail::Api::getStreamById(ID userId)
 inline StreamsReply* Detail::Api::getStreamsByIds(const QStringList& ids, const QString& after)
 {
     QString url = api() + QString("/streams") + QString("?user_id=") + ids.join("&user_id=");
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
+inline StreamsReply* Detail::Api::getStreamsByGameIds(const QStringList& ids, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?game_id=") + ids.join("&game_id=");
     if (!after.isEmpty())
         url += QString("&after=") + after;
 

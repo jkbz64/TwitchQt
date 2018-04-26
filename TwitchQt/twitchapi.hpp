@@ -40,6 +40,7 @@ namespace Detail {
         StreamsReply* getStreamsByGameId(ID, const QString& = "");
         StreamsReply* getStreamsByGameIds(const QStringList&, const QString& = "");
         StreamsReply* getStreamsByLanguage(const QString&, const QString& = "");
+        StreamsReply* getStreamsByLanguages(const QStringList&, const QString& = "");
 
         // Users
         UserReply* getUserById(ID);
