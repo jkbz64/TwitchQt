@@ -16,6 +16,21 @@ inline Detail::Api::~Api()
 {
 }
 
+inline int Detail::Api::rateLimit() const
+{
+    return m_rateLimit;
+}
+
+inline int Detail::Api::remainingRequests() const
+{
+    return m_rateRemaining;
+}
+
+inline const QDateTime& Detail::Api::resetDate() const
+{
+    return m_rateResetDate;
+}
+
 #include <type_traits>
 
 template <class T>
@@ -35,9 +50,25 @@ inline T* Detail::Api::createReply(const QNetworkRequest& request)
     return reply;
 }
 
-inline GamesReply* Detail::Api::getTopGames()
+inline void Detail::Api::updateLimits(QNetworkReply* reply)
 {
-    const QString url = api() + QString("/games/top");
+    if (reply->hasRawHeader("RateLimit-Limit"))
+        m_rateLimit = reply->rawHeader("RateLimit-Limit").toInt();
+    if (reply->hasRawHeader("RateLimit-Remaining"))
+        m_rateRemaining = reply->rawHeader("RateLimit-Remaining").toInt();
+    if (reply->hasRawHeader("RateLimit-Reset")) {
+        auto timestamp = reply->rawHeader("RateLimit-Reset").toUInt();
+        m_rateResetDate.setTime_t(timestamp);
+    }
+
+    qDebug() << m_rateRemaining;
+}
+
+// Games
+
+inline GamesReply* Detail::Api::getTopGames(int first)
+{
+    const QString url = api() + QString("/games/top") + QString("?first=") + QString::number(first);
     auto request = buildRequest(QUrl(url));
     return createReply<GamesReply>(request);
 }
@@ -63,13 +94,6 @@ inline GameReply* Detail::Api::getGameByName(const QString& name)
     return createReply<GameReply>(request);
 }
 
-inline GamesReply* Detail::Api::getGameByNames(const QStringList& names)
-{
-    const QString url = api() + QString("/games") + QString("?name=") + names.join(repeatDelimeter("name"));
-    auto request = buildRequest(QUrl(url));
-    return createReply<GamesReply>(request);
-}
-
 inline BoxArtReply* Detail::Api::getBoxArtByUrl(const QString& url, int width, int height)
 {
     QString targetUrl = url;
@@ -78,62 +102,21 @@ inline BoxArtReply* Detail::Api::getBoxArtByUrl(const QString& url, int width, i
     return createReply<BoxArtReply>(request);
 }
 
-inline StreamsReply* Detail::Api::getStreamsByGameId(ID gameId, const QString& after)
+inline GamesReply* Detail::Api::getGameByNames(const QStringList& names)
 {
-    QString url = api() + QString("/streams") + QString("?game_id=") + QString::number(gameId);
-    if (!after.isEmpty())
-        url += QString("&after=") + after;
-
+    const QString url = api() + QString("/games") + QString("?name=") + names.join(repeatDelimeter("name"));
     auto request = buildRequest(QUrl(url));
-    return createReply<StreamsReply>(request);
+    return createReply<GamesReply>(request);
 }
 
-inline StreamsReply* Detail::Api::getStreamsByLanguage(const QString& language, const QString& after)
-{
-    QString url = api() + QString("/streams") + QString("?language=") + language;
-    if (!after.isEmpty())
-        url += QString("&after=") + after;
+// Streams
 
-    auto request = buildRequest(QUrl(url));
-    return createReply<StreamsReply>(request);
-}
-
-inline StreamsReply* Detail::Api::getStreamsByLanguages(const QStringList& languages, const QString& after)
-{
-    QString url = api() + QString("/streams") + QString("?language=") + languages.join(repeatDelimeter("language"));
-    if (!after.isEmpty())
-        url += QString("&after=") + after;
-
-    auto request = buildRequest(QUrl(url));
-    return createReply<StreamsReply>(request);
-}
-
-inline StreamReply* Detail::Api::getStreamById(ID userId)
+inline StreamReply* Detail::Api::getStreamByUserId(ID userId)
 {
     const QString url = api() + QString("/streams") + QString("?user_id=") + QString::number(userId);
 
     auto request = buildRequest(QUrl(url));
     return createReply<StreamReply>(request);
-}
-
-inline StreamsReply* Detail::Api::getStreamsByIds(const QStringList& ids, const QString& after)
-{
-    QString url = api() + QString("/streams") + QString("?user_id=") + ids.join("&user_id=");
-    if (!after.isEmpty())
-        url += QString("&after=") + after;
-
-    auto request = buildRequest(QUrl(url));
-    return createReply<StreamsReply>(request);
-}
-
-inline StreamsReply* Detail::Api::getStreamsByGameIds(const QStringList& ids, const QString& after)
-{
-    QString url = api() + QString("/streams") + QString("?game_id=") + ids.join("&game_id=");
-    if (!after.isEmpty())
-        url += QString("&after=") + after;
-
-    auto request = buildRequest(QUrl(url));
-    return createReply<StreamsReply>(request);
 }
 
 inline StreamReply* Detail::Api::getStreamByName(const QString& userName)
@@ -144,15 +127,67 @@ inline StreamReply* Detail::Api::getStreamByName(const QString& userName)
     return createReply<StreamReply>(request);
 }
 
-inline StreamsReply* Detail::Api::getStreamsByNames(const QStringList& names, const QString& after)
+inline StreamsReply* Detail::Api::getStreamsByNames(const QStringList& names, int first, const QString& after)
 {
-    QString url = api() + QString("/streams") + QString("?user_login=") + names.join("&user_login=");
+    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("&user_login=") + names.join("&user_login=");
     if (!after.isEmpty())
         url += QString("&after=") + after;
 
     auto request = buildRequest(QUrl(url));
     return createReply<StreamsReply>(request);
 }
+
+inline StreamsReply* Detail::Api::getStreamsByUserIds(const QStringList& ids, int first, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("&user_id=") + ids.join("&user_id=");
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
+inline StreamsReply* Detail::Api::getStreamsByGameId(ID gameId, int first, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("&game_id=") + QString::number(gameId);
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
+inline StreamsReply* Detail::Api::getStreamsByGameIds(const QStringList& ids, int first, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("&game_id=") + ids.join("&game_id=");
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
+inline StreamsReply* Detail::Api::getStreamsByLanguage(const QString& language, int first, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("?language=") + language;
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
+inline StreamsReply* Detail::Api::getStreamsByLanguages(const QStringList& languages, int first, const QString& after)
+{
+    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("?language=") + languages.join(repeatDelimeter("language"));
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<StreamsReply>(request);
+}
+
+// User
 
 inline UserReply* Detail::Api::getUserById(ID userId)
 {
@@ -190,6 +225,8 @@ inline UsersReply* Detail::Api::getUserByNames(const QStringList& names, const Q
     return createReply<UsersReply>(request);
 }
 
+// Helix
+
 inline Helix::Helix(const QString& clientID)
     : Api(clientID)
 {
@@ -226,31 +263,4 @@ inline QNetworkRequest Helix::buildRequest(QUrl url)
 inline QString Helix::repeatDelimeter(const QString& parameter) const
 {
     return QString("&{parameter}=").replace("{parameter}", parameter);
-}
-
-inline int Detail::Api::rateLimit() const
-{
-    return m_rateLimit;
-}
-
-inline int Detail::Api::remainingRequests() const
-{
-    return m_rateRemaining;
-}
-
-inline const QDateTime& Detail::Api::resetDate() const
-{
-    return m_rateResetDate;
-}
-
-inline void Detail::Api::updateLimits(QNetworkReply* reply)
-{
-    if (reply->hasRawHeader("RateLimit-Limit"))
-        m_rateLimit = reply->rawHeader("RateLimit-Limit").toInt();
-    if (reply->hasRawHeader("RateLimit-Remaining"))
-        m_rateRemaining = reply->rawHeader("RateLimit-Remaining").toInt();
-    if (reply->hasRawHeader("RateLimit-Reset")) {
-        auto timestamp = reply->rawHeader("RateLimit-Reset").toUInt();
-        m_rateResetDate.setTime_t(timestamp);
-    }
 }

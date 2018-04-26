@@ -24,7 +24,7 @@ namespace Detail {
         virtual QString api() const = 0;
 
         // Games
-        GamesReply* getTopGames();
+        GamesReply* getTopGames(int = 20);
         GameReply* getGameById(ID);
         GamesReply* getGameByIds(const QStringList&);
         GameReply* getGameByName(const QString&);
@@ -32,15 +32,15 @@ namespace Detail {
         BoxArtReply* getBoxArtByUrl(const QString&, int, int);
 
         // Streams
-        StreamReply* getStreamById(ID);
+        StreamReply* getStreamByUserId(ID);
         StreamReply* getStreamByName(const QString&);
 
-        StreamsReply* getStreamsByNames(const QStringList&, const QString& = "");
-        StreamsReply* getStreamsByIds(const QStringList&, const QString& = "");
-        StreamsReply* getStreamsByGameId(ID, const QString& = "");
-        StreamsReply* getStreamsByGameIds(const QStringList&, const QString& = "");
-        StreamsReply* getStreamsByLanguage(const QString&, const QString& = "");
-        StreamsReply* getStreamsByLanguages(const QStringList&, const QString& = "");
+        StreamsReply* getStreamsByNames(const QStringList&, int = 20, const QString& = "");
+        StreamsReply* getStreamsByUserIds(const QStringList&, int = 20, const QString& = "");
+        StreamsReply* getStreamsByGameId(ID, int = 20, const QString& = "");
+        StreamsReply* getStreamsByGameIds(const QStringList&, int = 20, const QString& = "");
+        StreamsReply* getStreamsByLanguage(const QString&, int = 20, const QString& = "");
+        StreamsReply* getStreamsByLanguages(const QStringList&, int = 20, const QString& = "");
 
         // Users
         UserReply* getUserById(ID);
