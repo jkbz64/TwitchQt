@@ -1,7 +1,8 @@
 #ifndef TWITCHSTREAM_HPP
 #define TWITCHSTREAM_HPP
 
-#include "twitchreply.hpp"
+#include <QDateTime>
+#include <QString>
 
 namespace Twitch {
 /// Models
@@ -24,34 +25,6 @@ struct Stream {
 };
 
 using Streams = QVector<Twitch::Stream>;
-
-/// Replies
-class StreamReply : public JSONReply {
-    Q_OBJECT
-public:
-    using JSONReply::JSONReply;
-
-protected:
-    virtual void parseData(const QJsonDocument&) override;
-};
-
-class StreamsReply : public JSONReply {
-    Q_OBJECT
-public:
-    using JSONReply::JSONReply;
-    qulonglong combinedViewerCount() const;
-    const QString& cursor() const;
-
-protected:
-    qulonglong m_combinedViewerCount{ 0u };
-    QString m_cursor;
-    virtual void parseData(const QJsonDocument&) override;
-};
-
-#include "twitchstream.inl"
 }
-
-Q_DECLARE_METATYPE(Twitch::Stream);
-Q_DECLARE_METATYPE(Twitch::Streams);
 
 #endif // TWITCHSTREAM_HPP

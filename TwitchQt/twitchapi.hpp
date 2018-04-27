@@ -1,14 +1,11 @@
 #ifndef TWITCHAPI_HPP
 #define TWITCHAPI_HPP
 
-#include <QDateTime>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
 
-#include "twitchgame.hpp"
-#include "twitchreply.hpp"
-#include "twitchstream.hpp"
-#include "twitchuser.hpp"
+#include "twitchgamereply.hpp"
+#include "twitchstreamreply.hpp"
+#include "twitchuserreply.hpp"
 
 namespace Twitch {
 using ID = qulonglong;

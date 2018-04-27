@@ -10,7 +10,6 @@
 #include <QVariant>
 
 namespace Twitch {
-
 enum class ReplyState {
     Pending,
     Success,

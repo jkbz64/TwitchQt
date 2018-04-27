@@ -1,7 +1,7 @@
 #ifndef TWITCHUSER_HPP
 #define TWITCHUSER_HPP
 
-#include "twitchreply.hpp"
+#include <QString>
 
 namespace Twitch {
 // Models
@@ -30,30 +30,6 @@ struct User {
 };
 
 using Users = QVector<User>;
-
-// Replies
-
-class UserReply : public JSONReply {
-    Q_OBJECT
-public:
-    using JSONReply::JSONReply;
-
-protected:
-    virtual void parseData(const QJsonDocument&) override;
-};
-
-class UsersReply : public JSONReply {
-    Q_OBJECT
-public:
-    using JSONReply::JSONReply;
-
-protected:
-    virtual void parseData(const QJsonDocument&) override;
-};
-
-#include "twitchuser.inl"
 }
-
-Q_DECLARE_METATYPE(Twitch::User);
 
 #endif // TWITCHUSER_HPP
