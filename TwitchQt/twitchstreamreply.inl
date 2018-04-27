@@ -1,5 +1,5 @@
 
-inline void Twitch::StreamReply::parseData(const QJsonDocument& json)
+inline void StreamReply::parseData(const QJsonDocument& json)
 {
     auto&& root = json.object();
     if (root.contains("data")) {
