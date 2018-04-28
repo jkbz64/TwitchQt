@@ -4,8 +4,6 @@
 #include "twitchreply.hpp"
 #include "twitchstream.hpp"
 
-Q_DECLARE_METATYPE(Twitch::Stream);
-Q_DECLARE_METATYPE(Twitch::Streams);
 
 namespace Twitch {
 class StreamReply : public JSONReply {

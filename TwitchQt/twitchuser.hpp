@@ -32,4 +32,7 @@ struct User {
 using Users = QVector<User>;
 }
 
+Q_DECLARE_METATYPE(Twitch::User);
+Q_DECLARE_METATYPE(Twitch::Users);
+
 #endif // TWITCHUSER_HPP

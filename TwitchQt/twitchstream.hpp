@@ -27,4 +27,7 @@ struct Stream {
 using Streams = QVector<Twitch::Stream>;
 }
 
+Q_DECLARE_METATYPE(Twitch::Stream);
+Q_DECLARE_METATYPE(Twitch::Streams);
+
 #endif // TWITCHSTREAM_HPP

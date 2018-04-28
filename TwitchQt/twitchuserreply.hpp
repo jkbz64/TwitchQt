@@ -4,9 +4,6 @@
 #include "twitchreply.hpp"
 #include "twitchuser.hpp"
 
-Q_DECLARE_METATYPE(Twitch::User);
-Q_DECLARE_METATYPE(Twitch::Users);
-
 namespace Twitch {
 class UserReply : public JSONReply {
     Q_OBJECT
