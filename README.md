@@ -9,7 +9,7 @@ A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Q
 #### C++11 compatible compiler
 
 ## Usage
-Clone this library whenever you want and just `include(path/to/TwitchQt.pri)` in your .pro file. 
+Clone this library wherever you want and just `include(path/to/TwitchQt.pri)` in your .pro file. 
 
 There will be (hopefully) a single .hpp version of this library which will make things easier in the future.
 
