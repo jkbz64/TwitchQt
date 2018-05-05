@@ -1,3 +1,11 @@
+inline Detail::Api::Api(QObject *parent)
+  : QObject(parent)
+  , m_http(new QNetworkAccessManager(this))
+  , m_clientID()
+{
+
+}
+
 inline Detail::Api::Api(const QString& clientID)
     : QObject(nullptr)
     , m_http(new QNetworkAccessManager(this))
@@ -14,6 +22,16 @@ inline Detail::Api::Api(const QString& clientID, QObject* parent)
 
 inline Detail::Api::~Api()
 {
+}
+
+inline const QString& Detail::Api::clientID() const
+{
+    return m_clientID;
+}
+
+inline void Detail::Api::setClientID(const QString& id)
+{
+    m_clientID = id;
 }
 
 inline int Detail::Api::rateLimit() const
@@ -262,3 +280,4 @@ inline QString Helix::repeatDelimeter(const QString& parameter) const
 {
     return QString("&{parameter}=").replace("{parameter}", parameter);
 }
+

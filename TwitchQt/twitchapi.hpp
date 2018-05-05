@@ -14,10 +14,14 @@ namespace Detail {
     class Api : public QObject {
         Q_OBJECT
     public:
+        Api(QObject* = nullptr);
         Api(const QString&);
         Api(const QString&, QObject*);
-
         virtual ~Api();
+
+        const QString& clientID() const;
+        void setClientID(const QString&);
+
         virtual QString api() const = 0;
 
         // Games
