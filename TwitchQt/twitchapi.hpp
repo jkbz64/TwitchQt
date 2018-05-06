@@ -56,12 +56,15 @@ namespace Detail {
 
         // TwitchEmotes
         virtual EmotesReply* getGlobalEmotes();
+        virtual EmoteImageReply* getEmoteImage(ID);
 
         // BetterTTV
         virtual BTTV::EmotesReply* getBTTVGlobalEmotes();
+        virtual EmoteImageReply* getBTTVEmoteImage(QString);
 
         // FFZ
         virtual FFZ::EmotesReply* getFFZGlobalEmotes();
+        virtual EmoteImageReply* getFFZEmoteImage(ID);
 
         int rateLimit() const;
         int remainingRequests() const;

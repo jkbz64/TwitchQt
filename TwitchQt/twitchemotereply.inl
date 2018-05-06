@@ -107,3 +107,8 @@ inline void FFZ::EmotesReply::parseData(const QJsonDocument& json)
 
     m_data.setValue(emotes);
 }
+
+inline void EmoteImageReply::parseData(const QByteArray &data)
+{
+    m_data.setValue(QImage::fromData(data));
+}

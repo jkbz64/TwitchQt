@@ -280,6 +280,28 @@ inline FFZ::EmotesReply* Detail::Api::getFFZGlobalEmotes()
     return createReply<FFZ::EmotesReply>(request, false);
 }
 
+inline EmoteImageReply* Detail::Api::getEmoteImage(ID id)
+{
+    const QString url = Emote::urlTemplate().replace("{{id}}", QString::number(id)).replace("{{size}}", "1");
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<EmoteImageReply>(request, false);
+}
+
+inline EmoteImageReply* Detail::Api::getBTTVEmoteImage(QString id)
+{
+    const QString url = BTTV::Emote::urlTemplate().replace("{{id}}", id).replace("{{size}}", "1");
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<EmoteImageReply>(request, false);
+}
+
+inline EmoteImageReply* Detail::Api::getFFZEmoteImage(ID id)
+{
+    const QString url = FFZ::Emote::urlTemplate().replace("{{id}}", QString::number(id)).replace("{{size}}", "1");
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<EmoteImageReply>(request, false);
+}
+
+
 
 // Helix
 

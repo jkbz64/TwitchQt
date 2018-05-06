@@ -25,7 +25,7 @@ namespace BTTV {
         QString m_channel;
         Restrictions m_restrictions;
         QString m_imageType;
-        static QString urlTemplate() { return "https://cdn.betterttv.net/emote/{{id}}/{{size}}"; }
+        static QString urlTemplate() { return "https://cdn.betterttv.net/emote/{{id}}/{{size}}x"; }
     };
 
     using Emotes = QVector<BTTV::Emote>;

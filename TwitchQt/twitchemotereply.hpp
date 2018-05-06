@@ -3,6 +3,7 @@
 
 #include "twitchreply.hpp"
 #include "twitchemote.hpp"
+#include <QImage>
 
 namespace Twitch {
 class EmotesReply : public JSONReply {
@@ -35,6 +36,15 @@ namespace FFZ {
         virtual void parseData(const QJsonDocument&) override;
     };
 }
+
+class EmoteImageReply : public RawReply {
+    Q_OBJECT
+public:
+    using RawReply::RawReply;
+
+protected:
+    virtual void parseData(const QByteArray&) override;
+};
 
 #include "twitchemotereply.inl"
 }
