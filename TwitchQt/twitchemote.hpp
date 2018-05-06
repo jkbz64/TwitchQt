@@ -61,9 +61,37 @@ namespace FFZ {
     using Emotes = QVector<FFZ::Emote>;
 }
 
-class Emote {
+struct Emote {
     QString m_id;
     QString m_code;
+    QString m_url;
+
+    static Emote fromEmote(const TwitchEmotes::Emote& emote)
+    {
+        return Emote{
+            QString::number(emote.m_id),
+            emote.m_code,
+            TwitchEmotes::Emote::urlTemplate()
+        };
+    }
+
+    static Emote fromEmote(const BTTV::Emote& emote)
+    {
+        return Emote{
+            emote.m_id,
+            emote.m_code,
+            BTTV::Emote::urlTemplate()
+        };
+    }
+
+    static Emote fromEmote(const FFZ::Emote& emote)
+    {
+        return Emote{
+            emote.m_id,
+            emote.m_name,
+            FFZ::Emote::urlTemplate()
+        };
+    }
 };
 
 using Emotes = QVector<Emote>;
