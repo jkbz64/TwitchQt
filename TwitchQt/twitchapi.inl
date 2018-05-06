@@ -259,11 +259,11 @@ inline UsersReply* Detail::Api::getUserByNames(const QStringList& names, const Q
 
 // Emotes
 
-inline EmotesReply* Detail::Api::getGlobalEmotes()
+inline TwitchEmotes::EmotesReply* Detail::Api::getGlobalEmotes()
 {
     const QString url = emotesApi() + QString("/global.json");
     auto request = buildRequest(QUrl(url), false);
-    return createReply<EmotesReply>(request, false);
+    return createReply<TwitchEmotes::EmotesReply>(request, false);
 }
 
 inline BTTV::EmotesReply* Detail::Api::getBTTVGlobalEmotes()
@@ -280,23 +280,23 @@ inline FFZ::EmotesReply* Detail::Api::getFFZGlobalEmotes()
     return createReply<FFZ::EmotesReply>(request, false);
 }
 
-inline EmoteImageReply* Detail::Api::getEmoteImage(ID id)
+inline EmoteImageReply* Detail::Api::getEmoteImage(const QString& id)
 {
-    const QString url = Emote::urlTemplate().replace("{{id}}", QString::number(id)).replace("{{size}}", "1");
+    const QString url = TwitchEmotes::Emote::urlTemplate().replace("{{id}}", id).replace("{{size}}", "1");
     auto request = buildRequest(QUrl(url), false);
     return createReply<EmoteImageReply>(request, false);
 }
 
-inline EmoteImageReply* Detail::Api::getBTTVEmoteImage(QString id)
+inline EmoteImageReply* Detail::Api::getBTTVEmoteImage(const QString& id)
 {
     const QString url = BTTV::Emote::urlTemplate().replace("{{id}}", id).replace("{{size}}", "1");
     auto request = buildRequest(QUrl(url), false);
     return createReply<EmoteImageReply>(request, false);
 }
 
-inline EmoteImageReply* Detail::Api::getFFZEmoteImage(ID id)
+inline EmoteImageReply* Detail::Api::getFFZEmoteImage(const QString& id)
 {
-    const QString url = FFZ::Emote::urlTemplate().replace("{{id}}", QString::number(id)).replace("{{size}}", "1");
+    const QString url = FFZ::Emote::urlTemplate().replace("{{id}}", id).replace("{{size}}", "1");
     auto request = buildRequest(QUrl(url), false);
     return createReply<EmoteImageReply>(request, false);
 }

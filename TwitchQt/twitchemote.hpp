@@ -5,14 +5,18 @@
 #include <QVector>
 
 namespace Twitch {
+namespace TwitchEmotes {
+    struct Emote {
+        qulonglong m_id;
+        QString m_code;
+        int m_emoticonSet;
+        QString m_description;
+        static QString urlTemplate() { return "https://static-cdn.jtvnw.net/emoticons/v1/{{id}}/{{size}}.0"; }
+    };
 
-struct Emote {
-    qulonglong m_id;
-    QString m_code;
-    int m_emoticonSet;
-    QString m_description;
-    static QString urlTemplate() { return "https://static-cdn.jtvnw.net/emoticons/v1/{{id}}/{{size}}.0"; }
-};
+    using Emotes = QVector<TwitchEmotes::Emote>;
+}
+
 namespace BTTV {
     struct Restrictions {
         QVector<QString> m_channels;
@@ -53,17 +57,25 @@ namespace FFZ {
         int m_width;
         static QString urlTemplate() { return "https://cdn.frankerfacez.com/emoticon/{{id}}/{{size}}"; }
     };
+
     using Emotes = QVector<FFZ::Emote>;
 }
+
+class Emote {
+    QString m_id;
+    QString m_code;
+};
 
 using Emotes = QVector<Emote>;
 }
 
-Q_DECLARE_METATYPE(Twitch::Emote);
+Q_DECLARE_METATYPE(Twitch::TwitchEmotes::Emote);
 Q_DECLARE_METATYPE(Twitch::BTTV::Emote);
 Q_DECLARE_METATYPE(Twitch::FFZ::Emote);
-Q_DECLARE_METATYPE(Twitch::Emotes);
+Q_DECLARE_METATYPE(Twitch::TwitchEmotes::Emotes);
 Q_DECLARE_METATYPE(Twitch::BTTV::Emotes);
 Q_DECLARE_METATYPE(Twitch::FFZ::Emotes);
+Q_DECLARE_METATYPE(Twitch::Emote);
+Q_DECLARE_METATYPE(Twitch::Emotes);
 
 #endif // TWITCHEMOTE_HPP

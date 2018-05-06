@@ -55,16 +55,16 @@ namespace Detail {
         virtual UsersReply* getUserByNames(const QStringList&, const QString& = "");
 
         // TwitchEmotes
-        virtual EmotesReply* getGlobalEmotes();
-        virtual EmoteImageReply* getEmoteImage(ID);
+        virtual TwitchEmotes::EmotesReply* getGlobalEmotes();
+        virtual EmoteImageReply* getEmoteImage(const QString&);
 
         // BetterTTV
         virtual BTTV::EmotesReply* getBTTVGlobalEmotes();
-        virtual EmoteImageReply* getBTTVEmoteImage(QString);
+        virtual EmoteImageReply* getBTTVEmoteImage(const QString&);
 
         // FFZ
         virtual FFZ::EmotesReply* getFFZGlobalEmotes();
-        virtual EmoteImageReply* getFFZEmoteImage(ID);
+        virtual EmoteImageReply* getFFZEmoteImage(const QString&);
 
         int rateLimit() const;
         int remainingRequests() const;

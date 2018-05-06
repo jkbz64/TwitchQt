@@ -1,7 +1,7 @@
 
-inline void EmotesReply::parseData(const QJsonDocument& json)
+inline void TwitchEmotes::EmotesReply::parseData(const QJsonDocument& json)
 {
-    QVector<Emote> emotes;
+    QVector<TwitchEmotes::Emote> emotes;
     auto&& root = json.object();
     for (const auto& emoteObject : root) {
         auto&& emoteData = emoteObject.toObject();

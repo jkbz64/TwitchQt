@@ -6,14 +6,16 @@
 #include <QImage>
 
 namespace Twitch {
-class EmotesReply : public JSONReply {
-    Q_OBJECT
-public:
-    using JSONReply::JSONReply;
+namespace TwitchEmotes {
+    class EmotesReply : public JSONReply {
+        Q_OBJECT
+    public:
+        using JSONReply::JSONReply;
 
-protected:
-    virtual void parseData(const QJsonDocument&) override;
-};
+    protected:
+        virtual void parseData(const QJsonDocument&) override;
+    };
+}
 
 namespace BTTV {
     class EmotesReply : public JSONReply {
