@@ -9,4 +9,6 @@ HEADERS += \
 	$$PWD/TwitchQt/twitchapi.hpp \
 	$$PWD/TwitchQt/twitchgamereply.hpp \
 	$$PWD/TwitchQt/twitchstreamreply.hpp \
-	$$PWD/TwitchQt/twitchuserreply.hpp
+	$$PWD/TwitchQt/twitchuserreply.hpp \
+        $$PWD/TwitchQt/twitchemote.hpp \
+        $$PWD/TwitchQt/twitchemotereply.hpp \

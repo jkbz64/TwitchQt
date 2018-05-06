@@ -3,6 +3,7 @@
 
 #include <QDateTime>
 #include <QString>
+#include <QVector>
 
 namespace Twitch {
 /// Models

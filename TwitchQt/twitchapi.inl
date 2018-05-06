@@ -20,8 +20,21 @@ inline Detail::Api::Api(const QString& clientID, QObject* parent)
 {
 }
 
-inline Detail::Api::~Api()
+inline Detail::Api::~Api() = default;
+
+inline QString Detail::Api::emotesApi() const
 {
+    return QString("https://twitchemotes.com/api_cache/v3");
+}
+
+inline QString Detail::Api::ffzApi() const
+{
+    return QString("https://api.frankerfacez.com/v1");
+}
+
+inline QString Detail::Api::bttvApi() const
+{
+    return QString("https://api.betterttv.net/2");
 }
 
 inline const QString& Detail::Api::clientID() const
@@ -52,18 +65,21 @@ inline const QDateTime& Detail::Api::resetDate() const
 #include <type_traits>
 
 template <class T>
-inline T* Detail::Api::createReply(const QNetworkRequest& request)
+inline T* Detail::Api::createReply(const QNetworkRequest& request, bool shouldUpdate)
 {
     static_assert(std::is_base_of<Reply, T>::value, " must derive from Twitch::Reply");
 
     QNetworkReply* requestReply = m_http->get(request);
-    QPointer<T> reply = new T(requestReply);
+    T* reply = new T(requestReply);
     reply->setParent(this);
 
-    // Update rate limiting
-    connect(requestReply, &QNetworkReply::metaDataChanged, [this, requestReply]() {
-        updateLimits(requestReply);
-    });
+    if(shouldUpdate)
+    {
+        // Update rate limiting
+        connect(requestReply, &QNetworkReply::metaDataChanged, [this, requestReply]() {
+            updateLimits(requestReply);
+        });
+    }
 
     return reply;
 }
@@ -241,6 +257,30 @@ inline UsersReply* Detail::Api::getUserByNames(const QStringList& names, const Q
     return createReply<UsersReply>(request);
 }
 
+// Emotes
+
+inline EmotesReply* Detail::Api::getGlobalEmotes()
+{
+    const QString url = emotesApi() + QString("/global.json");
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<EmotesReply>(request, false);
+}
+
+inline BTTV::EmotesReply* Detail::Api::getBTTVGlobalEmotes()
+{
+    const QString url = bttvApi() + QString("/emotes");
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<BTTV::EmotesReply>(request, false);
+}
+
+inline FFZ::EmotesReply* Detail::Api::getFFZGlobalEmotes()
+{
+    const QString url = ffzApi() + QString("/set/global");
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<FFZ::EmotesReply>(request, false);
+}
+
+
 // Helix
 
 inline Helix::Helix(const QString& clientID)
@@ -266,11 +306,12 @@ inline QString Helix::api() const
     return QString("https://api.twitch.tv/helix");
 }
 
-inline QNetworkRequest Helix::buildRequest(QUrl url)
+inline QNetworkRequest Helix::buildRequest(QUrl url, bool includeID)
 {
     QNetworkRequest request;
     request.setRawHeader("User-Agent", "Twitch.Qt");
-    request.setRawHeader("Client-ID", m_clientID.toUtf8());
+    if(includeID)
+        request.setRawHeader("Client-ID", m_clientID.toUtf8());
     request.setUrl(url);
 
     return request;
@@ -280,4 +321,3 @@ inline QString Helix::repeatDelimeter(const QString& parameter) const
 {
     return QString("&{parameter}=").replace("{parameter}", parameter);
 }
-
