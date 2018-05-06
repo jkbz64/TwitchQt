@@ -5,13 +5,14 @@
 #include <QVector>
 
 namespace Twitch {
+
 struct Emote {
     qulonglong m_id;
     QString m_code;
     int m_emoticonSet;
     QString m_description;
+    static QString urlTemplate() { return "https://static-cdn.jtvnw.net/emoticons/v1/{{id}}/{{size}}.0"; }
 };
-
 namespace BTTV {
     struct Restrictions {
         QVector<QString> m_channels;
@@ -24,7 +25,9 @@ namespace BTTV {
         QString m_channel;
         Restrictions m_restrictions;
         QString m_imageType;
+        static QString urlTemplate() { return "https://cdn.betterttv.net/emote/{{id}}/{{size}}"; }
     };
+
     using Emotes = QVector<BTTV::Emote>;
 }
 
@@ -48,6 +51,7 @@ namespace FFZ {
         bool m_public;
         QVector<QString> m_urls;
         int m_width;
+        static QString urlTemplate() { return "https://cdn.frankerfacez.com/emoticon/{{id}}/{{size}}"; }
     };
     using Emotes = QVector<FFZ::Emote>;
 }
