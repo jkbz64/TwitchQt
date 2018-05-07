@@ -1,4 +1,28 @@
 
+inline Twitch::Emotes Detail::TwitchEmotesReply::toEmotes()
+{
+    Twitch::Emotes emotes;
+    for(const auto& emote : m_data.value<TwitchEmotes::Emotes>())
+        emotes.push_back(Twitch::Emote::fromEmote(emote));
+    return emotes;
+}
+
+inline Twitch::Emotes Detail::BTTVEmotesReply::toEmotes()
+{
+    Twitch::Emotes emotes;
+    for(const auto& emote : m_data.value<BTTV::Emotes>())
+        emotes.push_back(Twitch::Emote::fromEmote(emote));
+    return emotes;
+}
+
+inline Twitch::Emotes Detail::FFZEmotesReply::toEmotes()
+{
+    Twitch::Emotes emotes;
+    for(const auto& emote : m_data.value<FFZ::Emotes>())
+        emotes.push_back(Twitch::Emote::fromEmote(emote));
+    return emotes;
+}
+
 inline void TwitchEmotes::GlobalEmotesReply::parseData(const QJsonDocument& json)
 {
     QVector<TwitchEmotes::Emote> emotes;
@@ -201,28 +225,4 @@ inline void FFZ::SubscriberEmotesReply::parseData(const QJsonDocument &json)
     }
 
     m_data.setValue(emotes);
-}
-
-inline Twitch::Emotes TwitchEmotes::GlobalEmotesReply::toEmotes()
-{
-    Twitch::Emotes emotes;
-    for(const auto& emote : m_data.value<TwitchEmotes::Emotes>())
-        emotes.push_back(Twitch::Emote::fromEmote(emote));
-    return emotes;
-}
-
-inline Twitch::Emotes BTTV::GlobalEmotesReply::toEmotes()
-{
-    Twitch::Emotes emotes;
-    for(const auto& emote : m_data.value<BTTV::Emotes>())
-        emotes.push_back(Twitch::Emote::fromEmote(emote));
-    return emotes;
-}
-
-inline Twitch::Emotes FFZ::GlobalEmotesReply::toEmotes()
-{
-    Twitch::Emotes emotes;
-    for(const auto& emote : m_data.value<FFZ::Emotes>())
-        emotes.push_back(Twitch::Emote::fromEmote(emote));
-    return emotes;
 }
