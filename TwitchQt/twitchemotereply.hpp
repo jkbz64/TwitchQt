@@ -11,6 +11,8 @@ namespace Detail {
         Q_OBJECT
     public:
         using JSONReply::JSONReply;
+        virtual ~EmotesReply() = default;
+
         virtual Twitch::Emotes toEmotes() = 0;
     };
 
@@ -18,6 +20,7 @@ namespace Detail {
         Q_OBJECT
     public:
         using EmotesReply::EmotesReply;
+        virtual ~TwitchEmotesReply() = default;
         virtual Twitch::Emotes toEmotes() override final;
     };
 
@@ -25,6 +28,7 @@ namespace Detail {
         Q_OBJECT
     public:
         using EmotesReply::EmotesReply;
+        virtual ~BTTVEmotesReply() = default;
         virtual Twitch::Emotes toEmotes() override final;
     };
 
@@ -32,6 +36,7 @@ namespace Detail {
         Q_OBJECT
     public:
         using EmotesReply::EmotesReply;
+        virtual ~FFZEmotesReply() = default;
         virtual Twitch::Emotes toEmotes() override final;
     };
 }
