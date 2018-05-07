@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QVariant>
+#include <QImage>
 
 namespace Twitch {
 enum class ReplyState {
@@ -56,6 +57,15 @@ public:
 
 protected:
     virtual void parseData(const QJsonDocument&) = 0;
+};
+
+class ImageReply : public RawReply {
+    Q_OBJECT
+public:
+    using RawReply::RawReply;
+
+protected:
+    virtual void parseData(const QByteArray&) override;
 };
 
 #include "twitchreply.inl"

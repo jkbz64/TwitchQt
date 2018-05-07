@@ -77,3 +77,8 @@ inline JSONReply::JSONReply(QNetworkReply* reply)
 }
 
 inline JSONReply::~JSONReply() = default;
+
+inline void ImageReply::parseData(const QByteArray &data)
+{
+    m_data.setValue(QImage::fromData(data));
+}

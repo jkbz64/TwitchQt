@@ -108,11 +108,6 @@ inline void FFZ::EmotesReply::parseData(const QJsonDocument& json)
     m_data.setValue(emotes);
 }
 
-inline void EmoteImageReply::parseData(const QByteArray &data)
-{
-    m_data.setValue(QImage::fromData(data));
-}
-
 inline Twitch::Emotes TwitchEmotes::EmotesReply::toEmotes()
 {
     Twitch::Emotes emotes;
@@ -136,5 +131,3 @@ inline Twitch::Emotes FFZ::EmotesReply::toEmotes()
         emotes.push_back(Twitch::Emote::fromEmote(emote));
     return emotes;
 }
-
-

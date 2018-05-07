@@ -280,28 +280,32 @@ inline FFZ::EmotesReply* Detail::Api::getFFZGlobalEmotes()
     return createReply<FFZ::EmotesReply>(request, false);
 }
 
-inline EmoteImageReply* Detail::Api::getEmoteImage(const QString& id)
+inline ImageReply* Detail::Api::getImage(const QString &url)
+{
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<ImageReply>(request, false);
+}
+
+inline ImageReply* Detail::Api::getTwitchEmoteImage(const QString& id)
 {
     const QString url = TwitchEmotes::Emote::urlTemplate().replace("{{id}}", id).replace("{{size}}", "1");
     auto request = buildRequest(QUrl(url), false);
-    return createReply<EmoteImageReply>(request, false);
+    return createReply<ImageReply>(request, false);
 }
 
-inline EmoteImageReply* Detail::Api::getBTTVEmoteImage(const QString& id)
+inline ImageReply* Detail::Api::getBTTVEmoteImage(const QString& id)
 {
     const QString url = BTTV::Emote::urlTemplate().replace("{{id}}", id).replace("{{size}}", "1");
     auto request = buildRequest(QUrl(url), false);
-    return createReply<EmoteImageReply>(request, false);
+    return createReply<ImageReply>(request, false);
 }
 
-inline EmoteImageReply* Detail::Api::getFFZEmoteImage(const QString& id)
+inline ImageReply* Detail::Api::getFFZEmoteImage(const QString& id)
 {
     const QString url = FFZ::Emote::urlTemplate().replace("{{id}}", id).replace("{{size}}", "1");
     auto request = buildRequest(QUrl(url), false);
-    return createReply<EmoteImageReply>(request, false);
+    return createReply<ImageReply>(request, false);
 }
-
-
 
 // Helix
 
