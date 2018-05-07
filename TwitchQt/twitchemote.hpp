@@ -69,7 +69,7 @@ struct Emote {
     static Emote fromEmote(const TwitchEmotes::Emote& emote)
     {
         return Emote{
-            emote.m_id,
+            QString::number(emote.m_id),
             emote.m_code,
             TwitchEmotes::Emote::urlTemplate()
         };
