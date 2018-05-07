@@ -46,7 +46,7 @@ namespace FFZ {
         QString m_css;
         int m_height;
         bool m_hidden;
-        QString m_id;
+        int m_id;
         int m_margins;
         bool m_modifier;
         QString m_name;
@@ -69,7 +69,7 @@ struct Emote {
     static Emote fromEmote(const TwitchEmotes::Emote& emote)
     {
         return Emote{
-            QString::number(emote.m_id),
+            emote.m_id,
             emote.m_code,
             TwitchEmotes::Emote::urlTemplate()
         };
@@ -87,7 +87,7 @@ struct Emote {
     static Emote fromEmote(const FFZ::Emote& emote)
     {
         return Emote{
-            emote.m_id,
+            QString::number(emote.m_id),
             emote.m_name,
             FFZ::Emote::urlTemplate()
         };

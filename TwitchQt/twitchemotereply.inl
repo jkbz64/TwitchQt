@@ -52,7 +52,7 @@ inline void FFZ::EmotesReply::parseData(const QJsonDocument& json)
 {
     auto&& root = json.object();
     QVector<int> defaultSets;
-    auto&& defaultSetsObject = root.value("default_sets").toObject();
+    auto&& defaultSetsObject = root.value("default_sets").toArray();
     for(const auto& defaultSet : defaultSetsObject)
         defaultSets.push_back(defaultSet.toInt());
 
@@ -68,7 +68,7 @@ inline void FFZ::EmotesReply::parseData(const QJsonDocument& json)
             QString css = emote.value("css").toString();
             int height = emote.value("height").toInt();
             bool hidden = emote.value("hidden").toBool();
-            QString id = emote.value("id").toString();
+            int id = emote.value("id").toInt();
             int margins = emote.value("margins").toInt();
             bool modifier = emote.value("modifier").toBool();
             QString name = emote.value("name").toString();
