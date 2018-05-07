@@ -112,3 +112,19 @@ inline void EmoteImageReply::parseData(const QByteArray &data)
 {
     m_data.setValue(QImage::fromData(data));
 }
+
+inline Twitch::Emote TwitchEmotes::EmotesReply::toEmote()
+{
+    return Twitch::Emote::fromEmote(m_data.value<TwitchEmotes::Emote>());
+}
+
+inline Twitch::Emote BTTV::EmotesReply::toEmote()
+{
+    return Twitch::Emote::fromEmote(m_data.value<BTTV::Emote>());
+}
+
+inline Twitch::Emote FFZ::EmotesReply::toEmote()
+{
+    return Twitch::Emote::fromEmote(m_data.value<FFZ::Emote>());
+}
+

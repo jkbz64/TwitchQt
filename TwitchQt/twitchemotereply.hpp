@@ -11,6 +11,7 @@ namespace TwitchEmotes {
         Q_OBJECT
     public:
         using JSONReply::JSONReply;
+        Twitch::Emote toEmote();
 
     protected:
         virtual void parseData(const QJsonDocument&) override;
@@ -22,6 +23,7 @@ namespace BTTV {
         Q_OBJECT
     public:
         using JSONReply::JSONReply;
+        Twitch::Emote toEmote();
 
     protected:
         virtual void parseData(const QJsonDocument&) override;
@@ -33,6 +35,7 @@ namespace FFZ {
         Q_OBJECT
     public:
         using JSONReply::JSONReply;
+        Twitch::Emote toEmote();
 
     protected:
         virtual void parseData(const QJsonDocument&) override;
