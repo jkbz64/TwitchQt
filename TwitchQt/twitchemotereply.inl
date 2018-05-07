@@ -45,6 +45,7 @@ inline void BTTV::EmotesReply::parseData(const QJsonDocument& json)
             imageType
         });
     }
+    m_data.setValue(emotes);
 }
 
 inline void FFZ::EmotesReply::parseData(const QJsonDocument& json)
