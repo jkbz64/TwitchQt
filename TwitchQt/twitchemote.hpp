@@ -62,6 +62,11 @@ namespace FFZ {
 }
 
 struct Emote {
+    enum class EmoteType {
+        TwitchEmotes,
+        BTTV,
+        FFZ
+    } m_type;
     QString m_id;
     QString m_code;
     QString m_url;
@@ -69,6 +74,7 @@ struct Emote {
     static Emote fromEmote(const TwitchEmotes::Emote& emote)
     {
         return Emote{
+            EmoteType::TwitchEmotes,
             QString::number(emote.m_id),
             emote.m_code,
             TwitchEmotes::Emote::urlTemplate()
@@ -78,6 +84,7 @@ struct Emote {
     static Emote fromEmote(const BTTV::Emote& emote)
     {
         return Emote{
+            EmoteType::BTTV,
             emote.m_id,
             emote.m_code,
             BTTV::Emote::urlTemplate()
@@ -87,6 +94,7 @@ struct Emote {
     static Emote fromEmote(const FFZ::Emote& emote)
     {
         return Emote{
+            EmoteType::FFZ,
             QString::number(emote.m_id),
             emote.m_name,
             FFZ::Emote::urlTemplate()
