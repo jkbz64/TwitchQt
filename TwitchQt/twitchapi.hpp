@@ -55,20 +55,22 @@ namespace Detail {
         virtual UsersReply* getUserByNames(const QStringList&, const QString& = "");
 
         // TwitchEmotes aka official global emotes
-        virtual TwitchEmotes::EmotesReply* getGlobalEmotes();
+        virtual TwitchEmotes::GlobalEmotesReply* getGlobalEmotes();
+        virtual TwitchEmotes::SubscriberEmotesReply* getTwitchSubscriberEmotesByChannel(const QString&);
         virtual ImageReply* getTwitchEmoteImage(const QString&);
 
         // BetterTTV
-        virtual BTTV::EmotesReply* getBTTVGlobalEmotes();
+        virtual BTTV::GlobalEmotesReply* getBTTVGlobalEmotes();
+        virtual BTTV::SubscriberEmotesReply* getBTTVSubscriberEmotesByChannel(const QString&);
         virtual ImageReply* getBTTVEmoteImage(const QString&);
 
         // FFZ
-        virtual FFZ::EmotesReply* getFFZGlobalEmotes();
+        virtual FFZ::GlobalEmotesReply* getFFZGlobalEmotes();
+        virtual FFZ::SubscriberEmotesReply* getFFZSubscriberEmotesByChannel(const QString&);
         virtual ImageReply* getFFZEmoteImage(const QString&);
 
         // Image getter by Url
         virtual ImageReply* getImage(const QString&);
-
 
         int rateLimit() const;
         int remainingRequests() const;

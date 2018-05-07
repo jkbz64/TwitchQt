@@ -6,11 +6,20 @@
 
 namespace Twitch {
 namespace TwitchEmotes {
-    class EmotesReply : public JSONReply {
+    class GlobalEmotesReply : public JSONReply {
         Q_OBJECT
     public:
         using JSONReply::JSONReply;
         Twitch::Emotes toEmotes();
+
+    protected:
+        virtual void parseData(const QJsonDocument&) override;
+    };
+
+    class SubscriberEmotesReply : public JSONReply {
+        Q_OBJECT
+    public:
+        using JSONReply::JSONReply;
 
     protected:
         virtual void parseData(const QJsonDocument&) override;
@@ -18,7 +27,7 @@ namespace TwitchEmotes {
 }
 
 namespace BTTV {
-    class EmotesReply : public JSONReply {
+    class GlobalEmotesReply : public JSONReply {
         Q_OBJECT
     public:
         using JSONReply::JSONReply;
@@ -27,14 +36,32 @@ namespace BTTV {
     protected:
         virtual void parseData(const QJsonDocument&) override;
     };
+
+    class SubscriberEmotesReply : public JSONReply {
+        Q_OBJECT
+    public:
+        using JSONReply::JSONReply;
+
+    protected:
+        virtual void parseData(const QJsonDocument&) override;
+    };
 }
 
 namespace FFZ {
-    class EmotesReply : public JSONReply {
+    class GlobalEmotesReply : public JSONReply {
         Q_OBJECT
     public:
         using JSONReply::JSONReply;
         Twitch::Emotes toEmotes();
+
+    protected:
+        virtual void parseData(const QJsonDocument&) override;
+    };
+
+    class SubscriberEmotesReply : public JSONReply {
+        Q_OBJECT
+    public:
+        using JSONReply::JSONReply;
 
     protected:
         virtual void parseData(const QJsonDocument&) override;

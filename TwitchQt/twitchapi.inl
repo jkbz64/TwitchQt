@@ -259,25 +259,25 @@ inline UsersReply* Detail::Api::getUserByNames(const QStringList& names, const Q
 
 // Emotes
 
-inline TwitchEmotes::EmotesReply* Detail::Api::getGlobalEmotes()
+inline TwitchEmotes::GlobalEmotesReply* Detail::Api::getGlobalEmotes()
 {
     const QString url = emotesApi() + QString("/global.json");
     auto request = buildRequest(QUrl(url), false);
-    return createReply<TwitchEmotes::EmotesReply>(request, false);
+    return createReply<TwitchEmotes::GlobalEmotesReply>(request, false);
 }
 
-inline BTTV::EmotesReply* Detail::Api::getBTTVGlobalEmotes()
+inline BTTV::GlobalEmotesReply* Detail::Api::getBTTVGlobalEmotes()
 {
     const QString url = bttvApi() + QString("/emotes");
     auto request = buildRequest(QUrl(url), false);
-    return createReply<BTTV::EmotesReply>(request, false);
+    return createReply<BTTV::GlobalEmotesReply>(request, false);
 }
 
-inline FFZ::EmotesReply* Detail::Api::getFFZGlobalEmotes()
+inline FFZ::GlobalEmotesReply* Detail::Api::getFFZGlobalEmotes()
 {
     const QString url = ffzApi() + QString("/set/global");
     auto request = buildRequest(QUrl(url), false);
-    return createReply<FFZ::EmotesReply>(request, false);
+    return createReply<FFZ::GlobalEmotesReply>(request, false);
 }
 
 inline ImageReply* Detail::Api::getImage(const QString &url)
@@ -306,6 +306,27 @@ inline ImageReply* Detail::Api::getFFZEmoteImage(const QString& id)
     auto request = buildRequest(QUrl(url), false);
     return createReply<ImageReply>(request, false);
 }
+
+inline TwitchEmotes::SubscriberEmotesReply* Detail::Api::getTwitchSubscriberEmotesByChannel(const QString &channel)
+{
+    // TODO figure out subscriber emotes endpoint from twitch-emotes
+    //const QString url = emotesApi() + QString("")
+}
+
+inline BTTV::SubscriberEmotesReply* Detail::Api::getBTTVSubscriberEmotesByChannel(const QString &channel)
+{
+    const QString url = bttvApi() + "/channels/" + channel;
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<BTTV::SubscriberEmotesReply>(request, false);
+}
+
+inline FFZ::SubscriberEmotesReply* Detail::Api::getFFZSubscriberEmotesByChannel(const QString &channel)
+{
+    const QString url = ffzApi() + "/room/" + channel;
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<FFZ::SubscriberEmotesReply>(request, false);
+}
+
 
 // Helix
 
@@ -355,4 +376,3 @@ inline QString Helix::repeatDelimeter(const QString& parameter) const
 {
     return QString("&{parameter}=").replace("{parameter}", parameter);
 }
-
