@@ -54,7 +54,7 @@ namespace Detail {
         virtual UsersReply* getUserByIds(const QStringList&, const QString& = "");
         virtual UsersReply* getUserByNames(const QStringList&, const QString& = "");
 
-        // TwitchEmotes
+        // TwitchEmotes aka official global emotes
         virtual TwitchEmotes::EmotesReply* getGlobalEmotes();
         virtual EmoteImageReply* getEmoteImage(const QString&);
 
@@ -92,6 +92,7 @@ namespace Detail {
 class Helix : public Detail::Api {
     Q_OBJECT
 public:
+    Helix(QObject* = nullptr);
     Helix(const QString&);
     Helix(const QString&, QObject*);
     virtual ~Helix();

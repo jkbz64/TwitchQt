@@ -305,6 +305,14 @@ inline EmoteImageReply* Detail::Api::getFFZEmoteImage(const QString& id)
 
 // Helix
 
+inline Helix::Helix(QObject* parent)
+    : Api(parent)
+{
+    m_rateLimit = 30;
+    m_rateRemaining = 30;
+    m_rateResetDate = QDateTime::currentDateTime();
+}
+
 inline Helix::Helix(const QString& clientID)
     : Api(clientID)
 {
@@ -343,3 +351,4 @@ inline QString Helix::repeatDelimeter(const QString& parameter) const
 {
     return QString("&{parameter}=").replace("{parameter}", parameter);
 }
+
