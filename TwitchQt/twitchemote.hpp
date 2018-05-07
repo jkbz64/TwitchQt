@@ -7,7 +7,7 @@
 namespace Twitch {
 namespace TwitchEmotes {
     struct Emote {
-        qulonglong m_id;
+        int m_id;
         QString m_code;
         int m_emoticonSet;
         QString m_description;

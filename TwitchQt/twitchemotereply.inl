@@ -8,7 +8,7 @@ inline void TwitchEmotes::EmotesReply::parseData(const QJsonDocument& json)
         QString code = emoteData.value("code").toString();
         QString description = emoteData.value("description").toString();
         int emoticonSet = emoteData.value("emoticon_set").toInt();
-        qulonglong id = emoteData.value("id").toString().toULongLong();
+        int id = emoteData.value("id").toInt();
         emotes.push_back({
             id,
             code,
