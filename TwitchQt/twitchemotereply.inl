@@ -113,18 +113,28 @@ inline void EmoteImageReply::parseData(const QByteArray &data)
     m_data.setValue(QImage::fromData(data));
 }
 
-inline Twitch::Emote TwitchEmotes::EmotesReply::toEmote()
+inline Twitch::Emotes TwitchEmotes::EmotesReply::toEmotes()
 {
-    return Twitch::Emote::fromEmote(m_data.value<TwitchEmotes::Emote>());
+    Twitch::Emotes emotes;
+    for(const auto& emote : m_data.value<TwitchEmotes::Emotes>())
+        emotes.push_back(Twitch::Emote::fromEmote(emote));
+    return emotes;
 }
 
-inline Twitch::Emote BTTV::EmotesReply::toEmote()
+inline Twitch::Emotes BTTV::EmotesReply::toEmotes()
 {
-    return Twitch::Emote::fromEmote(m_data.value<BTTV::Emote>());
+    Twitch::Emotes emotes;
+    for(const auto& emote : m_data.value<BTTV::Emotes>())
+        emotes.push_back(Twitch::Emote::fromEmote(emote));
+    return emotes;
 }
 
-inline Twitch::Emote FFZ::EmotesReply::toEmote()
+inline Twitch::Emotes FFZ::EmotesReply::toEmotes()
 {
-    return Twitch::Emote::fromEmote(m_data.value<FFZ::Emote>());
+    Twitch::Emotes emotes;
+    for(const auto& emote : m_data.value<FFZ::Emotes>())
+        emotes.push_back(Twitch::Emote::fromEmote(emote));
+    return emotes;
 }
+
 
