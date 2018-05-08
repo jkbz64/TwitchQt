@@ -69,15 +69,21 @@ struct Emote {
     } m_type;
     QString m_id;
     QString m_code;
+    enum class ImageType {
+        PNG,
+        GIF
+    } m_imageType;
     QString m_url;
 
     static Emote fromEmote(const TwitchEmotes::Emote& emote)
     {
+        const auto id = QString::number(emote.m_id);
         return Emote{
             EmoteType::TwitchEmotes,
-            QString::number(emote.m_id),
+            id,
             emote.m_code,
-            TwitchEmotes::Emote::urlTemplate()
+            ImageType::PNG,
+            QString(TwitchEmotes::Emote::urlTemplate()).replace("{{id}}", id)
         };
     }
 
@@ -87,17 +93,20 @@ struct Emote {
             EmoteType::BTTV,
             emote.m_id,
             emote.m_code,
-            BTTV::Emote::urlTemplate()
+            emote.m_imageType.toUpper() == "PNG" ? ImageType::PNG : ImageType::GIF,
+            QString(BTTV::Emote::urlTemplate()).replace("{{id}}", emote.m_id)
         };
     }
 
     static Emote fromEmote(const FFZ::Emote& emote)
     {
+        const auto id = QString::number(emote.m_id);
         return Emote{
             EmoteType::FFZ,
-            QString::number(emote.m_id),
+            id,
             emote.m_name,
-            FFZ::Emote::urlTemplate()
+            ImageType::PNG,
+            QString(FFZ::Emote::urlTemplate()).replace("{{id}}", id)
         };
     }
 };

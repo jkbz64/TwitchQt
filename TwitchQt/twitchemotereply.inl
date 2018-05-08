@@ -221,11 +221,8 @@ inline void FFZ::SubscriberEmotesReply::parseData(const JSON& json)
             bool isPublic = emote["public"];
             QVector<QString> urls;
             auto&& urlObject = emote["urls"];
-            for(const auto& urlObject : urlObject)
-            {
-                QString url_ = urlObject;
-                urls.push_back(url_);
-            }
+            for(QString url : urlObject)
+                urls.push_back(url);
             int width = emote["width"];
 
             emotes.push_back(FFZ::Emote{
