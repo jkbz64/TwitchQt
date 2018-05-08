@@ -1,38 +1,37 @@
 
-inline void GameReply::parseData(const QJsonDocument& json)
+inline void GameReply::parseData(const JSON& json)
 {
-    auto&& root = json.object();
-    if (root.contains("data")) {
-        auto&& data = root.value("data").toArray();
-        if (!data.isEmpty()) {
-            auto&& game = data.first().toObject();
-            QString id = game.value("id").toString();
-            QString name = game.value("name").toString();
-            QString boxArtUrl = game.value("box_art_url").toString();
+    if (json.find("data") != json.end()) {
+        auto&& data = json["data"].array();
+        if (!data.empty()) {
+            auto&& game = data.front();
+            QString id = game["id"];
+            QString name = game["name"];
+            QString boxArtUrl = game["box_art_url"];
             m_data.setValue(Game{
                 id.toULongLong(),
                 name,
-                boxArtUrl });
+                boxArtUrl
+            });
         } else {
             // ??
         }
     }
 }
 
-inline void GamesReply::parseData(const QJsonDocument& json)
+inline void GamesReply::parseData(const JSON& json)
 {
     Games games;
-    auto&& root = json.object();
-    if (root.contains("data")) {
-        auto&& data = root.value("data").toArray();
-        for (const auto& gameElement : data) {
-            auto&& game = gameElement.toObject();
-            QString id = game.value("id").toString();
-            QString name = game.value("name").toString();
-            QString boxArtUrl = game.value("box_art_url").toString();
+    if (json.find("data") != json.end()) {
+        auto&& data = json["data"];
+        for (const auto& game : data) {
+            QString id = game["id"];
+            QString name = game["name"];
+            QString boxArtUrl = game["box_art_url"];
             games.push_back({ id.toULongLong(),
                 name,
-                boxArtUrl });
+                boxArtUrl
+            });
         }
     }
     m_data.setValue(games);

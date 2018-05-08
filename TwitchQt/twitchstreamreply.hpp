@@ -4,7 +4,6 @@
 #include "twitchreply.hpp"
 #include "twitchstream.hpp"
 
-
 namespace Twitch {
 class StreamReply : public JSONReply {
     Q_OBJECT
@@ -12,7 +11,7 @@ public:
     using JSONReply::JSONReply;
 
 protected:
-    virtual void parseData(const QJsonDocument&) override;
+    virtual void parseData(const JSON&) override;
 };
 
 class StreamsReply : public JSONReply {
@@ -25,7 +24,7 @@ public:
 protected:
     qulonglong m_combinedViewerCount{ 0u };
     QString m_cursor;
-    virtual void parseData(const QJsonDocument&) override;
+    virtual void parseData(const JSON&) override;
 };
 
 #include "twitchstreamreply.inl"

@@ -12,7 +12,7 @@ public:
     using JSONReply::JSONReply;
 
 protected:
-    virtual void parseData(const QJsonDocument&) override;
+    virtual void parseData(const JSON&) override;
 };
 
 class GamesReply : public JSONReply {
@@ -21,7 +21,7 @@ public:
     using JSONReply::JSONReply;
 
 protected:
-    virtual void parseData(const QJsonDocument&) override;
+    virtual void parseData(const JSON&) override;
 };
 
 class BoxArtReply : public RawReply {

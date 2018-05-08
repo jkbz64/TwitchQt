@@ -48,7 +48,7 @@ namespace TwitchEmotes {
         using Detail::TwitchEmotesReply::TwitchEmotesReply;
 
     protected:
-        virtual void parseData(const QJsonDocument&) override;
+        virtual void parseData(const JSON&) override;
     };
 
     class SubscriberEmotesReply : public Detail::TwitchEmotesReply {
@@ -57,7 +57,7 @@ namespace TwitchEmotes {
         using Detail::TwitchEmotesReply::TwitchEmotesReply;
 
     protected:
-        virtual void parseData(const QJsonDocument&) override;
+        virtual void parseData(const JSON&) override;
     };
 }
 
@@ -68,7 +68,7 @@ namespace BTTV {
         using Detail::BTTVEmotesReply::BTTVEmotesReply;
 
     protected:
-        virtual void parseData(const QJsonDocument&) override;
+        virtual void parseData(const JSON&) override;
     };
 
     class SubscriberEmotesReply : public Detail::BTTVEmotesReply {
@@ -77,7 +77,7 @@ namespace BTTV {
         using Detail::BTTVEmotesReply::BTTVEmotesReply;
 
     protected:
-        virtual void parseData(const QJsonDocument&) override;
+        virtual void parseData(const JSON&) override;
     };
 }
 
@@ -88,7 +88,7 @@ namespace FFZ {
         using Detail::FFZEmotesReply::FFZEmotesReply;
 
     protected:
-        virtual void parseData(const QJsonDocument&) override;
+        virtual void parseData(const JSON&) override;
     };
 
     class SubscriberEmotesReply : public Detail::FFZEmotesReply {
@@ -97,7 +97,7 @@ namespace FFZ {
         using Detail::FFZEmotesReply::FFZEmotesReply;
 
     protected:
-        virtual void parseData(const QJsonDocument&) override;
+        virtual void parseData(const JSON&) override;
     };
 }
 

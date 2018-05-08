@@ -5,6 +5,16 @@ inline Reply::Reply(QNetworkReply* reply)
     , m_currentState(ReplyState::Pending)
     , m_cursor("")
 {
+    connect(m_reply, &QNetworkReply::downloadProgress, this, &Reply::downloadProgress);
+    connect(m_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+    [this](QNetworkReply::NetworkError)
+    {
+        m_currentState = ReplyState::Error;
+        emit finished();
+        m_reply->deleteLater();
+        if (!parent())
+            deleteLater();
+    });
 }
 
 inline Reply::~Reply()
@@ -56,19 +66,19 @@ inline JSONReply::JSONReply(QNetworkReply* reply)
     : Reply(reply)
 {
     connect(m_reply, &QNetworkReply::finished, this, [this]() {
-        auto json = QJsonDocument::fromJson(m_reply->readAll());
+        JSON json = JSON::parse(m_reply->readAll().data());
         // Check errors
-        auto root = json.object();
-        if (root.find("error") != root.end() || json.isEmpty()) {
+        if(json.empty())
             m_currentState = ReplyState::Error;
-            // TODO error handling
-        } else {
+        else
+        {
             m_currentState = ReplyState::Success;
             parseData(json);
 
-            if (root.find("pagination") != root.end()) // Save the pagination
-                m_cursor = root.value("pagination").toObject().value("cursor").toString();
+            if (json.find("pagination") != json.end()) // Save the pagination
+                m_cursor = QString::fromStdString(json["pagination"]["cursor"].get<std::string>());
         }
+
         emit finished();
         m_reply->deleteLater();
         if (!parent())
@@ -82,3 +92,4 @@ inline void ImageReply::parseData(const QByteArray &data)
 {
     m_data.setValue(QImage::fromData(data));
 }
+

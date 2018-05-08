@@ -56,7 +56,7 @@ namespace Detail {
 
         // TwitchEmotes aka official global emotes
         virtual TwitchEmotes::GlobalEmotesReply* getGlobalEmotes();
-        virtual TwitchEmotes::SubscriberEmotesReply* getTwitchSubscriberEmotesByChannel(const QString&);
+        virtual TwitchEmotes::SubscriberEmotesReply* getTwitchSubscriberEmotes();
         virtual ImageReply* getTwitchEmoteImage(const QString&);
 
         // BetterTTV

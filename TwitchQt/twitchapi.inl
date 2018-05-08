@@ -307,10 +307,11 @@ inline ImageReply* Detail::Api::getFFZEmoteImage(const QString& id)
     return createReply<ImageReply>(request, false);
 }
 
-inline TwitchEmotes::SubscriberEmotesReply* Detail::Api::getTwitchSubscriberEmotesByChannel(const QString &channel)
+inline TwitchEmotes::SubscriberEmotesReply* Detail::Api::getTwitchSubscriberEmotes()
 {
-    // TODO figure out subscriber emotes endpoint from twitch-emotes
-    //const QString url = emotesApi() + QString("")
+    const QString url = emotesApi() + QString("/subscriber.json");
+    auto request = buildRequest(QUrl(url), false);
+    return createReply<TwitchEmotes::SubscriberEmotesReply>(request, false);
 }
 
 inline BTTV::SubscriberEmotesReply* Detail::Api::getBTTVSubscriberEmotesByChannel(const QString &channel)

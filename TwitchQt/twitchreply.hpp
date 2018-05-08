@@ -1,9 +1,10 @@
 #ifndef TWITCHREPLY_HPP
 #define TWITCHREPLY_HPP
 
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
+#include "json/json.hpp"
+using JSON = nlohmann::json;
+#include <QString>
+#include <string>
 #include <QNetworkReply>
 #include <QObject>
 #include <QPointer>
@@ -30,6 +31,7 @@ public:
 
     const QString& cursor() const;
 signals:
+    void downloadProgress(qint64, qint64);
     void finished();
 
 protected:
@@ -56,7 +58,7 @@ public:
     virtual ~JSONReply();
 
 protected:
-    virtual void parseData(const QJsonDocument&) = 0;
+    virtual void parseData(const JSON&) = 0;
 };
 
 class ImageReply : public RawReply {
@@ -69,6 +71,21 @@ protected:
 };
 
 #include "twitchreply.inl"
+}
+
+namespace nlohmann {
+template <>
+struct adl_serializer<QString> {
+    static QString from_json(const json& j)
+    {
+        return QString::fromStdString(j.get<std::string>());
+    }
+
+    static void to_json(json& j, const QString& t)
+    {
+        j = t.toStdString();
+    }
+};
 }
 
 #endif // TWITCHREPLY_HPP

@@ -11,7 +11,7 @@ public:
     using JSONReply::JSONReply;
 
 protected:
-    virtual void parseData(const QJsonDocument&) override;
+    virtual void parseData(const JSON&) override;
 };
 
 class UsersReply : public JSONReply {
@@ -20,7 +20,7 @@ public:
     using JSONReply::JSONReply;
 
 protected:
-    virtual void parseData(const QJsonDocument&) override;
+    virtual void parseData(const JSON&) override;
 };
 
 #include "twitchuserreply.inl"

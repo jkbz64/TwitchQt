@@ -1,32 +1,31 @@
 
-inline void StreamReply::parseData(const QJsonDocument& json)
+inline void StreamReply::parseData(const JSON& json)
 {
-    auto&& root = json.object();
-    if (root.contains("data")) {
-        auto&& data = root.value("data").toArray();
+    if (json.find("data") != json.end()) {
+        auto&& data = json["data"].array();
         if (!data.empty()) {
-            auto&& stream = data.first().toObject();
-            QString id = stream.value("id").toString();
-            QString userId = stream.value("user_id").toString();
-            QString gameId = stream.value("game_id").toString();
+            auto&& stream = data.front();
+            QString id = stream["id"];
+            QString userId = stream["user_id"];
+            QString gameId = stream["game_id"];
 
             QVector<QString> communityIds;
-            for (const auto& communityId : stream.value("community_ids").toArray())
-                communityIds.push_back(communityId.toString());
+            for (QString communityId : stream["community_ids"].array())
+                communityIds.push_back(communityId);
 
-            QString typeStr = stream.value("type").toString();
+            QString typeStr = stream["type"];
             Stream::StreamType type = Stream::StreamType::No;
             if (typeStr == "live")
                 type = Stream::StreamType::Live;
             else if (typeStr == "vodcast")
                 type = Stream::StreamType::Vodcast;
 
-            QString title = stream.value("title").toString();
-            qulonglong viewerCount = stream.value("viewer_count").toInt();
+            QString title = stream["title"];
+            qulonglong viewerCount = stream["viewer_count"];
 
-            QString startedAt = stream.value("started_at").toString();
-            QString language = stream.value("language").toString();
-            QString thumbnailUrl = stream.value("thumbnail_url").toString();
+            QString startedAt = stream["started_at"];
+            QString language = stream["language"];
+            QString thumbnailUrl = stream["thumbnail_url"];
 
             m_data.setValue(Stream{
                 id.toULongLong(),
@@ -45,35 +44,33 @@ inline void StreamReply::parseData(const QJsonDocument& json)
     }
 }
 
-inline void StreamsReply::parseData(const QJsonDocument& json)
+inline void StreamsReply::parseData(const JSON& json)
 {
     Streams streams;
-    auto&& root = json.object();
-    if (root.contains("data")) {
-        auto&& data = root.value("data").toArray();
-        for (const auto& streamElement : data) {
-            auto&& stream = streamElement.toObject();
-            QString id = stream.value("id").toString();
-            QString userId = stream.value("user_id").toString();
-            QString gameId = stream.value("game_id").toString();
+    if (json.find("data") != json.end()) {
+        auto&& data = json["data"];
+        for (const auto& stream : data) {
+            QString id = stream["id"];
+            QString userId = stream["user_id"];
+            QString gameId = stream["game_id"];
 
             QVector<QString> communityIds;
-            for (const auto& communityId : stream.value("community_ids").toArray())
-                communityIds.push_back(communityId.toString());
+            for (QString communityId : stream["community_ids"].array())
+                communityIds.push_back(communityId);
 
-            QString typeStr = stream.value("type").toString();
+            QString typeStr = stream["type"];
             Stream::StreamType type = Stream::StreamType::No;
             if (typeStr == "live")
                 type = Stream::StreamType::Live;
             else if (typeStr == "vodcast")
                 type = Stream::StreamType::Vodcast;
 
-            QString title = stream.value("title").toString();
-            qulonglong viewerCount = stream.value("viewer_count").toInt();
+            QString title = stream["title"];
+            qulonglong viewerCount = stream["viewer_count"];
 
-            QString startedAt = stream.value("started_at").toString();
-            QString language = stream.value("language").toString();
-            QString thumbnailUrl = stream.value("thumbnail_url").toString();
+            QString startedAt = stream["started_at"];
+            QString language = stream["language"];
+            QString thumbnailUrl = stream["thumbnail_url"];
 
             streams.push_back({ id.toULongLong(),
                 userId.toULongLong(),
@@ -88,10 +85,6 @@ inline void StreamsReply::parseData(const QJsonDocument& json)
 
             m_combinedViewerCount += streams.back().m_viewerCount;
         }
-    }
-    if (root.contains("pagination")) {
-        auto&& pagination = root.value("pagination").toObject();
-        m_cursor = pagination.value("cursor").toString();
     }
     m_data.setValue(streams);
 }
