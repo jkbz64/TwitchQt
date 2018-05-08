@@ -194,17 +194,21 @@ inline void FFZ::SubscriberEmotesReply::parseData(const JSON& json)
     auto&& sets = json["sets"];
     for(const auto& set : sets)
     {
-        auto&& emoticons = set["emoticons"].array();
+        auto&& emoticons = set["emoticons"];
         for(const auto& emote : emoticons)
         {
             QString css = emote["css"];
             int height = emote["height"];
             bool hidden = emote["hidden"];
             int id = emote["id"];
-            int margins = emote["margins"];
+            int margins = 0;
+            if(!emote["margins"].is_null() && emote["margins"].is_number())
+                margins = emote["margins"];
             bool modifier = emote["modifier"];
             QString name = emote["name"];
-            int offset = emote["offset"];
+            int offset = 0;
+            if(!emote["offset"].is_null() && emote["offset"].is_number())
+                margins = emote["offset"];
             auto&& ownerObject = emote["owner"];
             qulonglong ownerID = ownerObject["_id"];
             QString ownerDisplayName = ownerObject["display_name"];
