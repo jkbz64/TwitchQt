@@ -80,8 +80,10 @@ struct adl_serializer<QString> {
     {
         if (!j.is_null())
             return QString::fromStdString(j.get<std::string>());
-        else
-            return QString("");
+        else if (j.is_number()) {
+            return QString::number(j.get<qint64>());
+        }
+        return QString("");
     }
 
     static void to_json(json& j, const QString& t)
