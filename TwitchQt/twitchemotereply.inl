@@ -96,7 +96,10 @@ inline void BTTV::SubscriberEmotesReply::parseData(const JSON &json)
     BTTV::Emotes emotes;
 
     if(json.find("status") != json.end() && json["status"].get<int>() != 200)
+    {
+        m_currentState = ReplyState::Error;
         return;
+    }
 
     auto&& emotesArray = json["emotes"];
     for(const auto& emote : emotesArray)
@@ -122,6 +125,12 @@ inline void BTTV::SubscriberEmotesReply::parseData(const JSON &json)
 
 inline void FFZ::GlobalEmotesReply::parseData(const JSON& json)
 {
+    if(json.find("error") != json.end())
+    {
+        m_currentState = ReplyState::Error;
+        return;
+    }
+
     FFZ::Emotes emotes;
 
     QVector<int> defaultSets;
