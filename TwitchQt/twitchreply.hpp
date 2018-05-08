@@ -78,10 +78,12 @@ template <>
 struct adl_serializer<QString> {
     static QString from_json(const json& j)
     {
-        if (!j.is_null())
-            return QString::fromStdString(j.get<std::string>());
+        if (j.is_null())
+            return QString("");
         else if (j.is_number()) {
             return QString::number(j.get<qint64>());
+        } else if (j.is_string()) {
+            return QString::fromStdString(j.get<std::string>());
         }
         return QString("");
     }
