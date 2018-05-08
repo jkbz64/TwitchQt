@@ -2,7 +2,7 @@
 inline void StreamReply::parseData(const JSON& json)
 {
     if (json.find("data") != json.end()) {
-        auto&& data = json["data"].array();
+        auto&& data = json["data"];
         if (!data.empty()) {
             auto&& stream = data.front();
             QString id = stream["id"];

@@ -2,7 +2,7 @@
 inline void UserReply::parseData(const JSON& json)
 {
     if (json.find("data") != json.end()) {
-        auto&& data = json["data"].array();
+        auto&& data = json["data"];
         if (!data.empty()) {
             auto&& user = data.front();
 

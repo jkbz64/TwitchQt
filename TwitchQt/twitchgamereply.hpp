@@ -3,7 +3,6 @@
 
 #include "twitchreply.hpp"
 #include "twitchgame.hpp"
-#include <QImage>
 
 namespace Twitch {
 class GameReply : public JSONReply {

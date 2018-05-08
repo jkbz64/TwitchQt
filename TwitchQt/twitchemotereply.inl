@@ -46,7 +46,7 @@ inline void TwitchEmotes::SubscriberEmotesReply::parseData(const JSON &json)
     TwitchEmotes::Emotes emotes;
     for(const auto& user : json)
     {
-        auto&& emotesArray = user["emotes"].array();
+        auto&& emotesArray = user["emotes"];
         for(const auto& emote : emotesArray)
         {
             int id = emote["id"];
@@ -69,7 +69,7 @@ inline void BTTV::GlobalEmotesReply::parseData(const JSON& json)
         return;
 
     QVector<BTTV::Emote> emotes;
-    auto&& emotesArray = json["emotes"].array();
+    auto&& emotesArray = json["emotes"];
     for(const auto& emote : emotesArray)
     {
         QString id = emote["id"];
@@ -98,7 +98,7 @@ inline void BTTV::SubscriberEmotesReply::parseData(const JSON &json)
     if(json.find("status") != json.end() && json["status"].get<int>() != 200)
         return;
 
-    auto&& emotesArray = json["emotes"].array();
+    auto&& emotesArray = json["emotes"];
     for(const auto& emote : emotesArray)
     {
         QString id = emote["id"];
