@@ -125,16 +125,10 @@ inline void BTTV::SubscriberEmotesReply::parseData(const JSON &json)
 
 inline void FFZ::GlobalEmotesReply::parseData(const JSON& json)
 {
-    if(json.find("error") != json.end())
-    {
-        m_currentState = ReplyState::Error;
-        return;
-    }
-
     FFZ::Emotes emotes;
 
     QVector<int> defaultSets;
-    auto&& setsArray = json["default_sets"].array();
+    auto&& setsArray = json["default_sets"];
     for(const auto& set : setsArray)
         defaultSets.push_back(set.get<int>());
 
@@ -190,6 +184,12 @@ inline void FFZ::GlobalEmotesReply::parseData(const JSON& json)
 
 inline void FFZ::SubscriberEmotesReply::parseData(const JSON& json)
 {
+    if(json.find("error") != json.end())
+    {
+        m_currentState = ReplyState::Error;
+        return;
+    }
+
     FFZ::Emotes emotes;
     auto&& sets = json["sets"];
     for(const auto& set : sets)
