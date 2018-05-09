@@ -1,6 +1,6 @@
 # TwitchQt
 
-A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Qt5.
+A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Qt5. It also supports TwitchEmotes, BTTV and FFZ.
 
 ## Requirements
 #### Qt5
@@ -52,14 +52,8 @@ int main(int argc, char* argv[])
 Look at the [twitchapi.hpp](https://github.com/jkbz64/TwitchQt/blob/master/TwitchQt/twitchapi.hpp) file :)
 
 ## TODO:
-- GET Requests:
-  **Clips**
-  **Game analytics**
-  **Bits**
-  **Channel emoticons**
-  **Streams metadata**
-  **?**
-* Every request other than GET OMEGA
-* Unit tests
-* Maybe webhooks(?)
+* GET requests that need access to scopes.
 * Single header version (entire library in one file) 
+* Every request other than GET OMEGALUL
+* Unit tests
+* Maybe webhooks(not really?)
