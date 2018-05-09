@@ -7,6 +7,9 @@ A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Q
 - Core
 - Network
 #### C++11 compatible compiler
+- [JSON for Modern C++ (already included)](https://github.com/nlohmann/json) 
+
+You might ask - why external JSON while there's Qt's JSON library included in Qt Core? Well... it simply sucks, but the main problem is that it cannot parse documents bigger than 2^27 bytes (~135MB).
 
 ## Usage
 Clone this library wherever you want and just `include(path/to/TwitchQt.pri)` in your .pro file. 
