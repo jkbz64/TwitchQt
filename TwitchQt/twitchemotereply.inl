@@ -1,63 +1,32 @@
 
-inline Twitch::Emotes Detail::TwitchEmotesReply::toEmotes()
-{
-    Twitch::Emotes emotes;
-    for(const auto& emote : m_data.value<TwitchEmotes::Emotes>())
-        emotes.push_back(Twitch::Emote::fromEmote(emote));
-    return emotes;
-}
-
-inline Twitch::Emotes Detail::BTTVEmotesReply::toEmotes()
-{
-    Twitch::Emotes emotes;
-    for(const auto& emote : m_data.value<BTTV::Emotes>())
-        emotes.push_back(Twitch::Emote::fromEmote(emote));
-    return emotes;
-}
-
-inline Twitch::Emotes Detail::FFZEmotesReply::toEmotes()
-{
-    Twitch::Emotes emotes;
-    for(const auto& emote : m_data.value<FFZ::Emotes>())
-        emotes.push_back(Twitch::Emote::fromEmote(emote));
-    return emotes;
-}
-
 inline void TwitchEmotes::GlobalEmotesReply::parseData(const JSON& json)
 {
-    TwitchEmotes::Emotes emotes;
+    Twitch::Emotes emotes;
     for (const auto& emote : json) {
-        QString code = emote["code"];
-        QString description = emote["description"];
-        int emoticonSet = emote["emoticon_set"];
-        int id = emote["id"];
-        emotes.push_back({
-            id,
-            code,
-            emoticonSet,
-            description
-        });
+        emotes.push_back(Twitch::Emote::createEmote<TwitchEmotes::Emote>(
+            emote["id"].get<int>(),
+            emote["code"].get<QString>(),
+            emote["emoticon_set"].get<int>(),
+            emote["description"].get<QString>()
+        ));
     }
     m_data.setValue(emotes);
 }
 
 inline void TwitchEmotes::SubscriberEmotesReply::parseData(const JSON &json)
 {
-    TwitchEmotes::Emotes emotes;
+    Twitch::Emotes emotes;
     for(const auto& user : json)
     {
         auto&& emotesArray = user["emotes"];
         for(const auto& emote : emotesArray)
         {
-            int id = emote["id"];
-            QString code = emote["code"];
-            int emoticonSet = emote["emoticon_set"];
-            emotes.push_back(TwitchEmotes::Emote{
-                id,
-                code,
-                emoticonSet,
+            emotes.push_back(Twitch::Emote::createEmote<TwitchEmotes::Emote>(
+                emote["id"].get<int>(),
+                emote["code"].get<QString>(),
+                emote["emoticon_set"].get<int>(),
                 QString("")
-            });
+            ));
         }
     }
     m_data.setValue(emotes);
@@ -68,24 +37,18 @@ inline void BTTV::GlobalEmotesReply::parseData(const JSON& json)
     if(json.find("status") != json.end() && json["status"].get<int>() != 200)
         return;
 
-    QVector<BTTV::Emote> emotes;
+    Twitch::Emotes emotes;
     auto&& emotesArray = json["emotes"];
     for(const auto& emote : emotesArray)
     {
-        QString id = emote["id"];
-        QString code = emote["code"];
-        QString channel = emote["channel"];
         // TODO restrictions
-        Restrictions restrictions;
-        QString imageType = emote["imageType"];;
-
-        emotes.push_back(BTTV::Emote{
-            id,
-            code,
-            channel,
-            restrictions,
-            imageType
-        });
+        emotes.push_back(Twitch::Emote::createEmote<BTTV::Emote>(
+            emote["id"].get<QString>(),
+            emote["code"].get<QString>(),
+            emote["channel"].get<QString>(),
+            Restrictions{},
+            emote["imageType"].get<QString>()
+        ));
     }
     m_data.setValue(emotes);
 }
@@ -93,7 +56,7 @@ inline void BTTV::GlobalEmotesReply::parseData(const JSON& json)
 // For now it's pretty much like Global one, but later we'll get the bots badges here too.
 inline void BTTV::SubscriberEmotesReply::parseData(const JSON &json)
 {
-    BTTV::Emotes emotes;
+    Twitch::Emotes emotes;
 
     if(json.find("status") != json.end() && json["status"].get<int>() != 200)
     {
@@ -104,20 +67,13 @@ inline void BTTV::SubscriberEmotesReply::parseData(const JSON &json)
     auto&& emotesArray = json["emotes"];
     for(const auto& emote : emotesArray)
     {
-        QString id = emote["id"];
-        QString code = emote["code"];
-        QString channel = emote["channel"];
-        // TODO restrictions
-        Restrictions restrictions;
-        QString imageType = emote["imageType"];
-
-        emotes.push_back(BTTV::Emote{
-            id,
-            code,
-            channel,
-            restrictions,
-            imageType
-        });
+        emotes.push_back(Twitch::Emote::createEmote<BTTV::Emote>(
+            emote["id"].get<QString>(),
+            emote["code"].get<QString>(),
+            emote["channel"].get<QString>(),
+            Restrictions{},
+            emote["imageType"].get<QString>()
+        ));
     }
 
     m_data.setValue(emotes);
@@ -125,7 +81,7 @@ inline void BTTV::SubscriberEmotesReply::parseData(const JSON &json)
 
 inline void FFZ::GlobalEmotesReply::parseData(const JSON& json)
 {
-    FFZ::Emotes emotes;
+    Twitch::Emotes emotes;
 
     QVector<int> defaultSets;
     auto&& setsArray = json["default_sets"];
@@ -138,14 +94,14 @@ inline void FFZ::GlobalEmotesReply::parseData(const JSON& json)
         auto&& emoticons = set["emoticons"].array();
         for(const auto& emote : emoticons)
         {
-            QString css = emote["css"];
-            int height = emote["height"];
-            bool hidden = emote["hidden"];
-            int id = emote["id"];
-            int margins = emote["margins"];
-            bool modifier = emote["modifier"];
-            QString name = emote["name"];
-            int offset = emote["offset"];
+            int margins = 0;
+            if(!emote["margins"].is_null() && emote["margins"].is_number())
+                margins = emote["margins"];
+
+            int offset = 0;
+            if(!emote["offset"].is_null() && emote["offset"].is_number())
+                margins = emote["offset"];
+
             auto&& ownerObject = emote["owner"];
             qulonglong ownerID = ownerObject["_id"];
             QString ownerDisplayName = ownerObject["display_name"];
@@ -155,27 +111,25 @@ inline void FFZ::GlobalEmotesReply::parseData(const JSON& json)
                 ownerDisplayName,
                 ownerName
             };
-            bool isPublic = emote["public"];
             QVector<QString> urls;
             auto&& urlObject = emote["urls"].object();
             for(const auto& url : urlObject)
                 urls.push_back(url);
-            int width = emote["width"];
 
-            emotes.push_back(FFZ::Emote{
-                css,
-                height,
-                hidden,
-                id,
+            emotes.push_back(Twitch::Emote::createEmote<FFZ::Emote>(
+                emote["css"].get<QString>(),
+                emote["height"].get<int>(),
+                emote["hidden"].get<bool>(),
+                emote["id"].get<int>(),
                 margins,
-                modifier,
-                name,
+                emote["modifier"].get<bool>(),
+                emote["name"].get<QString>(),
                 offset,
                 owner,
-                isPublic,
+                emote["public"].get<bool>(),
                 urls,
-                width
-            });
+                emote["width"].get<int>()
+            ));
         }
     }
 
@@ -190,25 +144,21 @@ inline void FFZ::SubscriberEmotesReply::parseData(const JSON& json)
         return;
     }
 
-    FFZ::Emotes emotes;
+    Twitch::Emotes emotes;
     auto&& sets = json["sets"];
     for(const auto& set : sets)
     {
         auto&& emoticons = set["emoticons"];
         for(const auto& emote : emoticons)
         {
-            QString css = emote["css"];
-            int height = emote["height"];
-            bool hidden = emote["hidden"];
-            int id = emote["id"];
             int margins = 0;
             if(!emote["margins"].is_null() && emote["margins"].is_number())
                 margins = emote["margins"];
-            bool modifier = emote["modifier"];
-            QString name = emote["name"];
+
             int offset = 0;
             if(!emote["offset"].is_null() && emote["offset"].is_number())
                 margins = emote["offset"];
+
             auto&& ownerObject = emote["owner"];
             qulonglong ownerID = ownerObject["_id"];
             QString ownerDisplayName = ownerObject["display_name"];
@@ -218,29 +168,32 @@ inline void FFZ::SubscriberEmotesReply::parseData(const JSON& json)
                 ownerDisplayName,
                 ownerName
             };
-            bool isPublic = emote["public"];
             QVector<QString> urls;
-            auto&& urlObject = emote["urls"];
-            for(QString url : urlObject)
+            auto&& urlObject = emote["urls"].object();
+            for(const auto& url : urlObject)
                 urls.push_back(url);
-            int width = emote["width"];
 
-            emotes.push_back(FFZ::Emote{
-                css,
-                height,
-                hidden,
-                id,
+            emotes.push_back(Twitch::Emote::createEmote<FFZ::Emote>(
+                emote["css"].get<QString>(),
+                emote["height"].get<int>(),
+                emote["hidden"].get<bool>(),
+                emote["id"].get<int>(),
                 margins,
-                modifier,
-                name,
+                emote["modifier"].get<bool>(),
+                emote["name"].get<QString>(),
                 offset,
                 owner,
-                isPublic,
+                emote["public"].get<bool>(),
                 urls,
-                width
-            });
+                emote["width"].get<int>()
+            ));
         }
     }
 
     m_data.setValue(emotes);
+}
+
+inline Twitch::Emotes Twitch::Detail::EmotesReply::emotes()
+{
+    return m_data.value<Twitch::Emotes>();
 }

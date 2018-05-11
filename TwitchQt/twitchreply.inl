@@ -10,10 +10,6 @@ inline Reply::Reply(QNetworkReply* reply)
     [this](QNetworkReply::NetworkError)
     {
         m_currentState = ReplyState::Error;
-        emit finished();
-        m_reply->deleteLater();
-        if (!parent())
-            deleteLater();
     });
 }
 

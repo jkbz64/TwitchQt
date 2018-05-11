@@ -12,49 +12,24 @@ namespace Detail {
     public:
         using JSONReply::JSONReply;
         virtual ~EmotesReply() = default;
-
-        virtual Twitch::Emotes toEmotes() = 0;
-    };
-
-    class TwitchEmotesReply : public EmotesReply {
-        Q_OBJECT
-    public:
-        using EmotesReply::EmotesReply;
-        virtual ~TwitchEmotesReply() = default;
-        virtual Twitch::Emotes toEmotes() override final;
-    };
-
-    class BTTVEmotesReply : public EmotesReply {
-        Q_OBJECT
-    public:
-        using EmotesReply::EmotesReply;
-        virtual ~BTTVEmotesReply() = default;
-        virtual Twitch::Emotes toEmotes() override final;
-    };
-
-    class FFZEmotesReply : public EmotesReply {
-        Q_OBJECT
-    public:
-        using EmotesReply::EmotesReply;
-        virtual ~FFZEmotesReply() = default;
-        virtual Twitch::Emotes toEmotes() override final;
+        Twitch::Emotes emotes();
     };
 }
 
 namespace TwitchEmotes {
-    class GlobalEmotesReply : public Detail::TwitchEmotesReply {
+    class GlobalEmotesReply : public Detail::EmotesReply {
         Q_OBJECT
     public:
-        using Detail::TwitchEmotesReply::TwitchEmotesReply;
+        using Detail::EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
     };
 
-    class SubscriberEmotesReply : public Detail::TwitchEmotesReply {
+    class SubscriberEmotesReply : public Detail::EmotesReply {
         Q_OBJECT
     public:
-        using Detail::TwitchEmotesReply::TwitchEmotesReply;
+        using Detail::EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
@@ -62,19 +37,19 @@ namespace TwitchEmotes {
 }
 
 namespace BTTV {
-    class GlobalEmotesReply : public Detail::BTTVEmotesReply {
+    class GlobalEmotesReply : public Detail::EmotesReply {
         Q_OBJECT
     public:
-        using Detail::BTTVEmotesReply::BTTVEmotesReply;
+        using Detail::EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
     };
 
-    class SubscriberEmotesReply : public Detail::BTTVEmotesReply {
+    class SubscriberEmotesReply : public Detail::EmotesReply {
         Q_OBJECT
     public:
-        using Detail::BTTVEmotesReply::BTTVEmotesReply;
+        using Detail::EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
@@ -82,19 +57,19 @@ namespace BTTV {
 }
 
 namespace FFZ {
-    class GlobalEmotesReply : public Detail::FFZEmotesReply {
+    class GlobalEmotesReply : public Detail::EmotesReply {
         Q_OBJECT
     public:
-        using Detail::FFZEmotesReply::FFZEmotesReply;
+        using Detail::EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
     };
 
-    class SubscriberEmotesReply : public Detail::FFZEmotesReply {
+    class SubscriberEmotesReply : public Detail::EmotesReply {
         Q_OBJECT
     public:
-        using Detail::FFZEmotesReply::FFZEmotesReply;
+        using Detail::EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
