@@ -62,17 +62,17 @@ inline JSONReply::JSONReply(QNetworkReply* reply)
     : Reply(reply)
 {
     connect(m_reply, &QNetworkReply::finished, this, [this]() {
-        JSON json = JSON::parse(m_reply->readAll().data());
+        m_json = JSON::parse(m_reply->readAll().data());
         // Check errors
-        if(json.empty())
+        if(m_json.empty())
             m_currentState = ReplyState::Error;
         else
         {
             m_currentState = ReplyState::Success;
-            parseData(json);
+            parseData(m_json);
 
-            if (json.find("pagination") != json.end()) // Save the pagination
-                m_cursor = QString::fromStdString(json["pagination"]["cursor"].get<std::string>());
+            if (m_json.find("pagination") != m_json.end()) // Save the pagination
+                m_cursor = QString::fromStdString(m_json["pagination"]["cursor"].get<std::string>());
         }
 
         emit finished();
@@ -89,3 +89,7 @@ inline void ImageReply::parseData(const QByteArray &data)
     m_data.setValue(QImage::fromData(data));
 }
 
+inline const JSON &Twitch::JSONReply::json() const
+{
+    return m_json;
+}

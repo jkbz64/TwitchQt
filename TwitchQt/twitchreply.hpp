@@ -57,8 +57,11 @@ public:
     JSONReply(QNetworkReply*);
     virtual ~JSONReply();
 
+    const JSON& json() const;
+
 protected:
     virtual void parseData(const JSON&) = 0;
+    JSON m_json;
 };
 
 class ImageReply : public RawReply {
