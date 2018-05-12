@@ -26,7 +26,7 @@ struct adl_serializer<QString> {
 };
 
 template <class T>
-struct adl_serializer<QVector> {
+struct adl_serializer<QVector<T>> {
     static QVector<T> from_json(const json& j)
     {
         QVector<T> vector;
