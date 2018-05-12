@@ -272,6 +272,7 @@ struct adl_serializer<Twitch::FFZ::Emote> {
     {
         j["css"] = emote.m_css;
         j["height"] = emote.m_height;
+        j["name"] = emote.m_name;
         j["hidden"] = emote.m_hidden;
         j["offset"] = emote.m_offset;
         j["id"] = emote.m_id;
