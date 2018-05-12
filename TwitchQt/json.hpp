@@ -24,6 +24,23 @@ struct adl_serializer<QString> {
         j = t.toStdString();
     }
 };
+
+template <class T>
+struct adl_serializer<QVector> {
+    static QVector<T> from_json(const json& j)
+    {
+        QVector<T> vector;
+        for (const auto& element : j) {
+            vector.push_back(element);
+        }
+        return vector;
+    }
+
+    static void to_json(json& j, const QVector<T> vector)
+    {
+        j = vector.toStdVector();
+    }
+};
 }
 
 using JSON = nlohmann::json;
