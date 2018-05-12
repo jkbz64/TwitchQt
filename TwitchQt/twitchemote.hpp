@@ -238,7 +238,7 @@ struct adl_serializer<Twitch::FFZ::Emote> {
         if (!emote["offset"].is_null() && emote["offset"].is_number())
             offset = emote["offset"];
 
-        auto&& ownerObject = emote["owner"];
+        /* auto&& ownerObject = emote["owner"];
         qulonglong ownerID = ownerObject["_id"];
         QString ownerDisplayName = ownerObject["display_name"];
         QString ownerName = ownerObject["name"];
@@ -246,7 +246,8 @@ struct adl_serializer<Twitch::FFZ::Emote> {
             ownerID,
             ownerDisplayName,
             ownerName
-        };
+        };*/
+
         QVector<QString> urls;
         auto&& urlObject = emote["urls"].object();
         for (const auto& url : urlObject)
@@ -261,7 +262,7 @@ struct adl_serializer<Twitch::FFZ::Emote> {
             emote["modifier"].get<bool>(),
             emote["name"].get<QString>(),
             offset,
-            owner,
+            Twitch::FFZ::Owner{},
             emote["public"].get<bool>(),
             urls,
             emote["width"].get<int>());
