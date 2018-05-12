@@ -107,111 +107,22 @@ public:
         GIF
     };
 
-private:
-    template <typename>
-    struct EmoteTag {
-    };
-
-    template <typename... Args>
-    static Emote createEmoteImpl(EmoteTag<TwitchEmotes::Emote>, Args&&... args)
-    {
-        Emote emote;
-        auto emoteData = QSharedPointer<TwitchEmotes::Emote>::create(std::forward<Args>(args)...);
-        emote.m_data = emoteData;
-        emote.m_type = EmoteType::TwitchEmotes;
-        emote.m_id = QString::number(emoteData->m_id);
-        emote.m_code = emoteData->m_code;
-        emote.m_url = TwitchEmotes::Emote::urlTemplate().replace("{{id}}", emote.m_id);
-        emote.m_imageType = ImageType::PNG;
-        return emote;
-    }
-
-    template <typename... Args>
-    static Emote createEmoteImpl(EmoteTag<BTTV::Emote>, Args&&... args)
-    {
-        Emote emote;
-        auto emoteData = QSharedPointer<BTTV::Emote>::create(std::forward<Args>(args)...);
-        emote.m_data = emoteData;
-        emote.m_type = EmoteType::BTTV;
-        emote.m_id = emoteData->m_id;
-        emote.m_code = emoteData->m_code;
-        emote.m_url = BTTV::Emote::urlTemplate().replace("{{id}}", emote.m_id);
-        emote.m_imageType = emoteData->m_imageType.toUpper() == "PNG" ? ImageType::PNG : ImageType::GIF;
-        return emote;
-    }
-
-    template <typename... Args>
-    static Emote createEmoteImpl(EmoteTag<FFZ::Emote>, Args&&... args)
-    {
-        Emote emote;
-        auto emoteData = QSharedPointer<FFZ::Emote>::create(std::forward<Args>(args)...);
-        emote.m_data = emoteData;
-        emote.m_type = EmoteType::FFZ;
-        emote.m_id = QString::number(emoteData->m_id);
-        emote.m_code = emoteData->m_name;
-        emote.m_url = FFZ::Emote::urlTemplate().replace("{{id}}", emote.m_id);
-        emote.m_imageType = ImageType::PNG;
-        return emote;
-    }
-
 public:
     template <class EmoteClass, typename... Args>
-    static Emote createEmote(Args&&... args)
-    {
-        return createEmoteImpl(EmoteTag<EmoteClass>{}, std::forward<Args>(args)...);
-    }
+    static Emote createEmote(Args&&... args);
 
-    Emote()
-        : m_data(nullptr)
-    {
-    }
+    Emote();
+    Emote(EmoteData* data);
+    Emote(const Emote& other);
 
-    Emote(EmoteData* data)
-        : m_data(data)
-    {
-    }
-
-    Emote(const Emote& other)
-        : m_type(other.m_type)
-        , m_data(other.m_data)
-        , m_id(other.m_id)
-        , m_code(other.m_code)
-        , m_url(other.m_url)
-        , m_imageType(other.m_imageType)
-    {
-    }
-
-    const EmoteType& emoteType() const
-    {
-        return m_type;
-    }
-
-    const QString& id() const
-    {
-        return m_id;
-    }
-
-    const QString& code() const
-    {
-        return m_code;
-    }
-
-    const QString& url() const
-    {
-        return m_url;
-    }
-
-    const ImageType& imageType() const
-    {
-        return m_imageType;
-    }
+    const EmoteType& emoteType() const;
+    const QString& id() const;
+    const QString& code() const;
+    const QString& url() const;
+    const ImageType& imageType() const;
 
     template <class EmoteClass>
-    const EmoteClass& toEmote() const
-    {
-        // Maybe some kind of const cast?
-        return *dynamic_cast<EmoteClass*>(m_data.data());
-    }
+    const EmoteClass& toEmote() const;
 
 private:
     EmoteType m_type;
@@ -222,12 +133,32 @@ private:
     QString m_code;
     QString m_url;
     ImageType m_imageType;
+
+    template <typename>
+    struct EmoteTag {
+    };
+
+    template <typename... Args>
+    static Emote createEmoteImpl(EmoteTag<TwitchEmotes::Emote>, Args&&... args);
+    template <typename... Args>
+    static Emote createEmoteImpl(EmoteTag<BTTV::Emote>, Args&&... args);
+    template <typename... Args>
+    static Emote createEmoteImpl(EmoteTag<FFZ::Emote>, Args&&... args);
 };
 
-using Emotes = QVector<Emote>;
+class Emotes : public QVector<Emote> {
+public:
+    static Emotes fromTwitchEmotes(const JSON&);
+    static Emotes fromBTTV(const JSON&);
+    static Emotes fromFFZ(const JSON&);
+};
 }
 
 Q_DECLARE_METATYPE(Twitch::Emote);
 Q_DECLARE_METATYPE(Twitch::Emotes);
+
+namespace Twitch {
+#include "twitchemote.inl"
+}
 
 #endif // TWITCHEMOTE_HPP
