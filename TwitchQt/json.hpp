@@ -34,8 +34,7 @@ struct adl_serializer<QVector<T>> {
 
     static void to_json(json& j, const QVector<T>& vector)
     {
-        j = json{};
-        j.push_back(vector);
+        j = vector.toStdVector();
     }
 };
 }

@@ -236,7 +236,7 @@ struct adl_serializer<Twitch::FFZ::Emote> {
 
         int offset = 0;
         if (!emote["offset"].is_null() && emote["offset"].is_number())
-            margins = emote["offset"];
+            offset = emote["offset"];
 
         auto&& ownerObject = emote["owner"];
         qulonglong ownerID = ownerObject["_id"];
@@ -272,6 +272,7 @@ struct adl_serializer<Twitch::FFZ::Emote> {
         j["css"] = emote.m_css;
         j["height"] = emote.m_height;
         j["hidden"] = emote.m_hidden;
+        j["offset"] = emote.m_offset;
         j["id"] = emote.m_id;
         j["margins"] = emote.m_margins;
         j["modifier"] = emote.m_modifier;
