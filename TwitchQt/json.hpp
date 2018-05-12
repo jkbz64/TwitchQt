@@ -29,16 +29,13 @@ template <class T>
 struct adl_serializer<QVector<T>> {
     static QVector<T> from_json(const json& j)
     {
-        QVector<T> vector;
-        for (const auto& element : j) {
-            vector.push_back(element);
-        }
-        return vector;
+        return QVector<T>::fromStdVector(j);
     }
 
-    static void to_json(json& j, const QVector<T> vector)
+    static void to_json(json& j, const QVector<T>& vector)
     {
-        j = vector.toStdVector();
+        j = json{};
+        j.push_back(vector);
     }
 };
 }
