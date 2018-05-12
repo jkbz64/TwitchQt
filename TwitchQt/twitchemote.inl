@@ -104,14 +104,7 @@ inline Twitch::Emotes Twitch::Emotes::fromTwitchEmotes(const JSON &json)
 {
     Twitch::Emotes emotes;
     for(const auto& emote : json)
-    {
-        emotes.push_back(Twitch::Emote::createEmote<TwitchEmotes::Emote>(
-            emote["id"].get<int>(),
-            emote["code"].get<QString>(),
-            emote["emoticon_set"].get<int>(),
-            emote["description"].get<QString>()
-        ));
-    }
+        emotes.push_back(Twitch::Emote::createEmote<TwitchEmotes::Emote>(emote));
     return emotes;
 }
 
@@ -119,15 +112,7 @@ inline Twitch::Emotes Twitch::Emotes::fromBTTV(const JSON &json)
 {
     Twitch::Emotes emotes;
     for(const auto& emote : json)
-    {
-        emotes.push_back(Twitch::Emote::createEmote<BTTV::Emote>(
-            emote["id"].get<QString>(),
-            emote["code"].get<QString>(),
-            emote["channel"].get<QString>(),
-            BTTV::Restrictions{},
-            emote["imageType"].get<QString>()
-        ));
-    }
+        emotes.push_back(Twitch::Emote::createEmote<Twitch::BTTV::Emote>(emote));
     return emotes;
 }
 
@@ -135,43 +120,6 @@ inline Twitch::Emotes Twitch::Emotes::fromFFZ(const JSON &json)
 {
     Twitch::Emotes emotes;
     for(const auto& emote : json)
-    {
-        int margins = 0;
-        if(!emote["margins"].is_null() && emote["margins"].is_number())
-            margins = emote["margins"];
-
-        int offset = 0;
-        if(!emote["offset"].is_null() && emote["offset"].is_number())
-            margins = emote["offset"];
-
-        auto&& ownerObject = emote["owner"];
-        qulonglong ownerID = ownerObject["_id"];
-        QString ownerDisplayName = ownerObject["display_name"];
-        QString ownerName = ownerObject["name"];
-        FFZ::Owner owner{
-            ownerID,
-            ownerDisplayName,
-            ownerName
-        };
-        QVector<QString> urls;
-        auto&& urlObject = emote["urls"].object();
-        for(const auto& url : urlObject)
-            urls.push_back(url);
-
-        emotes.push_back(Twitch::Emote::createEmote<FFZ::Emote>(
-            emote["css"].get<QString>(),
-            emote["height"].get<int>(),
-            emote["hidden"].get<bool>(),
-            emote["id"].get<int>(),
-            margins,
-            emote["modifier"].get<bool>(),
-            emote["name"].get<QString>(),
-            offset,
-            owner,
-            emote["public"].get<bool>(),
-            urls,
-            emote["width"].get<int>()
-        ));
-    }
+        emotes.push_back(Twitch::Emote::createEmote<FFZ::Emote>(emote));
     return emotes;
 }

@@ -154,6 +154,182 @@ public:
 };
 }
 
+namespace nlohmann {
+
+template <>
+struct adl_serializer<Twitch::EmoteType> {
+    static Twitch::EmoteType from_json(const json& j)
+    {
+        const QString& type = j;
+        if (type == "TwitchEmotes")
+            return Twitch::EmoteType::TwitchEmotes;
+        else if (type == "BTTV")
+            return Twitch::EmoteType::BTTV;
+        else if (type == "FFZ")
+            return Twitch::EmoteType::FFZ;
+    }
+    static void to_json(json& j, const Twitch::EmoteType& t)
+    {
+        switch (t) {
+        case Twitch::EmoteType::TwitchEmotes:
+            j = QString("TwitchEmotes");
+            break;
+        case Twitch::EmoteType::BTTV:
+            j = QString("BTTV");
+            break;
+        case Twitch::EmoteType::FFZ:
+            j = QString("FFZ");
+            break;
+        }
+    }
+};
+
+template <>
+struct adl_serializer<Twitch::TwitchEmotes::Emote> {
+    static Twitch::TwitchEmotes::Emote from_json(const json& emote)
+    {
+        return Twitch::TwitchEmotes::Emote(
+            emote["id"].get<int>(),
+            emote["code"].get<QString>(),
+            emote["emoticon_set"].get<int>(),
+            emote["description"].get<QString>());
+    }
+
+    static void to_json(json& j, const Twitch::TwitchEmotes::Emote& emote)
+    {
+        j["id"] = emote.m_id;
+        j["code"] = emote.m_code;
+        j["emoticon_set"] = emote.m_emoticonSet;
+        j["description"] = emote.m_description;
+    }
+};
+
+template <>
+struct adl_serializer<Twitch::BTTV::Emote> {
+    static Twitch::BTTV::Emote from_json(const json& emote)
+    {
+        return Twitch::BTTV::Emote(
+            emote["id"].get<QString>(),
+            emote["code"].get<QString>(),
+            emote["channel"].get<QString>(),
+            Twitch::BTTV::Restrictions{},
+            emote["imageType"].get<QString>());
+    }
+
+    static void to_json(json& j, const Twitch::BTTV::Emote& emote)
+    {
+        j["id"] = emote.m_id;
+        j["code"] = emote.m_code;
+        j["channel"] = emote.m_channel;
+        // TODO restrictions
+        j["imageType"] = emote.m_imageType;
+    }
+};
+
+template <>
+struct adl_serializer<Twitch::FFZ::Emote> {
+    static Twitch::FFZ::Emote from_json(const json& emote)
+    {
+        int margins = 0;
+        if (!emote["margins"].is_null() && emote["margins"].is_number())
+            margins = emote["margins"];
+
+        int offset = 0;
+        if (!emote["offset"].is_null() && emote["offset"].is_number())
+            margins = emote["offset"];
+
+        auto&& ownerObject = emote["owner"];
+        qulonglong ownerID = ownerObject["_id"];
+        QString ownerDisplayName = ownerObject["display_name"];
+        QString ownerName = ownerObject["name"];
+        Twitch::FFZ::Owner owner{
+            ownerID,
+            ownerDisplayName,
+            ownerName
+        };
+        QVector<QString> urls;
+        auto&& urlObject = emote["urls"].object();
+        for (const auto& url : urlObject)
+            urls.push_back(url);
+
+        return Twitch::FFZ::Emote(
+            emote["css"].get<QString>(),
+            emote["height"].get<int>(),
+            emote["hidden"].get<bool>(),
+            emote["id"].get<int>(),
+            margins,
+            emote["modifier"].get<bool>(),
+            emote["name"].get<QString>(),
+            offset,
+            owner,
+            emote["public"].get<bool>(),
+            urls,
+            emote["width"].get<int>());
+    }
+
+    static void to_json(json& j, const Twitch::FFZ::Emote& emote)
+    {
+        j["css"] = emote.m_css;
+        j["height"] = emote.m_height;
+        j["hidden"] = emote.m_hidden;
+        j["id"] = emote.m_id;
+        j["margins"] = emote.m_margins;
+        j["modifier"] = emote.m_modifier;
+        // TODO j["owner"] = emote.m_owner;
+        j["public"] = emote.m_public;
+        j["urls"] = emote.m_urls;
+        j["width"] = emote.m_width;
+    }
+};
+
+template <>
+struct adl_serializer<Twitch::Emote> {
+    static Twitch::Emote from_json(const json& j)
+    {
+        const Twitch::EmoteType type = j["type"];
+        if (type == Twitch::EmoteType::TwitchEmotes) {
+            const Twitch::TwitchEmotes::Emote& emoteData = j["data"];
+            return Twitch::Emote::createEmote<Twitch::TwitchEmotes::Emote>(emoteData);
+        } else if (type == Twitch::EmoteType::BTTV) {
+            const Twitch::BTTV::Emote& emoteData = j["data"];
+            return Twitch::Emote::createEmote<Twitch::BTTV::Emote>(emoteData);
+        } else if (type == Twitch::EmoteType::FFZ) {
+            const Twitch::FFZ::Emote& emoteData = j["data"];
+            return Twitch::Emote::createEmote<Twitch::FFZ::Emote>(emoteData);
+        }
+
+        return Twitch::Emote{};
+    }
+
+    static void to_json(json& j, const Twitch::Emote& t)
+    {
+        j["type"] = t.emoteType();
+        j["id"] = t.id();
+        j["code"] = t.code();
+        j["url"] = t.url();
+        switch (t.imageType()) {
+        case Twitch::Emote::ImageType::PNG:
+            j["imageType"] = QString("PNG");
+            break;
+        case Twitch::Emote::ImageType::GIF:
+            j["imageType"] = QString("GIF");
+            break;
+        }
+        switch (t.emoteType()) {
+        case Twitch::EmoteType::TwitchEmotes:
+            j["data"] = t.toEmote<Twitch::TwitchEmotes::Emote>();
+            break;
+        case Twitch::EmoteType::BTTV:
+            j["data"] = t.toEmote<Twitch::BTTV::Emote>();
+            break;
+        case Twitch::EmoteType::FFZ:
+            j["data"] = t.toEmote<Twitch::FFZ::Emote>();
+            break;
+        }
+    }
+};
+}
+
 Q_DECLARE_METATYPE(Twitch::Emote);
 Q_DECLARE_METATYPE(Twitch::Emotes);
 
