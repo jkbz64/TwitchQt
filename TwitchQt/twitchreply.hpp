@@ -1,8 +1,7 @@
 #ifndef TWITCHREPLY_HPP
 #define TWITCHREPLY_HPP
 
-#include "json/json.hpp"
-using JSON = nlohmann::json;
+#include "json.hpp"
 #include <QString>
 #include <string>
 #include <QNetworkReply>
@@ -74,28 +73,6 @@ protected:
 };
 
 #include "twitchreply.inl"
-}
-
-namespace nlohmann {
-template <>
-struct adl_serializer<QString> {
-    static QString from_json(const json& j)
-    {
-        if (j.is_null())
-            return QString("");
-        else if (j.is_number()) {
-            return QString::number(j.get<qint64>());
-        } else if (j.is_string()) {
-            return QString::fromStdString(j.get<std::string>());
-        }
-        return QString("");
-    }
-
-    static void to_json(json& j, const QString& t)
-    {
-        j = t.toStdString();
-    }
-};
 }
 
 #endif // TWITCHREPLY_HPP

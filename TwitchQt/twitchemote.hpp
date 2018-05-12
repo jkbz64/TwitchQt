@@ -1,7 +1,7 @@
 #ifndef TWITCHEMOTE_HPP
 #define TWITCHEMOTE_HPP
 
-#include <QString>
+#include "json.hpp"
 #include <QVector>
 #include <QSharedPointer>
 

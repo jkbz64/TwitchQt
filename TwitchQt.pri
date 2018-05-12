@@ -12,3 +12,4 @@ HEADERS += \
 	$$PWD/TwitchQt/twitchuserreply.hpp \
         $$PWD/TwitchQt/twitchemote.hpp \
         $$PWD/TwitchQt/twitchemotereply.hpp \
+    $$PWD/TwitchQt/json.hpp
