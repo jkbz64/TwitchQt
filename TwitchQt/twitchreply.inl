@@ -62,7 +62,20 @@ inline JSONReply::JSONReply(QNetworkReply* reply)
     : Reply(reply)
 {
     connect(m_reply, &QNetworkReply::finished, this, [this]() {
-        m_json = JSON::parse(m_reply->readAll().data());
+        JSON::parser_callback_t cb = [](int depth, JSON::parse_event_t event, JSON& parsed)
+        {
+                // Skip values with null value
+                if (event == JSON::parse_event_t::value and parsed.is_null())
+                {
+                    qDebug() << parsed.dump().data();
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+        };
+        m_json = JSON::parse(m_reply->readAll().data(), cb);
         // Check errors
         if(m_json.empty())
             m_currentState = ReplyState::Error;

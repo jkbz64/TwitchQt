@@ -240,15 +240,15 @@ struct adl_serializer<Twitch::FFZ::Emote> {
             ownerName
         };*/
 
-        QVector<QString> urls = emote.value("urls", QVector<QString>());
+        QVector<QString> urls;
         auto&& urlObject = emote["urls"].object();
         for (const auto& url : urlObject)
             urls.push_back(url);
 
         return Twitch::FFZ::Emote(
-            emote.value("css", QString()),
+            emote.value("css", QString("")),
             emote.value("height", -1),
-            emote.value("hidden", -1),
+            emote.value("hidden", false),
             emote.value("id", -1),
             emote.value("margins", 0),
             emote.value("modifier", false),
