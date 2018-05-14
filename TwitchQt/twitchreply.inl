@@ -67,7 +67,6 @@ inline JSONReply::JSONReply(QNetworkReply* reply)
                 // Skip values with null value
                 if (event == JSON::parse_event_t::value and parsed.is_null())
                 {
-                    qDebug() << parsed.dump().data();
                     return false;
                 }
                 else
