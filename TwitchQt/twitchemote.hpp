@@ -189,10 +189,10 @@ struct adl_serializer<Twitch::TwitchEmotes::Emote> {
     static Twitch::TwitchEmotes::Emote from_json(const json& emote)
     {
         return Twitch::TwitchEmotes::Emote(
-            emote["id"].get<int>(),
-            emote["code"].get<QString>(),
-            emote["emoticon_set"].get<int>(),
-            emote["description"].get<QString>());
+            emote.value("id", -1),
+            emote.value("code", QString("ERROR")),
+            emote.value("emoticon_set", -1),
+            emote.value("description", QString("")));
     }
 
     static void to_json(json& j, const Twitch::TwitchEmotes::Emote& emote)
@@ -209,11 +209,11 @@ struct adl_serializer<Twitch::BTTV::Emote> {
     static Twitch::BTTV::Emote from_json(const json& emote)
     {
         return Twitch::BTTV::Emote(
-            emote["id"].get<QString>(),
-            emote["code"].get<QString>(),
-            emote["channel"].get<QString>(),
+            emote.value("id", QString("-1")),
+            emote.value("code", QString("ERROR")),
+            emote.value("channel", QString("ERROR")),
             Twitch::BTTV::Restrictions{},
-            emote["imageType"].get<QString>());
+            emote.value<QString>("imageType", QString("PNG")));
     }
 
     static void to_json(json& j, const Twitch::BTTV::Emote& emote)
@@ -230,14 +230,6 @@ template <>
 struct adl_serializer<Twitch::FFZ::Emote> {
     static Twitch::FFZ::Emote from_json(const json& emote)
     {
-        int margins = 0;
-        if (!emote["margins"].is_null() && emote["margins"].is_number())
-            margins = emote["margins"];
-
-        int offset = 0;
-        if (!emote["offset"].is_null() && emote["offset"].is_number())
-            offset = emote["offset"];
-
         /* auto&& ownerObject = emote["owner"];
         qulonglong ownerID = ownerObject["_id"];
         QString ownerDisplayName = ownerObject["display_name"];
@@ -248,24 +240,24 @@ struct adl_serializer<Twitch::FFZ::Emote> {
             ownerName
         };*/
 
-        QVector<QString> urls;
+        QVector<QString> urls = emote.value("urls", QVector<QString>());
         auto&& urlObject = emote["urls"].object();
         for (const auto& url : urlObject)
             urls.push_back(url);
 
         return Twitch::FFZ::Emote(
-            emote["css"].get<QString>(),
-            emote["height"].get<int>(),
-            emote["hidden"].get<bool>(),
-            emote["id"].get<int>(),
-            margins,
-            emote["modifier"].get<bool>(),
-            emote["name"].get<QString>(),
-            offset,
+            emote.value("css", QString()),
+            emote.value("height", -1),
+            emote.value("hidden", -1),
+            emote.value("id", -1),
+            emote.value("margins", 0),
+            emote.value("modifier", false),
+            emote.value("name", QString("ERROR")),
+            emote.value("offset", 0),
             Twitch::FFZ::Owner{},
-            emote["public"].get<bool>(),
+            emote.value("public", false),
             urls,
-            emote["width"].get<int>());
+            emote.value("width", -1));
     }
 
     static void to_json(json& j, const Twitch::FFZ::Emote& emote)
@@ -289,7 +281,7 @@ template <>
 struct adl_serializer<Twitch::Emote> {
     static Twitch::Emote from_json(const json& j)
     {
-        const Twitch::EmoteType type = j["type"];
+        const Twitch::EmoteType type = j.value("type", Twitch::EmoteType::TwitchEmotes);
         if (type == Twitch::EmoteType::TwitchEmotes) {
             const Twitch::TwitchEmotes::Emote& emoteData = j["data"];
             return Twitch::Emote::createEmote<Twitch::TwitchEmotes::Emote>(emoteData);
