@@ -105,9 +105,9 @@ inline GamesReply* Detail::Api::getTopGames(int first)
     return createReply<GamesReply>(request);
 }
 
-inline GameReply* Detail::Api::getGameById(ID id)
+inline GameReply* Detail::Api::getGameById(const QString& id)
 {
-    const QString url = api() + QString("/games") + QString("?id=") + QString::number(id);
+    const QString url = api() + QString("/games") + QString("?id=") + id;
     auto request = buildRequest(QUrl(url));
     return createReply<GameReply>(request);
 }
@@ -143,9 +143,9 @@ inline GamesReply* Detail::Api::getGameByNames(const QStringList& names)
 
 // Streams
 
-inline StreamReply* Detail::Api::getStreamByUserId(ID userId)
+inline StreamReply* Detail::Api::getStreamByUserId(const QString& userId)
 {
-    const QString url = api() + QString("/streams") + QString("?user_id=") + QString::number(userId);
+    const QString url = api() + QString("/streams") + QString("?user_id=") + userId;
 
     auto request = buildRequest(QUrl(url));
     return createReply<StreamReply>(request);
@@ -179,9 +179,9 @@ inline StreamsReply* Detail::Api::getStreamsByUserIds(const QStringList& ids, in
     return createReply<StreamsReply>(request);
 }
 
-inline StreamsReply* Detail::Api::getStreamsByGameId(ID gameId, int first, const QString& after)
+inline StreamsReply* Detail::Api::getStreamsByGameId(const QString& gameId, int first, const QString& after)
 {
-    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("&game_id=") + QString::number(gameId);
+    QString url = api() + QString("/streams") + QString("?first=") + QString::number(first) + QString("&game_id=") + gameId;
     if (!after.isEmpty())
         url += QString("&after=") + after;
 
@@ -221,9 +221,9 @@ inline StreamsReply* Detail::Api::getStreamsByLanguages(const QStringList& langu
 
 // User
 
-inline UserReply* Detail::Api::getUserById(ID userId)
+inline UserReply* Detail::Api::getUserById(const QString& userId)
 {
-    const QString url = api() + QString("/users") + QString("?id=") + QString::number(userId);
+    const QString url = api() + QString("/users") + QString("?id=") + userId;
 
     auto request = buildRequest(QUrl(url));
     return createReply<UserReply>(request);
