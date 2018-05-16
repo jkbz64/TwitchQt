@@ -5,7 +5,6 @@
 |_____|_____|_____|_|___|  https://github.com/nlohmann/json
 
 Licensed under the MIT License <http://opensource.org/licenses/MIT>.
-SPDX-License-Identifier: MIT
 Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>.
 
 Permission is hereby  granted, free of charge, to any  person obtaining a copy
@@ -1739,176 +1738,6 @@ class input_buffer_adapter : public input_adapter_protocol
     const char* start;
 };
 
-template<typename WideStringType>
-class wide_string_input_adapter : public input_adapter_protocol
-{
-  public:
-    wide_string_input_adapter(const WideStringType& w) : str(w) {}
-
-    std::char_traits<char>::int_type get_character() noexcept override
-    {
-        // unget_character() was called previously: return the last character
-        if (next_unget)
-        {
-            next_unget = false;
-            return last_char;
-        }
-
-        // check if buffer needs to be filled
-        if (utf8_bytes_index == utf8_bytes_filled)
-        {
-            if (sizeof(typename WideStringType::value_type) == 2)
-            {
-                fill_buffer_utf16();
-            }
-            else
-            {
-                fill_buffer_utf32();
-            }
-
-            assert(utf8_bytes_filled > 0);
-            assert(utf8_bytes_index == 0);
-        }
-
-        // use buffer
-        assert(utf8_bytes_filled > 0);
-        assert(utf8_bytes_index < utf8_bytes_filled);
-        return (last_char = utf8_bytes[utf8_bytes_index++]);
-    }
-
-    void unget_character() noexcept override
-    {
-        next_unget = true;
-    }
-
-  private:
-    void fill_buffer_utf16()
-    {
-        utf8_bytes_index = 0;
-
-        if (current_wchar == str.size())
-        {
-            utf8_bytes[0] = std::char_traits<char>::eof();
-            utf8_bytes_filled = 1;
-        }
-        else
-        {
-            // get the current character
-            const int wc = static_cast<int>(str[current_wchar++]);
-
-            // UTF-16 to UTF-8 encoding
-            if (wc < 0x80)
-            {
-                utf8_bytes[0] = wc;
-                utf8_bytes_filled = 1;
-            }
-            else if (wc <= 0x7FF)
-            {
-                utf8_bytes[0] = 0xC0 | ((wc >> 6));
-                utf8_bytes[1] = 0x80 | (wc & 0x3F);
-                utf8_bytes_filled = 2;
-            }
-            else if (0xD800 > wc or wc >= 0xE000)
-            {
-                utf8_bytes[0] = 0xE0 | ((wc >> 12));
-                utf8_bytes[1] = 0x80 | ((wc >> 6) & 0x3F);
-                utf8_bytes[2] = 0x80 | (wc & 0x3F);
-                utf8_bytes_filled = 3;
-            }
-            else
-            {
-                if (current_wchar < str.size())
-                {
-                    const int wc2 = static_cast<int>(str[current_wchar++]);
-                    const int charcode = 0x10000 + (((wc & 0x3FF) << 10) | (wc2 & 0x3FF));
-                    utf8_bytes[0] = 0xf0 | (charcode >> 18);
-                    utf8_bytes[1] = 0x80 | ((charcode >> 12) & 0x3F);
-                    utf8_bytes[2] = 0x80 | ((charcode >> 6) & 0x3F);
-                    utf8_bytes[3] = 0x80 | (charcode & 0x3F);
-                    utf8_bytes_filled = 4;
-                }
-                else
-                {
-                    // unknown character
-                    ++current_wchar;
-                    utf8_bytes[0] = wc;
-                    utf8_bytes_filled = 1;
-                }
-            }
-        }
-    }
-
-    void fill_buffer_utf32()
-    {
-        utf8_bytes_index = 0;
-
-        if (current_wchar == str.size())
-        {
-            utf8_bytes[0] = std::char_traits<char>::eof();
-            utf8_bytes_filled = 1;
-        }
-        else
-        {
-            // get the current character
-            const int wc = static_cast<int>(str[current_wchar++]);
-
-            // UTF-32 to UTF-8 encoding
-            if (wc < 0x80)
-            {
-                utf8_bytes[0] = wc;
-                utf8_bytes_filled = 1;
-            }
-            else if (wc <= 0x7FF)
-            {
-                utf8_bytes[0] = 0xC0 | ((wc >> 6) & 0x1F);
-                utf8_bytes[1] = 0x80 | (wc & 0x3F);
-                utf8_bytes_filled = 2;
-            }
-            else if (wc <= 0xFFFF)
-            {
-                utf8_bytes[0] = 0xE0 | ((wc >> 12) & 0x0F);
-                utf8_bytes[1] = 0x80 | ((wc >> 6) & 0x3F);
-                utf8_bytes[2] = 0x80 | (wc & 0x3F);
-                utf8_bytes_filled = 3;
-            }
-            else if (wc <= 0x10FFFF)
-            {
-                utf8_bytes[0] = 0xF0 | ((wc >> 18 ) & 0x07);
-                utf8_bytes[1] = 0x80 | ((wc >> 12) & 0x3F);
-                utf8_bytes[2] = 0x80 | ((wc >> 6) & 0x3F);
-                utf8_bytes[3] = 0x80 | (wc & 0x3F);
-                utf8_bytes_filled = 4;
-            }
-            else
-            {
-                // unknown character
-                utf8_bytes[0] = wc;
-                utf8_bytes_filled = 1;
-            }
-        }
-    }
-
-  private:
-    /// the wstring to process
-    const WideStringType& str;
-
-    /// index of the current wchar in str
-    std::size_t current_wchar = 0;
-
-    /// a buffer for UTF-8 bytes
-    std::array<std::char_traits<char>::int_type, 4> utf8_bytes = {{0, 0, 0, 0}};
-
-    /// index to the utf8_codes array for the next valid byte
-    std::size_t utf8_bytes_index = 0;
-    /// number of valid bytes in the utf8_codes array
-    std::size_t utf8_bytes_filled = 0;
-
-    /// the last character (returned after unget_character() is called)
-    std::char_traits<char>::int_type last_char = 0;
-    /// whether get_character() should return last_char
-    bool next_unget = false;
-};
-
 class input_adapter
 {
   public:
@@ -1921,15 +1750,6 @@ class input_adapter
     /// input adapter for input stream
     input_adapter(std::istream&& i)
         : ia(std::make_shared<input_stream_adapter>(i)) {}
-
-    input_adapter(const std::wstring& ws)
-        : ia(std::make_shared<wide_string_input_adapter<std::wstring>>(ws)) {}
-
-    input_adapter(const std::u16string& ws)
-        : ia(std::make_shared<wide_string_input_adapter<std::u16string>>(ws)) {}
-
-    input_adapter(const std::u32string& ws)
-        : ia(std::make_shared<wide_string_input_adapter<std::u32string>>(ws)) {}
 
     /// input adapter for buffer
     template<typename CharT,
@@ -6537,9 +6357,9 @@ class binary_writer
                 break;
             }
 
-            case value_t::number_float:
+            case value_t::number_float: // Double-Precision Float
             {
-                oa->write_character(get_cbor_float_prefix(j.m_value.number_float));
+                oa->write_character(static_cast<CharType>(0xFB));
                 write_number(j.m_value.number_float);
                 break;
             }
@@ -6797,9 +6617,9 @@ class binary_writer
                 break;
             }
 
-            case value_t::number_float:
+            case value_t::number_float: // float 64
             {
-                oa->write_character(get_msgpack_float_prefix(j.m_value.number_float));
+                oa->write_character(static_cast<CharType>(0xCB));
                 write_number(j.m_value.number_float);
                 break;
             }
@@ -6976,7 +6796,7 @@ class binary_writer
                 if (use_type and not j.m_value.array->empty())
                 {
                     assert(use_count);
-                    const CharType first_prefix = ubjson_prefix(j.front());
+                    const char first_prefix = ubjson_prefix(j.front());
                     const bool same_prefix = std::all_of(j.begin() + 1, j.end(),
                                                          [this, first_prefix](const BasicJsonType & v)
                     {
@@ -6987,7 +6807,7 @@ class binary_writer
                     {
                         prefix_required = false;
                         oa->write_character(static_cast<CharType>('$'));
-                        oa->write_character(first_prefix);
+                        oa->write_character(static_cast<CharType>(first_prefix));
                     }
                 }
 
@@ -7021,7 +6841,7 @@ class binary_writer
                 if (use_type and not j.m_value.object->empty())
                 {
                     assert(use_count);
-                    const CharType first_prefix = ubjson_prefix(j.front());
+                    const char first_prefix = ubjson_prefix(j.front());
                     const bool same_prefix = std::all_of(j.begin(), j.end(),
                                                          [this, first_prefix](const BasicJsonType & v)
                     {
@@ -7032,7 +6852,7 @@ class binary_writer
                     {
                         prefix_required = false;
                         oa->write_character(static_cast<CharType>('$'));
-                        oa->write_character(first_prefix);
+                        oa->write_character(static_cast<CharType>(first_prefix));
                     }
                 }
 
@@ -7100,7 +6920,7 @@ class binary_writer
     {
         if (add_prefix)
         {
-            oa->write_character(get_ubjson_float_prefix(n));
+            oa->write_character(static_cast<CharType>('D'));  // float64
         }
         write_number(n);
     }
@@ -7221,7 +7041,7 @@ class binary_writer
           write_number_with_ubjson_prefix. Therefore, we return 'L' for any
           value that does not fit the previous limits.
     */
-    CharType ubjson_prefix(const BasicJsonType& j) const noexcept
+    char ubjson_prefix(const BasicJsonType& j) const noexcept
     {
         switch (j.type())
         {
@@ -7280,7 +7100,7 @@ class binary_writer
             }
 
             case value_t::number_float:
-                return get_ubjson_float_prefix(j.m_value.number_float);
+                return 'D';
 
             case value_t::string:
                 return 'S';
@@ -7294,36 +7114,6 @@ class binary_writer
             default:  // discarded values
                 return 'N';
         }
-    }
-
-    static constexpr CharType get_cbor_float_prefix(float)
-    {
-        return static_cast<CharType>(0xFA);  // Single-Precision Float
-    }
-
-    static constexpr CharType get_cbor_float_prefix(double)
-    {
-        return static_cast<CharType>(0xFB);  // Double-Precision Float
-    }
-
-    static constexpr CharType get_msgpack_float_prefix(float)
-    {
-        return static_cast<CharType>(0xCA);  // float 32
-    }
-
-    static constexpr CharType get_msgpack_float_prefix(double)
-    {
-        return static_cast<CharType>(0xCB);  // float 64
-    }
-
-    static constexpr CharType get_ubjson_float_prefix(float)
-    {
-        return 'd';  // float 32
-    }
-
-    static constexpr CharType get_ubjson_float_prefix(double)
-    {
-        return 'D';  // float 64
     }
 
   private:
@@ -13226,7 +13016,7 @@ class basic_json
     @return copy of the element at key @a key or @a default_value if @a key
     is not found
 
-    @throw type_error.306 if the JSON value is not an object; in that case,
+    @throw type_error.306 if the JSON value is not an objec; in that case,
     using `value()` with a key makes no sense.
 
     @complexity Logarithmic in the size of the container.

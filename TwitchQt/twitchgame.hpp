@@ -7,8 +7,7 @@
 namespace Twitch {
 // Models
 struct Game {
-    Game() = default;
-    qulonglong m_id;
+    QString m_id;
     QString m_name;
     QString m_boxArtUrl;
 };

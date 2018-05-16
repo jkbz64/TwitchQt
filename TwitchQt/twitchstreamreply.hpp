@@ -18,12 +18,10 @@ class StreamsReply : public JSONReply {
     Q_OBJECT
 public:
     using JSONReply::JSONReply;
-    qulonglong combinedViewerCount() const;
-    const QString& cursor() const;
+    int combinedViewerCount() const;
 
 protected:
-    qulonglong m_combinedViewerCount{ 0u };
-    QString m_cursor;
+    int m_combinedViewerCount{ 0 };
     virtual void parseData(const JSON&) override;
 };
 

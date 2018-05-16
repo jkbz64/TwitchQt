@@ -20,13 +20,13 @@ struct User {
     BroadcasterType m_broadcasterType;
     QString m_description;
     QString m_displayName;
-    // QString m_email;
-    qulonglong m_id;
+    QString m_email;
+    QString m_id;
     QString m_login;
     QString m_offlineImageUrl;
     QString m_profileImageUrl;
     UserType m_type;
-    qulonglong m_viewCount;
+    int m_viewCount;
 };
 
 using Users = QVector<User>;

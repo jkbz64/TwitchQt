@@ -2,26 +2,18 @@
 inline void UserReply::parseData(const JSON& json)
 {
     if (json.find("data") != json.end()) {
-        auto&& data = json["data"];
+        const auto& data = json["data"];
         if (!data.empty()) {
-            auto&& user = data.front();
+            const auto& user = data.front();
 
-            QString broadcasterTypeStr = user["broadcaster_type"];
+            QString broadcasterTypeStr = user.value("broadcaster_type", QString(""));
             User::BroadcasterType broadcasterType = User::BroadcasterType::No;
             if (broadcasterTypeStr == "partner")
                 broadcasterType = User::BroadcasterType::Partner;
             else if (broadcasterTypeStr == "affiliate")
                 broadcasterType = User::BroadcasterType::Affiliate;
 
-            QString description = user["description"];
-            QString displayName = user["display_name"];
-            //QString email = user["email"];
-            QString id = user["id"];
-            QString login = user["login"];
-            QString offlineImageUrl = user["offline_image_url"];
-            QString profileImageUrl = user["profile_image_url"];
-
-            QString userTypeStr = user["type"];
+            QString userTypeStr = user.value("type", QString(""));
             User::UserType userType = User::UserType::No;
             if (userTypeStr == "global_mod")
                 userType = User::UserType::GlobalMod;
@@ -30,21 +22,18 @@ inline void UserReply::parseData(const JSON& json)
             else if (userTypeStr == "staff")
                 userType = User::UserType::Staff;
 
-            QString viewCount = user["view_count"];
-
             m_data.setValue(User{
                 broadcasterType,
-                description,
-                displayName,
-                //email,
-                id.toULongLong(),
-                login,
-                offlineImageUrl,
-                profileImageUrl,
+                user.value("description", QString("")),
+                user.value("display_name", QString("")),
+                user.value("email", QString("")),
+                user.value("id", QString("-1")),
+                user.value("login", QString("")),
+                user.value("offline_image_url", QString("")),
+                user.value("profile_image_url", QString("")),
                 userType,
-                viewCount.toULongLong() });
-        } else {
-            // ??
+                user.value("view_count", -1)
+            });
         }
     }
 }
@@ -53,48 +42,36 @@ inline void UsersReply::parseData(const JSON& json)
 {
     Users users;
     if (json.find("data") != json.end()) {
-        auto&& data = json["data"];
-        if (!data.empty()) {
-            for (const auto& user : data) {
-                QString broadcasterTypeStr = user["broadcaster_type"];
-                User::BroadcasterType broadcasterType = User::BroadcasterType::No;
-                if (broadcasterTypeStr == "partner")
-                    broadcasterType = User::BroadcasterType::Partner;
-                else if (broadcasterTypeStr == "affiliate")
-                    broadcasterType = User::BroadcasterType::Affiliate;
+        const auto& data = json["data"];
+        for (const auto& user : data) {
+            QString broadcasterTypeStr = user.value("broadcaster_type", QString(""));
+            User::BroadcasterType broadcasterType = User::BroadcasterType::No;
+            if (broadcasterTypeStr == "partner")
+                broadcasterType = User::BroadcasterType::Partner;
+            else if (broadcasterTypeStr == "affiliate")
+                broadcasterType = User::BroadcasterType::Affiliate;
 
-                QString description = user["description"];
-                QString displayName = user["display_name"];
-                //QString email = user["email"];
-                QString id = user["id"];
-                QString login = user["login"];
-                QString offlineImageUrl = user["offline_image_url"];
-                QString profileImageUrl = user["profile_image_url"];
+            QString userTypeStr = user.value("type", QString(""));
+            User::UserType userType = User::UserType::No;
+            if (userTypeStr == "global_mod")
+                userType = User::UserType::GlobalMod;
+            else if (userTypeStr == "admin")
+                userType = User::UserType::Admin;
+            else if (userTypeStr == "staff")
+                userType = User::UserType::Staff;
 
-                QString userTypeStr = user["type"];
-                User::UserType userType = User::UserType::No;
-                if (userTypeStr == "global_mod")
-                    userType = User::UserType::GlobalMod;
-                else if (userTypeStr == "admin")
-                    userType = User::UserType::Admin;
-                else if (userTypeStr == "staff")
-                    userType = User::UserType::Staff;
-
-                QString viewCount = user["view_count"];
-
-                users.push_back({ broadcasterType,
-                    description,
-                    displayName,
-                    //email,
-                    id.toULongLong(),
-                    login,
-                    offlineImageUrl,
-                    profileImageUrl,
-                    userType,
-                    viewCount.toULongLong() });
-            }
-        } else {
-            // ??
+            users.push_back({
+                broadcasterType,
+                user.value("description", QString("")),
+                user.value("display_name", QString("")),
+                user.value("email", QString("")),
+                user.value("id", QString("-1")),
+                user.value("login", QString("")),
+                user.value("offline_image_url", QString("")),
+                user.value("profile_image_url", QString("")),
+                userType,
+                user.value("view_count", -1)
+            });
         }
     }
 }

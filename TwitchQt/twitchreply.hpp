@@ -9,6 +9,8 @@
 #include <QPointer>
 #include <QVariant>
 #include <QImage>
+#include <QAbstractNetworkCache>
+#include <QFile>
 
 namespace Twitch {
 enum class ReplyState {
@@ -34,6 +36,8 @@ signals:
     void finished();
 
 protected:
+    virtual void onFinished() = 0;
+
     QNetworkReply* m_reply;
     ReplyState m_currentState;
     QVariant m_data;
@@ -47,6 +51,8 @@ public:
     virtual ~RawReply();
 
 protected:
+    virtual void onFinished() override;
+
     virtual void parseData(const QByteArray&) = 0;
 };
 
@@ -56,11 +62,10 @@ public:
     JSONReply(QNetworkReply*);
     virtual ~JSONReply();
 
-    const JSON& json() const;
-
 protected:
+    virtual void onFinished() override;
+
     virtual void parseData(const JSON&) = 0;
-    JSON m_json;
 };
 
 class ImageReply : public RawReply {

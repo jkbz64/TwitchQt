@@ -2,16 +2,9 @@
 inline void StreamReply::parseData(const JSON& json)
 {
     if (json.find("data") != json.end()) {
-        auto&& data = json["data"];
+        const auto& data = json["data"];
         if (!data.empty()) {
-            auto&& stream = data.front();
-            QString id = stream["id"];
-            QString userId = stream["user_id"];
-            QString gameId = stream["game_id"];
-
-            QVector<QString> communityIds;
-            for (QString communityId : stream["community_ids"].array())
-                communityIds.push_back(communityId);
+            const auto& stream = data.front();
 
             QString typeStr = stream["type"];
             Stream::StreamType type = Stream::StreamType::No;
@@ -19,25 +12,20 @@ inline void StreamReply::parseData(const JSON& json)
                 type = Stream::StreamType::Live;
             else if (typeStr == "vodcast")
                 type = Stream::StreamType::Vodcast;
-
-            QString title = stream["title"];
-            qulonglong viewerCount = stream["viewer_count"];
-
             QString startedAt = stream["started_at"];
-            QString language = stream["language"];
-            QString thumbnailUrl = stream["thumbnail_url"];
 
             m_data.setValue(Stream{
-                id.toULongLong(),
-                userId.toULongLong(),
-                gameId.toULongLong(),
-                communityIds,
+                stream.value("id", QString("-1")),
+                stream.value("user_id", QString("-1")),
+                stream.value("game_id", QString("-1")),
+                stream.value("community_ids", QVector<QString>()),
                 type,
-                title,
-                viewerCount,
+                stream.value("title", QString("")),
+                stream.value("viewer_count", -1),
                 QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
-                language,
-                thumbnailUrl });
+                stream.value("language", QString("")),
+                stream.value("thumbnail_url", QString(""))
+            });
         } else {
             // ???
         }
@@ -48,40 +36,29 @@ inline void StreamsReply::parseData(const JSON& json)
 {
     Streams streams;
     if (json.find("data") != json.end()) {
-        auto&& data = json["data"];
+        const auto& data = json["data"];
         for (const auto& stream : data) {
-            QString id = stream["id"];
-            QString userId = stream["user_id"];
-            QString gameId = stream["game_id"];
-
-            QVector<QString> communityIds;
-            for (QString communityId : stream["community_ids"].array())
-                communityIds.push_back(communityId);
-
             QString typeStr = stream["type"];
+
             Stream::StreamType type = Stream::StreamType::No;
             if (typeStr == "live")
                 type = Stream::StreamType::Live;
             else if (typeStr == "vodcast")
                 type = Stream::StreamType::Vodcast;
-
-            QString title = stream["title"];
-            qulonglong viewerCount = stream["viewer_count"];
-
             QString startedAt = stream["started_at"];
-            QString language = stream["language"];
-            QString thumbnailUrl = stream["thumbnail_url"];
 
-            streams.push_back({ id.toULongLong(),
-                userId.toULongLong(),
-                gameId.toULongLong(),
-                communityIds,
+            streams.push_back({
+                stream.value("id", QString("-1")),
+                stream.value("user_id", QString("-1")),
+                stream.value("game_id", QString("-1")),
+                stream.value("community_ids", QVector<QString>()),
                 type,
-                title,
-                viewerCount,
+                stream.value("title", QString("")),
+                stream.value("viewer_count", -1),
                 QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
-                language,
-                thumbnailUrl });
+                stream.value("language", QString("")),
+                stream.value("thumbnail_url", QString(""))
+            });
 
             m_combinedViewerCount += streams.back().m_viewerCount;
         }
@@ -89,12 +66,7 @@ inline void StreamsReply::parseData(const JSON& json)
     m_data.setValue(streams);
 }
 
-inline const QString& StreamsReply::cursor() const
-{
-    return m_cursor;
-}
-
-inline qulonglong StreamsReply::combinedViewerCount() const
+inline int StreamsReply::combinedViewerCount() const
 {
     return m_combinedViewerCount;
 }
