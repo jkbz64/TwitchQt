@@ -28,25 +28,25 @@ namespace Detail {
 
         // Games
         virtual GamesReply* getTopGames(int = 20);
-        virtual GameReply* getGameById(const QStringID);
+        virtual GameReply* getGameById(const QString& ID);
         virtual GamesReply* getGameByIds(const QStringList&);
         virtual GameReply* getGameByName(const QString&);
         virtual GamesReply* getGameByNames(const QStringList&);
         virtual BoxArtReply* getBoxArtByUrl(const QString&, int, int);
 
         // Streams
-        virtual StreamReply* getStreamByUserId(const QStringID);
+        virtual StreamReply* getStreamByUserId(const QString& ID);
         virtual StreamReply* getStreamByName(const QString&);
 
         virtual StreamsReply* getStreamsByNames(const QStringList&, int = 20, const QString& = "");
         virtual StreamsReply* getStreamsByUserIds(const QStringList&, int = 20, const QString& = "");
-        virtual StreamsReply* getStreamsByGameId(const QStringID, int = 20, const QString& = "");
+        virtual StreamsReply* getStreamsByGameId(const QString& ID, int = 20, const QString& = "");
         virtual StreamsReply* getStreamsByGameIds(const QStringList&, int = 20, const QString& = "");
         virtual StreamsReply* getStreamsByLanguage(const QString&, int = 20, const QString& = "");
         virtual StreamsReply* getStreamsByLanguages(const QStringList&, int = 20, const QString& = "");
 
         // Users
-        virtual UserReply* getUserById(const QStringID);
+        virtual UserReply* getUserById(const QString& ID);
         virtual UserReply* getUserByName(const QString&);
 
         virtual UsersReply* getUserByIds(const QStringList&, const QString& = "");
