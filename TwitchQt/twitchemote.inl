@@ -96,7 +96,7 @@ template <class EmoteClass>
 inline const EmoteClass& Emote::toEmote() const
 {
     // Maybe some kind of const cast?
-    return *dynamic_cast<EmoteClass*>(m_data.data());
+    return *static_cast<EmoteClass*>(m_data.data());
 }
 
 

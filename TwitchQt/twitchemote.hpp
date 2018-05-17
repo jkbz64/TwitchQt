@@ -2,7 +2,6 @@
 #define TWITCHEMOTE_HPP
 
 #include "json.hpp"
-#include <QVector>
 #include <QSharedPointer>
 
 namespace Twitch {
@@ -152,6 +151,8 @@ public:
     static Emotes fromBTTV(const JSON&);
     static Emotes fromFFZ(const JSON&);
 };
+
+using EmotesMap = QMultiMap<JSON::string_t, Emote>;
 }
 
 namespace nlohmann {
@@ -327,6 +328,7 @@ struct adl_serializer<Twitch::Emote> {
 
 Q_DECLARE_METATYPE(Twitch::Emote);
 Q_DECLARE_METATYPE(Twitch::Emotes);
+Q_DECLARE_METATYPE(Twitch::EmotesMap);
 
 namespace Twitch {
 #include "twitchemote.inl"

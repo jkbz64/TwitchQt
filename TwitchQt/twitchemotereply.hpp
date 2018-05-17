@@ -26,10 +26,11 @@ namespace TwitchEmotes {
         virtual void parseData(const JSON&) override;
     };
 
-    class SubscriberEmotesReply : public Detail::EmotesReply {
+    class SubscriberEmotesReply : public JSONReply {
         Q_OBJECT
     public:
-        using Detail::EmotesReply::EmotesReply;
+        using JSONReply::JSONReply;
+        Twitch::EmotesMap emotes();
 
     protected:
         virtual void parseData(const JSON&) override;
