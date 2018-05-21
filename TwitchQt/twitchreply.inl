@@ -66,7 +66,7 @@ inline void RawReply::onFinished()
         m_currentState = ReplyState::Error;
     } else {
         m_currentState = ReplyState::Success;
-        //parseData(data);
+        parseData(data);
     }
 
     emit finished();

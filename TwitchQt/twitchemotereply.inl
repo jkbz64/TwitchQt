@@ -6,12 +6,18 @@ inline void TwitchEmotes::GlobalEmotesReply::parseData(const JSON& json)
 
 inline void TwitchEmotes::SubscriberEmotesReply::parseData(const JSON &json)
 {
-    Twitch::Emotes emotes;
+    Twitch::EmotesMap emotes;
     for(const auto& user : json)
     {
-        auto&& emotesArray = user["emotes"];
-        auto userEmotes = Emotes::fromTwitchEmotes(emotesArray);
-        emotes << userEmotes;
+        const QString id = user.value("channel_id", QString(""));
+        if(user.find("emotes") != user.end() && !id.isEmpty())
+        {
+             Twitch::Emotes userEmotes = Emotes::fromTwitchEmotes(user["emotes"]);
+             for(const auto& emote : userEmotes)
+             {
+                 emotes.insert(id.toStdString(), emote);
+             }
+        }
     }
     m_data.setValue(emotes);
 }
@@ -80,4 +86,9 @@ inline void FFZ::SubscriberEmotesReply::parseData(const JSON& json)
 inline Twitch::Emotes EmotesReply::emotes()
 {
     return m_data.value<Twitch::Emotes>();
+}
+
+inline Twitch::EmotesMap TwitchEmotes::SubscriberEmotesReply::emotes()
+{
+    return m_data.value<Twitch::EmotesMap>();
 }
