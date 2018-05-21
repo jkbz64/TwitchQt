@@ -2,15 +2,9 @@
 #define TWITCHREPLY_HPP
 
 #include "json.hpp"
-#include <QString>
-#include <string>
 #include <QNetworkReply>
-#include <QObject>
-#include <QPointer>
 #include <QVariant>
 #include <QImage>
-#include <QAbstractNetworkCache>
-#include <QFile>
 
 namespace Twitch {
 enum class ReplyState {
@@ -62,10 +56,15 @@ public:
     JSONReply(QNetworkReply*);
     virtual ~JSONReply();
 
+    const JSON& json() const;
+
 protected:
     virtual void onFinished() override;
 
-    virtual void parseData(const JSON&) = 0;
+    virtual void parseData(const JSON&);
+
+private:
+    JSON m_json;
 };
 
 class ImageReply : public RawReply {

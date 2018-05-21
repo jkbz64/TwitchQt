@@ -77,7 +77,7 @@ inline void FFZ::SubscriberEmotesReply::parseData(const JSON& json)
     m_data.setValue(emotes);
 }
 
-inline Twitch::Emotes Twitch::Detail::EmotesReply::emotes()
+inline Twitch::Emotes EmotesReply::emotes()
 {
     return m_data.value<Twitch::Emotes>();
 }

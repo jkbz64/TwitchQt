@@ -7,6 +7,12 @@
 
 namespace Twitch {
 
+enum class EmoteSize {
+    Original = 1, // 1x
+    Medium = 2, // 2x
+    Big = 4 // 4x
+};
+
 struct EmoteData {
     virtual ~EmoteData() = default;
 };

@@ -84,21 +84,32 @@ inline void JSONReply::onFinished()
             return true;
         }
     };
+
     auto data = m_reply->readAll();
     {
-        const auto& json = JSON::parse(data.constData(), cb);
-        if (json.empty())
+        m_json = JSON::parse(data.constData(), cb);
+        if (m_json.empty())
             m_currentState = ReplyState::Error;
         else {
             m_currentState = ReplyState::Success;
-            parseData(json);
+            parseData(m_json);
 
-            if (json.find("pagination") != json.end()) // Save the pagination
-                m_cursor = QString::fromStdString(json["pagination"]["cursor"].get<std::string>());
+            if (m_json.find("pagination") != m_json.end()) // Save the pagination
+                m_cursor = QString::fromStdString(m_json["pagination"]["cursor"].get<std::string>());
         }
     }
 
     emit finished();
     m_reply->setParent(nullptr);
     m_reply->deleteLater();
+}
+
+inline const JSON &Twitch::JSONReply::json() const
+{
+    return m_json;
+}
+
+inline void JSONReply::parseData(const JSON &)
+{
+
 }

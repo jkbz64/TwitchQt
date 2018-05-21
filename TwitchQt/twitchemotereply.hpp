@@ -5,31 +5,31 @@
 #include "twitchemote.hpp"
 
 namespace Twitch {
+class EmotesReply : public JSONReply {
+    Q_OBJECT
+public:
+    using JSONReply::JSONReply;
+    virtual ~EmotesReply() = default;
+    Twitch::Emotes emotes();
 
-namespace Detail {
-    class EmotesReply : public JSONReply {
-        Q_OBJECT
-    public:
-        using JSONReply::JSONReply;
-        virtual ~EmotesReply() = default;
-        Twitch::Emotes emotes();
-    };
-}
+protected:
+    virtual void parseData(const JSON&) = 0;
+};
 
 namespace TwitchEmotes {
-    class GlobalEmotesReply : public Detail::EmotesReply {
+    class GlobalEmotesReply : public EmotesReply {
         Q_OBJECT
     public:
-        using Detail::EmotesReply::EmotesReply;
+        using EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
     };
 
-    class SubscriberEmotesReply : public Detail::EmotesReply {
+    class SubscriberEmotesReply : public EmotesReply {
         Q_OBJECT
     public:
-        using Detail::EmotesReply::EmotesReply;
+        using EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
@@ -37,19 +37,19 @@ namespace TwitchEmotes {
 }
 
 namespace BTTV {
-    class GlobalEmotesReply : public Detail::EmotesReply {
+    class GlobalEmotesReply : public EmotesReply {
         Q_OBJECT
     public:
-        using Detail::EmotesReply::EmotesReply;
+        using EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
     };
 
-    class SubscriberEmotesReply : public Detail::EmotesReply {
+    class SubscriberEmotesReply : public EmotesReply {
         Q_OBJECT
     public:
-        using Detail::EmotesReply::EmotesReply;
+        using EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
@@ -57,19 +57,19 @@ namespace BTTV {
 }
 
 namespace FFZ {
-    class GlobalEmotesReply : public Detail::EmotesReply {
+    class GlobalEmotesReply : public EmotesReply {
         Q_OBJECT
     public:
-        using Detail::EmotesReply::EmotesReply;
+        using EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
     };
 
-    class SubscriberEmotesReply : public Detail::EmotesReply {
+    class SubscriberEmotesReply : public EmotesReply {
         Q_OBJECT
     public:
-        using Detail::EmotesReply::EmotesReply;
+        using EmotesReply::EmotesReply;
 
     protected:
         virtual void parseData(const JSON&) override;
