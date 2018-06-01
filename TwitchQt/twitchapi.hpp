@@ -133,7 +133,7 @@ public:
     virtual StreamsReply* getStreamsByLanguages(const QStringList&, int = 20, const QString& = "") override;
 
     // Users
-    virtual UserReply* getUserById(const QString& ID) override;
+    virtual UserReply* getUserById(const QString&) override;
     virtual UserReply* getUserByName(const QString&) override;
 
     virtual UsersReply* getUserByIds(const QStringList&, const QString& = "") override;

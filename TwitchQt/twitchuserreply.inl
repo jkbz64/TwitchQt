@@ -5,7 +5,6 @@ inline void UserReply::parseData(const JSON& json)
         const auto& data = json["data"];
         if (!data.empty()) {
             const auto& user = data.front();
-
             QString broadcasterTypeStr = user.value("broadcaster_type", QString(""));
             User::BroadcasterType broadcasterType = User::BroadcasterType::No;
             if (broadcasterTypeStr == "partner")
@@ -74,4 +73,5 @@ inline void UsersReply::parseData(const JSON& json)
             });
         }
     }
+    m_data.setValue(users);
 }

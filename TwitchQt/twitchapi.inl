@@ -1,4 +1,4 @@
-inline Detail::TwitchApi::TwitchApi(QObject* parent)
+    inline Detail::TwitchApi::TwitchApi(QObject* parent)
     : QObject(parent)
     , m_http(new QNetworkAccessManager(this))
     , m_clientID()
@@ -220,7 +220,6 @@ inline StreamsReply* Helix::getStreamsByLanguages(const QStringList& languages, 
 }
 
 // User
-
 inline UserReply* Helix::getUserById(const QString& userId)
 {
     const QString url = api() + QString("/users") + QString("?id=") + userId;
