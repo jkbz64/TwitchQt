@@ -92,3 +92,11 @@ inline Twitch::EmotesMap TwitchEmotes::SubscriberEmotesReply::emotes()
 {
     return m_data.value<Twitch::EmotesMap>();
 }
+
+inline void Twitch::EmoteSetsReply::parseData(const JSON &json)
+{
+    QMap<QString, Emotes> sets;
+    for(const auto& set : json["emoticon_sets"].get<JSON::object_t>())
+        sets[QString::fromStdString(set.first)] = Emotes::fromTwitchEmotes(set.second);
+    m_data.setValue(sets);
+}

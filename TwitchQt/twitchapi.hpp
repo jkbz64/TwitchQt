@@ -58,8 +58,8 @@ public:
 
     // Emotes // These curently fallback to v5 api
     EmotesReply* getGlobalEmotes();
-    EmotesReply* getChannelEmotes(const QString&);
-    EmotesReply* getEmotesByEmoteSet(const QString&);
+    EmoteSetsReply* getEmotesBySet(const QString&);
+    EmoteSetsReply* getEmotesBySets(const QStringList&);
     ImageReply* getEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
 
     // Optional backends

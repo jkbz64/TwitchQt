@@ -77,6 +77,15 @@ namespace FFZ {
     };
 }
 
+class EmoteSetsReply : public EmotesReply {
+    Q_OBJECT
+public:
+    using EmotesReply::EmotesReply;
+
+protected:
+    virtual void parseData(const JSON&) override;
+};
+
 #include "twitchemotereply.inl"
 }
 

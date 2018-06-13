@@ -406,14 +406,19 @@ inline EmotesReply* Api::getGlobalEmotes()
     return getTwitchEmotesGlobalEmotes();
 }
 
-inline EmotesReply* Api::getChannelEmotes(const QString& name)
+inline EmoteSetsReply* Api::getEmotesBySet(const QString& set)
 {
     // Fallback to v5
-    throw std::runtime_error("Helix does not have emotes endpoints yet, use the TwitchEmotes backend");
+    const QString url = QString("https://api.twitch.tv/kraken/chat/emoticon_images?emotesets=" + set);
+    auto request = buildRequest(QUrl(url));
+    request.setRawHeader("Accept", "application/vnd.twitchtv.v5+json");
+    return createReply<EmoteSetsReply>(request, false);
 }
 
-inline EmotesReply* Api::getEmotesByEmoteSet(const QString& name)
+inline EmoteSetsReply* Api::getEmotesBySets(const QStringList& sets)
 {
-    // Fallback to v5
-    throw std::runtime_error("Helix does not have emotes endpoints yet, use the TwitchEmotes backend");
+    const QString url = QString("https://api.twitch.tv/kraken/chat/emoticon_images?emotesets=") + sets.join(",");
+    auto request = buildRequest(QUrl(url));
+    request.setRawHeader("Accept", "application/vnd.twitchtv.v5+json");
+    return createReply<EmoteSetsReply>(request, false);
 }
