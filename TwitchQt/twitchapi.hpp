@@ -43,12 +43,12 @@ public:
     StreamReply* getStreamByUserId(const QString&);
     StreamReply* getStreamByName(const QString&);
 
-    StreamsReply* getStreamsByNames(const QStringList&, int, const QString& = "");
-    StreamsReply* getStreamsByUserIds(const QStringList&, int, const QString& = "");
-    StreamsReply* getStreamsByGameId(const QString&, int, const QString& = "");
-    StreamsReply* getStreamsByGameIds(const QStringList&, int, const QString& = "");
-    StreamsReply* getStreamsByLanguage(const QString&, int, const QString& = "");
-    StreamsReply* getStreamsByLanguages(const QStringList&, int, const QString& = "");
+    StreamsReply* getStreamsByNames(const QStringList&, int = 30, const QString& = "");
+    StreamsReply* getStreamsByUserIds(const QStringList&, int = 30, const QString& = "");
+    StreamsReply* getStreamsByGameId(const QString&, int = 30, const QString& = "");
+    StreamsReply* getStreamsByGameIds(const QStringList&, int = 30, const QString& = "");
+    StreamsReply* getStreamsByLanguage(const QString&, int = 30, const QString& = "");
+    StreamsReply* getStreamsByLanguages(const QStringList&, int = 30, const QString& = "");
 
     // Users
     UserReply* getUserById(const QString& ID);
