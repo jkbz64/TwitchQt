@@ -117,8 +117,13 @@ public:
     static Emote createEmote(Args&&... args);
 
     Emote();
+    ~Emote();
     Emote(EmoteData* data);
     Emote(const Emote& other);
+    Emote(Emote&&);
+
+    Emote& operator=(const Emote&);
+    Emote& operator=(Emote&&);
 
     const EmoteType& emoteType() const;
     const QString& id() const;

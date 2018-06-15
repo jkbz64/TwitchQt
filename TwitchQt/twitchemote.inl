@@ -67,6 +67,50 @@ inline Emote::Emote(const Emote& other)
 {
 }
 
+inline Emote::Emote(Emote&& other)
+    :
+      m_type(other.m_type),
+      m_data(std::move(other.m_data)),
+      m_id(other.m_id),
+      m_code(other.m_code),
+      m_url(other.m_url),
+      m_imageType(other.m_imageType)
+{
+
+}
+
+inline Emote& Emote::operator=(const Emote& other)
+{
+    if(&other == this)
+        return *this;
+
+    m_type = other.m_type;
+    m_data = other.m_data;
+    m_id = other.m_id;
+    m_code = other.m_code;
+    m_url = other.m_url;
+    m_imageType = other.m_imageType;
+
+    return *this;
+}
+
+inline Emote& Emote::operator=(Emote&& other)
+{
+    if(&other == this)
+        return *this;
+
+    m_type = other.m_type;
+    m_id = other.m_id;
+    m_code = other.m_code;
+    m_url = other.m_url;
+    m_imageType = other.m_imageType;
+    m_data = std::move(other.m_data);
+
+    return *this;
+}
+
+inline Emote::~Emote() = default;
+
 inline const EmoteType& Emote::emoteType() const
 {
     return m_type;
@@ -123,3 +167,4 @@ inline Twitch::Emotes Twitch::Emotes::fromFFZ(const JSON &json)
         emotes.push_back(Twitch::Emote::createEmote<FFZ::Emote>(emote));
     return emotes;
 }
+
