@@ -60,15 +60,17 @@ inline void ImageReply::parseData(const QByteArray& data)
 
 inline void RawReply::onFinished()
 {
-    auto data = m_reply->readAll();
-    // Check errors
-    if (data.isEmpty() || data.isNull()) {
-        m_currentState = ReplyState::Error;
-    } else {
-        m_currentState = ReplyState::Success;
-        parseData(data);
+    if(m_currentState != ReplyState::Error)
+    {
+        auto data = m_reply->readAll();
+        // Check errors
+        if (data.isEmpty() || data.isNull()) {
+            m_currentState = ReplyState::Error;
+        } else {
+            m_currentState = ReplyState::Success;
+            parseData(data);
+        }
     }
-
     emit finished();
     m_reply->setParent(nullptr);
     m_reply->deleteLater();
@@ -76,26 +78,29 @@ inline void RawReply::onFinished()
 
 inline void JSONReply::onFinished()
 {
-    JSON::parser_callback_t cb = [](int, JSON::parse_event_t event, JSON& parsed) {
-        // Skip values with null value
-        if (event == JSON::parse_event_t::value and parsed.is_null()) {
-            return false;
-        } else {
-            return true;
-        }
-    };
-
-    auto data = m_reply->readAll();
+    if(m_currentState != ReplyState::Error)
     {
-        m_json = JSON::parse(data.constData(), cb);
-        if (m_json.empty())
-            m_currentState = ReplyState::Error;
-        else {
-            m_currentState = ReplyState::Success;
-            parseData(m_json);
+        JSON::parser_callback_t cb = [](int, JSON::parse_event_t event, JSON& parsed) {
+            // Skip values with null value
+            if (event == JSON::parse_event_t::value and parsed.is_null()) {
+                return false;
+            } else {
+                return true;
+            }
+        };
 
-            if (m_json.find("pagination") != m_json.end()) // Save the pagination
-                m_cursor = QString::fromStdString(m_json["pagination"]["cursor"].get<std::string>());
+        auto data = m_reply->readAll();
+        {
+            m_json = JSON::parse(data.constData(), cb);
+            if (m_json.empty())
+                m_currentState = ReplyState::Error;
+            else {
+                m_currentState = ReplyState::Success;
+                parseData(m_json);
+
+                if (m_json.find("pagination") != m_json.end()) // Save the pagination
+                    m_cursor = QString::fromStdString(m_json["pagination"]["cursor"].get<std::string>());
+            }
         }
     }
 
