@@ -19,6 +19,8 @@ class GamesReply : public JSONReply {
 public:
     using JSONReply::JSONReply;
 
+    Twitch::Games games();
+
 protected:
     virtual void parseData(const JSON&) override;
 };

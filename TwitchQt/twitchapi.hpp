@@ -2,6 +2,8 @@
 #define TWITCHAPI_HPP
 
 #include <QNetworkAccessManager>
+#include <QNetworkDiskCache>
+#include <QStandardPaths>
 
 #include "twitchemotereply.hpp"
 #include "twitchgamereply.hpp"
@@ -13,12 +15,9 @@ class Api : public QObject {
     Q_OBJECT
 public:
     Api(QObject* = nullptr);
-    Api(QNetworkAccessManager*);
-    Api(QNetworkAccessManager*, QObject*);
-    Api(const QString&);
-    Api(const QString&, QNetworkAccessManager*);
-    Api(const QString&, QObject*);
-    Api(const QString&, QNetworkAccessManager*, QObject*);
+    Api(QNetworkAccessManager*, QObject* = nullptr);
+    Api(const QString&, QObject* = nullptr);
+    Api(const QString&, QNetworkAccessManager*, QObject* = nullptr);
     virtual ~Api();
 
     // Client ID
@@ -87,15 +86,47 @@ public:
     int remainingRequests() const;
     const QDateTime& resetDate() const;
 
+    // Cache settings
+    struct CacheSettings {
+        qreal m_topGamesExpireTime = 5.0;
+        qreal m_topStreamsExpireTime = 0.0;
+
+    private:
+        friend class Api;
+        QDateTime m_lastTopGamesFetch = QDateTime::currentDateTime().addDays(-1);
+        QMap<QString, QDateTime> m_topStreamsFetches;
+
+        bool shouldFetchTopGames() const
+        {
+            return m_lastTopGamesFetch.secsTo(QDateTime::currentDateTime()) >= m_topGamesExpireTime;
+        }
+
+        bool shouldFetchTopStreams(const QString& game) const
+        {
+            return m_topStreamsFetches[game].secsTo(QDateTime::currentDateTime()) >= m_topStreamsExpireTime;
+        }
+    };
+
+    CacheSettings cacheSettings() const;
+    void setCacheSettings(const CacheSettings& cacheSettings);
+
 protected:
     QNetworkAccessManager* m_http;
     QString m_clientID;
+
+    void resetRateLimit();
     int m_rateLimit;
     int m_rateRemaining;
     QDateTime m_rateResetDate;
 
-    // Returns request with already included ClientID or not
-    QNetworkRequest buildRequest(QUrl, bool = true);
+    CacheSettings m_cacheSettings;
+
+    using IncludeID = bool;
+    enum class CacheFlag {
+        UseNetworkDoNotCache,
+        PreferCache
+    };
+    QNetworkRequest buildRequest(QUrl, IncludeID = true, const CacheFlag = CacheFlag::UseNetworkDoNotCache);
     // Repeated parameters format for requests
     // For example in Helix it's ampersand (&) and in v5 it's comma (,)
     QString repeatDelimeter(const QString& = "", const QChar& = '&') const;

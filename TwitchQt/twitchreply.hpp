@@ -16,6 +16,10 @@ enum class ReplyState {
 class Reply : public QObject {
     Q_OBJECT
 public:
+    template <class T>
+    static T* fromData(QObject*, const QVariant&);
+
+    Reply();
     Reply(QNetworkReply*);
     virtual ~Reply();
 
@@ -41,6 +45,7 @@ protected:
 class RawReply : public Reply {
     Q_OBJECT
 public:
+    using Reply::Reply;
     RawReply(QNetworkReply*);
     virtual ~RawReply();
 
@@ -53,6 +58,7 @@ protected:
 class JSONReply : public Reply {
     Q_OBJECT
 public:
+    using Reply::Reply;
     JSONReply(QNetworkReply*);
     virtual ~JSONReply();
 

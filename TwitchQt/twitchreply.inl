@@ -1,4 +1,22 @@
 
+template<class T>
+inline T* Twitch::Reply::fromData(QObject* parent, const QVariant &data)
+{
+    T* reply = new T;
+    reply->setParent(parent);
+    reply->m_data = data;
+    return reply;
+}
+
+inline Reply::Reply()
+    : QObject(nullptr)
+    , m_reply(nullptr)
+    , m_currentState(ReplyState::Success)
+    , m_cursor("")
+{
+
+}
+
 inline Reply::Reply(QNetworkReply* reply)
     : QObject(reply->manager())
     , m_reply(reply)
@@ -118,3 +136,4 @@ inline void JSONReply::parseData(const JSON &)
 {
 
 }
+

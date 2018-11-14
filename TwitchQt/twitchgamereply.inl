@@ -32,6 +32,11 @@ inline void GamesReply::parseData(const JSON& json)
     m_data.setValue(games);
 }
 
+inline Twitch::Games Twitch::GamesReply::games()
+{
+    return m_data.value<Twitch::Games>();
+}
+
 inline void BoxArtReply::parseData(const QByteArray& data)
 {
     m_data.setValue(QImage::fromData(data));
