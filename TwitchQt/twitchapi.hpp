@@ -31,84 +31,60 @@ public:
     QString bttvApi() const;
 
     // Games
-    GamesReply* getTopGames(int);
-    GameReply* getGameById(const QString&);
-    GamesReply* getGameByIds(const QStringList&);
-    GameReply* getGameByName(const QString&);
-    GamesReply* getGameByNames(const QStringList&);
-    BoxArtReply* getBoxArtByUrl(const QString&, int, int);
+    virtual GamesReply* getTopGames(int);
+    virtual GameReply* getGameById(const QString&);
+    virtual GamesReply* getGameByIds(const QStringList&);
+    virtual GameReply* getGameByName(const QString&);
+    virtual GamesReply* getGameByNames(const QStringList&);
+    virtual BoxArtReply* getBoxArtByUrl(const QString&, int, int);
 
     // Streams
-    StreamReply* getStreamByUserId(const QString&);
-    StreamReply* getStreamByName(const QString&);
+    virtual StreamReply* getStreamByUserId(const QString&);
+    virtual StreamReply* getStreamByName(const QString&);
 
-    StreamsReply* getStreamsByNames(const QStringList&, int = 30, const QString& = "");
-    StreamsReply* getStreamsByUserIds(const QStringList&, int = 30, const QString& = "");
-    StreamsReply* getStreamsByGameId(const QString&, int = 30, const QString& = "");
-    StreamsReply* getStreamsByGameIds(const QStringList&, int = 30, const QString& = "");
-    StreamsReply* getStreamsByLanguage(const QString&, int = 30, const QString& = "");
-    StreamsReply* getStreamsByLanguages(const QStringList&, int = 30, const QString& = "");
+    virtual StreamsReply* getStreamsByNames(const QStringList&, int = 30, const QString& = "");
+    virtual StreamsReply* getStreamsByUserIds(const QStringList&, int = 30, const QString& = "");
+    virtual StreamsReply* getStreamsByGameId(const QString&, int = 30, const QString& = "");
+    virtual StreamsReply* getStreamsByGameIds(const QStringList&, int = 30, const QString& = "");
+    virtual StreamsReply* getStreamsByLanguage(const QString&, int = 30, const QString& = "");
+    virtual StreamsReply* getStreamsByLanguages(const QStringList&, int = 30, const QString& = "");
 
     // Users
-    UserReply* getUserById(const QString& ID);
-    UserReply* getUserByName(const QString&);
-    UsersReply* getUserByIds(const QStringList&, const QString& = "");
-    UsersReply* getUserByNames(const QStringList&, const QString& = "");
+    virtual UserReply* getUserById(const QString& ID);
+    virtual UserReply* getUserByName(const QString&);
+    virtual UsersReply* getUserByIds(const QStringList&, const QString& = "");
+    virtual UsersReply* getUserByNames(const QStringList&, const QString& = "");
 
     // Emotes // These curently fallback to v5 api
-    EmotesReply* getGlobalEmotes();
-    EmoteSetsReply* getEmotesBySet(const QString&);
-    EmoteSetsReply* getEmotesBySets(const QStringList&);
-    ImageReply* getEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
+    virtual EmotesReply* getGlobalEmotes();
+    virtual EmoteSetsReply* getEmotesBySet(const QString&);
+    virtual EmoteSetsReply* getEmotesBySets(const QStringList&);
+    virtual ImageReply* getEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
 
     // Optional backends
     // TwitchEmotes
-    TwitchEmotes::GlobalEmotesReply* getTwitchEmotesGlobalEmotes();
-    TwitchEmotes::SubscriberEmotesReply* getTwitchEmotesSubscriberEmotes();
-    JSONReply* getTwitchEmotesEmoteSets();
+    virtual TwitchEmotes::GlobalEmotesReply* getTwitchEmotesGlobalEmotes();
+    virtual TwitchEmotes::SubscriberEmotesReply* getTwitchEmotesSubscriberEmotes();
+    virtual JSONReply* getTwitchEmotesEmoteSets();
 
     // BetterTTV
-    BTTV::GlobalEmotesReply* getBTTVGlobalEmotes();
-    BTTV::SubscriberEmotesReply* getBTTVSubscriberEmotesByChannel(const QString&);
-    ImageReply* getBTTVEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
+    virtual BTTV::GlobalEmotesReply* getBTTVGlobalEmotes();
+    virtual BTTV::SubscriberEmotesReply* getBTTVSubscriberEmotesByChannel(const QString&);
+    virtual ImageReply* getBTTVEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
 
     // FFZ
-    FFZ::GlobalEmotesReply* getFFZGlobalEmotes();
-    FFZ::SubscriberEmotesReply* getFFZSubscriberEmotesByChannel(const QString&);
-    ImageReply* getFFZEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
+    virtual FFZ::GlobalEmotesReply* getFFZGlobalEmotes();
+    virtual FFZ::SubscriberEmotesReply* getFFZSubscriberEmotesByChannel(const QString&);
+    virtual ImageReply* getFFZEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
 
     // Utility
     // Image getter by Url
-    ImageReply* getImage(const QString&);
+    virtual ImageReply* getImage(const QString&);
 
     // Rate limiting
     int rateLimit() const;
     int remainingRequests() const;
     const QDateTime& resetDate() const;
-
-    // Cache settings
-    struct CacheSettings {
-        qreal m_topGamesExpireTime = 5.0;
-        qreal m_topStreamsExpireTime = 0.0;
-
-    private:
-        friend class Api;
-        QDateTime m_lastTopGamesFetch = QDateTime::currentDateTime().addDays(-1);
-        QMap<QString, QDateTime> m_topStreamsFetches;
-
-        bool shouldFetchTopGames() const
-        {
-            return m_lastTopGamesFetch.secsTo(QDateTime::currentDateTime()) >= m_topGamesExpireTime;
-        }
-
-        bool shouldFetchTopStreams(const QString& game) const
-        {
-            return m_topStreamsFetches[game].secsTo(QDateTime::currentDateTime()) >= m_topStreamsExpireTime;
-        }
-    };
-
-    CacheSettings cacheSettings() const;
-    void setCacheSettings(const CacheSettings& cacheSettings);
 
 protected:
     QNetworkAccessManager* m_http;
@@ -118,8 +94,6 @@ protected:
     int m_rateLimit;
     int m_rateRemaining;
     QDateTime m_rateResetDate;
-
-    CacheSettings m_cacheSettings;
 
     using IncludeID = bool;
     enum class CacheFlag {

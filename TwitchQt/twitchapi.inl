@@ -402,13 +402,3 @@ inline EmoteSetsReply* Api::getEmotesBySets(const QStringList& sets)
     return createReply<EmoteSetsReply>(request, false);
 }
 
-inline Api::CacheSettings Api::cacheSettings() const
-{
-    return m_cacheSettings;
-}
-
-inline void Api::setCacheSettings(const CacheSettings &cacheSettings)
-{
-    m_cacheSettings = cacheSettings;
-}
-
