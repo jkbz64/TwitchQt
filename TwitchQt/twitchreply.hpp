@@ -47,7 +47,7 @@ class RawReply : public Reply {
 public:
     using Reply::Reply;
     RawReply(QNetworkReply*);
-    virtual ~RawReply();
+    virtual ~RawReply() override;
 
 protected:
     virtual void onFinished() override;
@@ -59,8 +59,9 @@ class JSONReply : public Reply {
     Q_OBJECT
 public:
     using Reply::Reply;
+    JSONReply() = default;
     JSONReply(QNetworkReply*);
-    virtual ~JSONReply();
+    virtual ~JSONReply() override;
 
     const JSON& json() const;
 
