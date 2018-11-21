@@ -15,6 +15,7 @@ struct Stream {
     };
     QString m_id;
     QString m_userId;
+    QString m_userName;
     QString m_gameId;
     QVector<QString> m_communityIds;
     StreamType m_type;

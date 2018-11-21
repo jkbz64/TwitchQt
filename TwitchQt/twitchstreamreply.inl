@@ -17,6 +17,7 @@ inline void StreamReply::parseData(const JSON& json)
             m_data.setValue(Stream{
                 stream.value("id", QString("-1")),
                 stream.value("user_id", QString("-1")),
+                stream.value("user_name", QString("")),
                 stream.value("game_id", QString("-1")),
                 stream.value("community_ids", QVector<QString>()),
                 type,
@@ -50,6 +51,7 @@ inline void StreamsReply::parseData(const JSON& json)
             streams.push_back({
                 stream.value("id", QString("-1")),
                 stream.value("user_id", QString("-1")),
+                stream.value("user_name", QString("")),
                 stream.value("game_id", QString("-1")),
                 stream.value("community_ids", QVector<QString>()),
                 type,
