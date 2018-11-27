@@ -14,6 +14,9 @@ namespace Twitch {
 class Api : public QObject {
     Q_OBJECT
 public:
+    using Cursor = QString;
+    using ObjectCount = int;
+
     Api(QObject* = nullptr);
     Api(QNetworkAccessManager*, QObject* = nullptr);
     Api(const QString&, QObject* = nullptr);
@@ -31,7 +34,7 @@ public:
     QString bttvApi() const;
 
     // Games
-    virtual GamesReply* getTopGames(int);
+    virtual GamesReply* getTopGames(ObjectCount = 30);
     virtual GameReply* getGameById(const QString&);
     virtual GamesReply* getGameByIds(const QStringList&);
     virtual GameReply* getGameByName(const QString&);
@@ -42,18 +45,18 @@ public:
     virtual StreamReply* getStreamByUserId(const QString&);
     virtual StreamReply* getStreamByName(const QString&);
 
-    virtual StreamsReply* getStreamsByNames(const QStringList&, int = 30, const QString& = "");
-    virtual StreamsReply* getStreamsByUserIds(const QStringList&, int = 30, const QString& = "");
-    virtual StreamsReply* getStreamsByGameId(const QString&, int = 30, const QString& = "");
-    virtual StreamsReply* getStreamsByGameIds(const QStringList&, int = 30, const QString& = "");
-    virtual StreamsReply* getStreamsByLanguage(const QString&, int = 30, const QString& = "");
-    virtual StreamsReply* getStreamsByLanguages(const QStringList&, int = 30, const QString& = "");
+    virtual StreamsReply* getStreamsByNames(const QStringList&, ObjectCount = 30, const Cursor& = Cursor());
+    virtual StreamsReply* getStreamsByUserIds(const QStringList&, ObjectCount = 30, const Cursor& = Cursor());
+    virtual StreamsReply* getStreamsByGameId(const QString&, ObjectCount = 30, const Cursor& = Cursor());
+    virtual StreamsReply* getStreamsByGameIds(const QStringList&, ObjectCount = 30, const Cursor& = Cursor());
+    virtual StreamsReply* getStreamsByLanguage(const QString&, ObjectCount = 30, const Cursor& = Cursor());
+    virtual StreamsReply* getStreamsByLanguages(const QStringList&, ObjectCount = 30, const Cursor& = Cursor());
 
     // Users
     virtual UserReply* getUserById(const QString& ID);
     virtual UserReply* getUserByName(const QString&);
-    virtual UsersReply* getUserByIds(const QStringList&, const QString& = "");
-    virtual UsersReply* getUserByNames(const QStringList&, const QString& = "");
+    virtual UsersReply* getUserByIds(const QStringList&, const Cursor& = Cursor());
+    virtual UsersReply* getUserByNames(const QStringList&, const Cursor& = Cursor());
 
     // Emotes // These curently fallback to v5 api
     virtual EmotesReply* getGlobalEmotes();

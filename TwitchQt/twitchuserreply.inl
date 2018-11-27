@@ -75,3 +75,13 @@ inline void UsersReply::parseData(const JSON& json)
     }
     m_data.setValue(users);
 }
+
+inline Twitch::User Twitch::UserReply::user()
+{
+    return m_data.value<Twitch::User>();
+}
+
+inline Twitch::Users Twitch::UsersReply::users()
+{
+    return m_data.value<Twitch::Users>();
+}

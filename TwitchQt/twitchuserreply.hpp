@@ -10,6 +10,8 @@ class UserReply : public JSONReply {
 public:
     using JSONReply::JSONReply;
 
+    Twitch::User user();
+
 protected:
     virtual void parseData(const JSON&) override;
 };
@@ -18,6 +20,8 @@ class UsersReply : public JSONReply {
     Q_OBJECT
 public:
     using JSONReply::JSONReply;
+
+    Twitch::Users users();
 
 protected:
     virtual void parseData(const JSON&) override;

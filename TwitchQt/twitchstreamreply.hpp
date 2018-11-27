@@ -10,6 +10,8 @@ class StreamReply : public JSONReply {
 public:
     using JSONReply::JSONReply;
 
+    Twitch::Stream stream();
+
 protected:
     virtual void parseData(const JSON&) override;
 };
@@ -19,6 +21,8 @@ class StreamsReply : public JSONReply {
 public:
     using JSONReply::JSONReply;
     int combinedViewerCount() const;
+
+    Twitch::Streams streams();
 
 protected:
     int m_combinedViewerCount{ 0 };

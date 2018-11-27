@@ -72,3 +72,13 @@ inline int StreamsReply::combinedViewerCount() const
 {
     return m_combinedViewerCount;
 }
+
+inline Twitch::Stream Twitch::StreamReply::stream()
+{
+    return m_data.value<Twitch::Stream>();
+}
+
+inline Twitch::Streams Twitch::StreamsReply::streams()
+{
+    return m_data.value<Twitch::Streams>();
+}
