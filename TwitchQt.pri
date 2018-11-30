@@ -6,10 +6,13 @@ HEADERS += \
 	$$PWD/TwitchQt/twitchreply.hpp \
 	$$PWD/TwitchQt/twitchstream.hpp \
 	$$PWD/TwitchQt/twitchuser.hpp \
+        $$PWD/TwitchQt/twitchemote.hpp \
+        $$PWD/TwitchQt/twitchbadge.hpp \
 	$$PWD/TwitchQt/twitchapi.hpp \
 	$$PWD/TwitchQt/twitchgamereply.hpp \
-	$$PWD/TwitchQt/twitchstreamreply.hpp \
+        $$PWD/TwitchQt/twitchstreamreply.hpp \
 	$$PWD/TwitchQt/twitchuserreply.hpp \
-        $$PWD/TwitchQt/twitchemote.hpp \
         $$PWD/TwitchQt/twitchemotereply.hpp \
-    $$PWD/TwitchQt/json.hpp
+        $$PWD/TwitchQt/twitchbadgereply.hpp \
+        $$PWD/TwitchQt/json.hpp \
+

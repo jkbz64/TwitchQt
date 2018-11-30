@@ -31,8 +31,7 @@ inline void UserReply::parseData(const JSON& json)
                 user.value("offline_image_url", QString("")),
                 user.value("profile_image_url", QString("")),
                 userType,
-                user.value("view_count", -1)
-            });
+                user.value("view_count", -1) });
         }
     }
 }
@@ -59,8 +58,7 @@ inline void UsersReply::parseData(const JSON& json)
             else if (userTypeStr == "staff")
                 userType = User::UserType::Staff;
 
-            users.push_back({
-                broadcasterType,
+            users.push_back({ broadcasterType,
                 user.value("description", QString("")),
                 user.value("display_name", QString("")),
                 user.value("email", QString("")),
@@ -69,8 +67,7 @@ inline void UsersReply::parseData(const JSON& json)
                 user.value("offline_image_url", QString("")),
                 user.value("profile_image_url", QString("")),
                 userType,
-                user.value("view_count", -1)
-            });
+                user.value("view_count", -1) });
         }
     }
     m_data.setValue(users);

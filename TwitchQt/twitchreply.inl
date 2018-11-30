@@ -1,6 +1,6 @@
 
-template<class T>
-inline T* Twitch::Reply::fromData(QObject* parent, const QVariant &data)
+template <class T>
+inline T* Twitch::Reply::fromData(QObject* parent, const QVariant& data)
 {
     T* reply = new T;
     reply->setParent(parent);
@@ -14,7 +14,6 @@ inline Reply::Reply()
     , m_currentState(ReplyState::Success)
     , m_cursor("")
 {
-
 }
 
 inline Reply::Reply(QNetworkReply* reply)
@@ -78,8 +77,7 @@ inline void ImageReply::parseData(const QByteArray& data)
 
 inline void RawReply::onFinished()
 {
-    if(m_currentState != ReplyState::Error)
-    {
+    if (m_currentState != ReplyState::Error) {
         auto data = m_reply->readAll();
         // Check errors
         if (data.isEmpty() || data.isNull()) {
@@ -96,8 +94,7 @@ inline void RawReply::onFinished()
 
 inline void JSONReply::onFinished()
 {
-    if(m_currentState != ReplyState::Error)
-    {
+    if (m_currentState != ReplyState::Error) {
         JSON::parser_callback_t cb = [](int, JSON::parse_event_t event, JSON& parsed) {
             // Skip values with null value
             if (event == JSON::parse_event_t::value and parsed.is_null()) {
@@ -127,13 +124,11 @@ inline void JSONReply::onFinished()
     m_reply->deleteLater();
 }
 
-inline const JSON &Twitch::JSONReply::json() const
+inline const JSON& Twitch::JSONReply::json() const
 {
     return m_json;
 }
 
-inline void JSONReply::parseData(const JSON &)
+inline void JSONReply::parseData(const JSON&)
 {
-
 }
-

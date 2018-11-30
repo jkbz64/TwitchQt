@@ -8,8 +8,7 @@ inline void GameReply::parseData(const JSON& json)
             m_data.setValue(Game{
                 game.value("id", QString("-1")),
                 game.value("name", QString("ERROR")),
-                game.value("box_art_url", QString(""))
-            });
+                game.value("box_art_url", QString("")) });
         } else {
             // ??
         }
@@ -22,11 +21,9 @@ inline void GamesReply::parseData(const JSON& json)
     if (json.find("data") != json.end()) {
         const auto& data = json["data"];
         for (const auto& game : data) {
-            games.push_back({
-               game.value("id", QString("-1")),
-               game.value("name", QString("ERROR")),
-               game.value("box_art_url", QString(""))
-            });
+            games.push_back({ game.value("id", QString("-1")),
+                game.value("name", QString("ERROR")),
+                game.value("box_art_url", QString("")) });
         }
     }
     m_data.setValue(games);

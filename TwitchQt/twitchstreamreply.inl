@@ -25,8 +25,7 @@ inline void StreamReply::parseData(const JSON& json)
                 stream.value("viewer_count", -1),
                 QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
                 stream.value("language", QString("")),
-                stream.value("thumbnail_url", QString(""))
-            });
+                stream.value("thumbnail_url", QString("")) });
         } else {
             // ???
         }
@@ -48,8 +47,7 @@ inline void StreamsReply::parseData(const JSON& json)
                 type = Stream::StreamType::Vodcast;
             QString startedAt = stream["started_at"];
 
-            streams.push_back({
-                stream.value("id", QString("-1")),
+            streams.push_back({ stream.value("id", QString("-1")),
                 stream.value("user_id", QString("-1")),
                 stream.value("user_name", QString("")),
                 stream.value("game_id", QString("-1")),
@@ -59,8 +57,7 @@ inline void StreamsReply::parseData(const JSON& json)
                 stream.value("viewer_count", -1),
                 QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
                 stream.value("language", QString("")),
-                stream.value("thumbnail_url", QString(""))
-            });
+                stream.value("thumbnail_url", QString("")) });
 
             m_combinedViewerCount += streams.back().m_viewerCount;
         }

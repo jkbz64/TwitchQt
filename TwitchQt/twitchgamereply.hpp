@@ -26,6 +26,7 @@ protected:
 };
 
 class BoxArtReply : public RawReply {
+    Q_OBJECT
 public:
     using RawReply::RawReply;
 

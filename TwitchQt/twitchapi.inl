@@ -87,15 +87,14 @@ inline QNetworkRequest Api::buildRequest(QUrl url, bool includeID, const CacheFl
     if (includeID)
         request.setRawHeader("Client-ID", m_clientID.toUtf8());
 
-    switch(cacheFlag)
-    {
-        case CacheFlag::UseNetworkDoNotCache:
-            request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork);
-            request.setAttribute(QNetworkRequest::CacheSaveControlAttribute, false);
+    switch (cacheFlag) {
+    case CacheFlag::UseNetworkDoNotCache:
+        request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork);
+        request.setAttribute(QNetworkRequest::CacheSaveControlAttribute, false);
         break;
-        case CacheFlag::PreferCache:
-            request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
-            request.setAttribute(QNetworkRequest::CacheSaveControlAttribute, true);
+    case CacheFlag::PreferCache:
+        request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
+        request.setAttribute(QNetworkRequest::CacheSaveControlAttribute, true);
         break;
     }
 
@@ -402,3 +401,16 @@ inline EmoteSetsReply* Api::getEmotesBySets(const QStringList& sets)
     return createReply<EmoteSetsReply>(request, false);
 }
 
+inline Twitch::GlobalBadgesReply* Twitch::Api::getGlobalBadges()
+{
+    const QUrl url = QString("https://badges.twitch.tv/v1/badges/global/display");
+    auto request = buildRequest(url, false);
+    return createReply<GlobalBadgesReply>(request, false);
+}
+
+inline Twitch::ChannelBadgesReply* Twitch::Api::getChannelBadges(const QString& id)
+{
+    const QUrl url = QString("https://badges.twitch.tv/v1/badges/channels/") + id + QString("/display");
+    auto request = buildRequest(url, false);
+    return createReply<ChannelBadgesReply>(request, false);
+}

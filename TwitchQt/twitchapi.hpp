@@ -9,6 +9,7 @@
 #include "twitchgamereply.hpp"
 #include "twitchstreamreply.hpp"
 #include "twitchuserreply.hpp"
+#include "twitchbadgereply.hpp"
 
 namespace Twitch {
 class Api : public QObject {
@@ -80,9 +81,14 @@ public:
     virtual FFZ::SubscriberEmotesReply* getFFZSubscriberEmotesByChannel(const QString&);
     virtual ImageReply* getFFZEmoteImage(const QString&, EmoteSize = EmoteSize::Original);
 
+    // Badges
+    virtual GlobalBadgesReply* getGlobalBadges();
+    virtual ChannelBadgesReply* getChannelBadges(const QString&);
+
     // Utility
     // Image getter by Url
-    virtual ImageReply* getImage(const QString&);
+    virtual ImageReply*
+    getImage(const QString&);
 
     // Rate limiting
     int rateLimit() const;
