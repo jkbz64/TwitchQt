@@ -68,7 +68,7 @@ namespace FFZ {
 
     struct Emote : public EmoteData {
         Emote() = default;
-        Emote(QString css, int height, bool hidden, int id, int margins, bool modifier, QString name, int offset, Owner owner, bool isPublic, QVector<QString> urls, int width)
+        Emote(QString css, unsigned int height, bool hidden, int id, QString margins, bool modifier, QString name, QString offset, Owner owner, bool isPublic, QVector<QString> urls, unsigned int width)
             : m_css(css)
             , m_height(height)
             , m_hidden(hidden)
@@ -84,17 +84,17 @@ namespace FFZ {
         {
         }
         QString m_css;
-        int m_height;
+        unsigned int m_height;
         bool m_hidden;
         int m_id;
-        int m_margins;
+        QString m_margins;
         bool m_modifier;
         QString m_name;
-        int m_offset;
+        QString m_offset;
         Owner m_owner;
         bool m_public;
         QVector<QString> m_urls;
-        int m_width;
+        unsigned int m_width;
         static QString urlTemplate() { return "https://cdn.frankerfacez.com/emoticon/{{id}}/{{size}}"; }
     };
 }
@@ -259,17 +259,17 @@ struct adl_serializer<Twitch::FFZ::Emote> {
 
         return Twitch::FFZ::Emote(
             emote.value("css", QString("")),
-            emote.value("height", -1),
+            emote.value("height", 0u),
             emote.value("hidden", false),
             emote.value("id", -1),
-            emote.value("margins", 0),
+            emote.value("margins", QString("")),
             emote.value("modifier", false),
             emote.value("name", QString("ERROR")),
-            emote.value("offset", 0),
+            emote.value("offset", QString()),
             Twitch::FFZ::Owner{},
             emote.value("public", false),
             urls,
-            emote.value("width", -1));
+            emote.value("width", 0u));
     }
 
     static void to_json(json& j, const Twitch::FFZ::Emote& emote)
