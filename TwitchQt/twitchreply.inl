@@ -113,8 +113,12 @@ inline void JSONReply::onFinished()
                 m_currentState = ReplyState::Success;
                 parseData(m_json);
 
-                if (m_json.find("pagination") != m_json.end()) // Save the pagination
-                    m_cursor = QString::fromStdString(m_json["pagination"]["cursor"].get<std::string>());
+                if (m_json.find("pagination") != m_json.end()) {
+                    if (!m_json["pagination"]["cursor"].is_null()) {
+                        // Save the pagination
+                        m_cursor = QString::fromStdString(m_json["pagination"]["cursor"].get<std::string>());
+                    }
+                }
             }
         }
     }
