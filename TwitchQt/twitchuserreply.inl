@@ -73,6 +73,25 @@ inline void UsersReply::parseData(const JSON& json)
     m_data.setValue(users);
 }
 
+inline void UserFollowsReply::parseData(const JSON& json)
+{
+    UserFollows userFollows;
+    userFollows.m_total = json["total"].get<int>();
+    if (json.find("data") != json.end()) {
+        const auto& data = json["data"];
+        for (const auto& follow : data) {
+            userFollows.m_follows.push_back({
+                follow.value("from_id", QString("")),
+                follow.value("from_name", QString("")),
+                follow.value("to_id", QString("")),
+                follow.value("to_name", QString("")),
+                follow.value("followed_at", QString("")),
+            });
+        }
+    }
+    m_data.setValue(userFollows);
+}
+
 inline Twitch::User Twitch::UserReply::user()
 {
     return m_data.value<Twitch::User>();
@@ -81,4 +100,9 @@ inline Twitch::User Twitch::UserReply::user()
 inline Twitch::Users Twitch::UsersReply::users()
 {
     return m_data.value<Twitch::Users>();
+}
+
+inline Twitch::UserFollows Twitch::UserFollowsReply::userFollows()
+{
+    return m_data.value<Twitch::UserFollows>();
 }

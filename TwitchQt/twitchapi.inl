@@ -60,6 +60,16 @@ inline void Api::setClientID(const QString& id)
     m_clientID = id;
 }
 
+inline const QString& Api::bearerToken() const
+{
+    return m_bearerToken;
+}
+
+inline void Api::setBearerToken(const QString& bearerToken)
+{
+    m_bearerToken = bearerToken;
+}
+
 inline int Api::rateLimit() const
 {
     return m_rateLimit;
@@ -86,6 +96,8 @@ inline QNetworkRequest Api::buildRequest(QUrl url, bool includeID, const CacheFl
     request.setRawHeader("User-Agent", "Twitch.Qt");
     if (includeID)
         request.setRawHeader("Client-ID", m_clientID.toUtf8());
+
+    request.setRawHeader("Authorization", QString("Bearer %1").arg(bearerToken()).toUtf8());
 
     switch (cacheFlag) {
     case CacheFlag::UseNetworkDoNotCache:
@@ -262,6 +274,23 @@ inline StreamsReply* Api::getStreamsByLanguages(const QStringList& languages, in
 
     auto request = buildRequest(QUrl(url));
     return createReply<StreamsReply>(request);
+}
+
+// Users Follows
+inline UserFollowsReply* Api::getUserFollowsFromId(const QString& userId)
+{
+    const QUrl url = api() + QString("/users/follows") + QString("?from_id=") + userId;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<UserFollowsReply>(request);
+}
+
+inline UserFollowsReply* Api::getUserFollowsToId(const QString& userId)
+{
+    const QUrl url = api() + QString("/users/follows") + QString("?to_id=") + userId;
+
+    auto request = buildRequest(QUrl(url));
+    return createReply<UserFollowsReply>(request);
 }
 
 // User
