@@ -3,6 +3,7 @@
 
 #include "twitchreply.hpp"
 #include "twitchuser.hpp"
+#include <iostream>
 
 namespace Twitch {
 class UserReply : public JSONReply {
@@ -22,6 +23,17 @@ public:
     using JSONReply::JSONReply;
 
     Twitch::Users users();
+
+protected:
+    virtual void parseData(const JSON&) override;
+};
+
+class UserFollowsReply : public JSONReply {
+    Q_OBJECT
+public:
+    using JSONReply::JSONReply;
+
+    Twitch::UserFollows userFollows();
 
 protected:
     virtual void parseData(const JSON&) override;

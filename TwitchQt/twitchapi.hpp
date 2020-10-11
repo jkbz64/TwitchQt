@@ -53,6 +53,10 @@ public:
     virtual StreamsReply* getStreamsByLanguage(const QString&, ObjectCount = 30, const Cursor& = Cursor());
     virtual StreamsReply* getStreamsByLanguages(const QStringList&, ObjectCount = 30, const Cursor& = Cursor());
 
+    // Users Follows
+    virtual UserFollowsReply* getUserFollowsFromId(const QString& ID);
+    virtual UserFollowsReply* getUserFollowsToId(const QString& ID);
+
     // Users
     virtual UserReply* getUserById(const QString& ID);
     virtual UserReply* getUserByName(const QString&);
@@ -95,9 +99,13 @@ public:
     int remainingRequests() const;
     const QDateTime& resetDate() const;
 
+    const QString& bearerToken() const;
+    void setBearerToken(const QString &bearerToken);
+
 protected:
     QNetworkAccessManager* m_http;
     QString m_clientID;
+    QString m_bearerToken;
 
     void resetRateLimit();
     int m_rateLimit;

@@ -29,10 +29,24 @@ struct User {
     int m_viewCount;
 };
 
+struct Follow {
+    QString m_fromId;
+    QString m_fromName;
+    QString m_toId;
+    QString m_toName;
+    QString m_followedAt;
+};
+
+struct UserFollows {
+    int m_total;
+    QVector<Twitch::Follow> m_follows;
+};
+
 using Users = QVector<User>;
 }
 
 Q_DECLARE_METATYPE(Twitch::User);
 Q_DECLARE_METATYPE(Twitch::Users);
+Q_DECLARE_METATYPE(Twitch::UserFollows);
 
 #endif // TWITCHUSER_HPP
