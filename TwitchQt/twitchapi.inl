@@ -155,9 +155,12 @@ inline void Twitch::Api::resetRateLimit()
 }
 
 // Games
-inline GamesReply* Api::getTopGames(int first)
+inline GamesReply* Api::getTopGames(int first, const QString& after)
 {
-    const QUrl url = api() + QString("/games/top") + QString("?first=") + QString::number(first);
+    QString url = api() + QString("/games/top") + QString("?first=") + QString::number(first);
+    if (!after.isEmpty())
+        url += QString("&after=") + after;
+
     auto request = buildRequest(url);
     return createReply<GamesReply>(request);
 }

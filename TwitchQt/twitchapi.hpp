@@ -35,7 +35,7 @@ public:
     QString bttvApi() const;
 
     // Games
-    virtual GamesReply* getTopGames(ObjectCount = 30);
+    virtual GamesReply* getTopGames(ObjectCount = 30, const Cursor& = Cursor());
     virtual GameReply* getGameById(const QString&);
     virtual GamesReply* getGameByIds(const QStringList&);
     virtual GameReply* getGameByName(const QString&);
