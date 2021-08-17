@@ -12,9 +12,22 @@ A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Q
 You might ask - why external JSON while there's Qt's JSON library included in Qt Core? Well... it simply sucks, but the main problem is that it cannot parse documents bigger than 2^27 bytes (~135MB).
 
 ## Usage
+#### QMake
 Clone this library wherever you want and just `include(path/to/TwitchQt.pri)` in your .pro file. 
 
 There will be (hopefully) a single .hpp version of this library which will make things easier in the future.
+#### CMake
+```
+include(FetchContent)
+...
+FetchContent_Declare(
+    TwitchQt
+    GIT_REPOSITORY "https://github.com/jkbz64/TwitchQt"
+    GIT_TAG "commit hash"
+    )
+FetchContent_MakeAvailable(TwitchQt)
+```
+Or clone the repo in your project and add `add_subdirectory(path/to/TwitchQt)` in your CMakeLists.txt.
 
 ## Example
 ```cpp
