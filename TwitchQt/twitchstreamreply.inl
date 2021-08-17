@@ -23,7 +23,7 @@ inline void StreamReply::parseData(const JSON& json)
                 type,
                 stream.value("title", QString("")),
                 stream.value("viewer_count", -1),
-                QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
+                QDateTime::fromString(startedAt, Qt::ISODate),
                 stream.value("language", QString("")),
                 stream.value("thumbnail_url", QString("")) });
         } else {
@@ -55,7 +55,7 @@ inline void StreamsReply::parseData(const JSON& json)
                 type,
                 stream.value("title", QString("")),
                 stream.value("viewer_count", -1),
-                QDateTime::fromString(startedAt, "yyyy-MM-ddTHH:mm:ssZ"),
+                QDateTime::fromString(startedAt, Qt::ISODate),
                 stream.value("language", QString("")),
                 stream.value("thumbnail_url", QString("")) });
 
