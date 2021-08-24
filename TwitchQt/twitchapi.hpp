@@ -9,6 +9,7 @@
 #include "twitchgamereply.hpp"
 #include "twitchstreamreply.hpp"
 #include "twitchuserreply.hpp"
+#include "twitchvideoreply.hpp"
 #include "twitchbadgereply.hpp"
 
 namespace Twitch {
@@ -52,6 +53,10 @@ public:
     virtual StreamsReply* getStreamsByGameIds(const QStringList&, ObjectCount = 30, const Cursor& = Cursor());
     virtual StreamsReply* getStreamsByLanguage(const QString&, ObjectCount = 30, const Cursor& = Cursor());
     virtual StreamsReply* getStreamsByLanguages(const QStringList&, ObjectCount = 30, const Cursor& = Cursor());
+
+    // Videos
+    virtual VideoReply* getVideoById(const QString&);
+    virtual VideosReply* getVideosByUserId(const QString&, ObjectCount = 30, const Cursor& = Cursor());
 
     // Users Follows
     virtual UserFollowsReply* getUserFollowsFromId(const QString& ID);

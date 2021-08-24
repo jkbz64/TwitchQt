@@ -24,6 +24,8 @@ target_sources(TwitchQt
         TwitchQt/twitchstreamreply.hpp
         TwitchQt/twitchuser.hpp
         TwitchQt/twitchuserreply.hpp
+        TwitchQt/twitchvideo.hpp
+        TwitchQt/twitchvideoreply.hpp
         TwitchQt/json/json.hpp)
 
 target_include_directories(TwitchQt
