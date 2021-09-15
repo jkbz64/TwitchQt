@@ -143,7 +143,12 @@ inline void Api::updateLimits(QNetworkReply* reply)
         m_rateRemaining = reply->rawHeader("RateLimit-Remaining").toInt();
     if (reply->hasRawHeader("RateLimit-Reset")) {
         auto timestamp = reply->rawHeader("RateLimit-Reset").toUInt();
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_rateResetDate.setTime_t(timestamp);
+#else
+        m_rateResetDate.setSecsSinceEpoch(timestamp);
+#endif
     }
 }
 

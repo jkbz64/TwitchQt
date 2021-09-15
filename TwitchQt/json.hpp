@@ -2,7 +2,10 @@
 #define JSON_HPP
 
 #include <QString>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QVector>
+#endif
+#include <QList>
 #include <QMultiMap>
 #include "json/json.hpp"
 
@@ -27,6 +30,8 @@ struct adl_serializer<QString> {
     }
 };
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+
 template <class T>
 struct adl_serializer<QVector<T>> {
     static QVector<T> from_json(const json& j)
@@ -40,11 +45,13 @@ struct adl_serializer<QVector<T>> {
     }
 };
 
+#endif
+
 template <class T>
 struct adl_serializer<QList<T>> {
     static QList<T> from_json(const json& j)
     {
-        return QList<T>::fromStdVector(j);
+        return QList<T>(j.begin(), j.end());
     }
 
     static void to_json(json& j, const QList<T>& list)

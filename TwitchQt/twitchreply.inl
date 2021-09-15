@@ -24,10 +24,17 @@ inline Reply::Reply(QNetworkReply* reply)
 {
     connect(m_reply, &QNetworkReply::finished, this, &Reply::onFinished, Qt::DirectConnection);
     connect(m_reply, &QNetworkReply::downloadProgress, this, &Reply::downloadProgress, Qt::UniqueConnection);
+
+    #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(m_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
         [this](QNetworkReply::NetworkError) {
             m_currentState = ReplyState::Error;
         });
+    #else
+    connect(m_reply, &QNetworkReply::errorOccurred, [this](QNetworkReply::NetworkError) {
+        m_currentState = ReplyState::Error;
+    });
+    #endif
 }
 
 inline Reply::~Reply()
