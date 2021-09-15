@@ -9,13 +9,10 @@ A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Q
 #### C++11 compatible compiler
 - [JSON for Modern C++ (already included)](https://github.com/nlohmann/json) 
 
-You might ask - why external JSON while there's Qt's JSON library included in Qt Core? Well... it simply sucks, but the main problem is that it cannot parse documents bigger than 2^27 bytes (~135MB).
-
 ## Usage
 #### QMake
 Clone this library wherever you want and just `include(path/to/TwitchQt.pri)` in your .pro file. 
 
-There will be (hopefully) a single .hpp version of this library which will make things easier in the future.
 #### CMake
 ```
 include(FetchContent)
@@ -37,10 +34,12 @@ Or clone the repo in your project and add `add_subdirectory(path/to/TwitchQt)` i
 int main(int argc, char* argv[])
 {
     QCoreApplication a(argc, argv);
-	// Twitch::Api is aliased to New Twitch Api (Helix)
-	// TODO Twitch::v5 
+    
+    // Twitch::Api is aliased to New Twitch Api (Helix)
     Twitch::Api api("CLIENT-ID HERE");
+    api.setBearerToken("BEARER-TOKEN HERE");
 
+    // Note: For this endpoint stream has to be online to return the data! 
     auto reply = api.getStreamByName("forsen");
     a.connect(reply, &Twitch::Reply::finished, [&a, reply]() {
         if (reply->currentState() == Twitch::ReplyState::Success) {
@@ -63,10 +62,3 @@ int main(int argc, char* argv[])
 
 ## Features
 Look at the [twitchapi.hpp](https://github.com/jkbz64/TwitchQt/blob/master/TwitchQt/twitchapi.hpp) file :)
-
-## TODO:
-* GET requests that need access to scopes.
-* Single header version (entire library in one file) 
-* Every request other than GET OMEGALUL
-* Unit tests
-* Maybe webhooks(not really?)
