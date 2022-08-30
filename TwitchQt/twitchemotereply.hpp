@@ -13,7 +13,7 @@ public:
     Twitch::Emotes emotes();
 
 protected:
-    virtual void parseData(const JSON&) = 0;
+    virtual void parseData(const JSON&) override = 0;
 };
 
 namespace TwitchEmotes {
