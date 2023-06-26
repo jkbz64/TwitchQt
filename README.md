@@ -1,5 +1,7 @@
 # TwitchQt
 
+*The project is discontinued and publicly archived, work has been continued in [this fork](https://github.com/g-fb/TwitchQt).*
+
 A simple Header-only Qt wrapper for the new Twitch.tv api(Helix) written using Qt5. It also supports TwitchEmotes, BTTV and FFZ.
 
 ## Requirements
